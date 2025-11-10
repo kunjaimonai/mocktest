@@ -214,7 +214,7 @@ if (!q) {
       <Watermark schoolName={schoolData.name} />
 
       <motion.div
-        className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 relative z-10"
+        className="w-full max-w-7xl sm:w-3xl lg:w-5xl md:w-6xl bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 relative z-10"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
@@ -232,7 +232,7 @@ if (!q) {
               <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
                 {schoolData.name}
               </h1>
-              <p className="text-sm text-slate-600 mt-1">{schoolData.number}</p>
+              <p className="text-sm text-slate-600 mt-1">ph:{schoolData.number}</p>
               <p className="text-sm text-slate-600 mt-1">Road Safety Mock Test</p>
             </div>
           </div>

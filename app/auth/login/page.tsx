@@ -49,7 +49,6 @@ export default function LoginPage() {
     }
 
     localStorage.setItem("loggedInSchoolId", String(school.id));
-
     router.push("/mocktest");
   };
 
@@ -58,7 +57,7 @@ export default function LoginPage() {
       <div className="flex flex-row items-center mb-8 gap-4">
         <Image src="/learners_logo.png" width={80} height={100} alt=""></Image>
         <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-center">
-          <span id="text">EARNERS MOCK TEST KERALA</span>
+          <span id="text">LEARNERS MOCK TEST KERALA</span>
         </h1>
       </div>
       <motion.div
