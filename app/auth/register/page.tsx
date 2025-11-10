@@ -38,7 +38,6 @@ const Register = () => {
       fetchSchoolData();
     }, []);
 
-  const PAYMENT_AMOUNT = 500;
 
   const generateUniqueId = (): number => {
     let id: number;
@@ -217,14 +216,14 @@ const Register = () => {
             className="text-center"
           >
             <h2 className="text-2xl font-semibold text-slate-800 mb-4">
-              Pay ₹{PAYMENT_AMOUNT} to Complete Registration
+              Pay to Complete Registration
             </h2>
             <p className="text-slate-600 mb-4">
               Scan the QR code below and upload your payment screenshot.
             </p>
             <div className="flex justify-center mb-4">
               <Image
-                src="/payment-qr.png"
+                src="/image.png"
                 alt="Payment QR"
                 width={200}
                 height={200}
