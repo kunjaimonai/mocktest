@@ -43,7 +43,8 @@ const Register = () => {
     let id: number;
     const existingIds = new Set(schools.map((s) => s.id));
     do {
-      id = Math.floor(100 + Math.random() * 900);
+      id = Math.floor(1000 + Math.random() * 9000);
+      id = Number(String(id).padStart(4, "0"));
     } while (existingIds.has(id));
     return id;
   };

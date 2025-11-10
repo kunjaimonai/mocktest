@@ -84,10 +84,10 @@ export default function LoginPage() {
                 setInstitutionCode(e.target.value);
                 setError("");
               }}
-              placeholder="Enter 3-digit code (e.g. 123)"
+              placeholder="Enter 4-digit code (e.g. 1234)"
               onKeyDown={(e) => e.key === "Enter" && handleLogin()}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 text-slate-800 text-center font-semibold text-lg tracking-widest"
-              maxLength={3}
+              maxLength={4}
             />
           </div>
 
