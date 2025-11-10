@@ -72,7 +72,7 @@ export default function AdminPage() {
   const approvePayment = async (id: number) => {
     const { error } = await supabase
       .from("schools")
-      .update({ paymentStatus: "completed" })
+      .update({ paymentstatus: "completed" })
       .eq("id", id);
 
     if (error) {
@@ -83,7 +83,7 @@ export default function AdminPage() {
     // Update UI locally
     setSchools((prev) =>
       prev.map((s) =>
-        s.id === id ? { ...s, paymentStatus: "completed" } : s
+        s.id === id ? { ...s, paymentstatus: "completed" } : s
       )
     );
   };
@@ -204,11 +204,11 @@ export default function AdminPage() {
                         <School className="w-5 h-5 text-sky-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg">
+                        <CardTitle className="text-lg text-black">
                           {school.name}
                         </CardTitle>
                         <CardDescription className="flex items-center gap-1">
-                          <Phone className="w-3 h-3" />
+                          <Phone className="w-3 h-3 text-slate-400" />
                           {school.number}
                         </CardDescription>
                       </div>
