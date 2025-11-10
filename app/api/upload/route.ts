@@ -5,7 +5,7 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File;
-    const type = formData.get("type") as string; // "logo" or "screenshot"
+    const type = formData.get("type") as string;
     const id = formData.get("id") as string;
 
     if (!file || !type || !id) {
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const filename = `${type}-${id}-${Date.now()}.${extension}`;
 
     // Upload to respective bucket
-    const bucket = type === "logo" ? "logos" : "screenshots";
+    const bucket = type === "logo" ? "logo" : "screenshot";
 
     const { error: uploadError } = await supabase.storage
       .from(bucket)
