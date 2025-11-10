@@ -14,9 +14,9 @@ const Watermark: React.FC<WatermarkProps> = ({ schoolName }) => {
       if (width < 640) {
         setGrid({ rows: 8, cols: 4 }); // phones
       } else if (width < 1024) {
-        setGrid({ rows: 7, cols: 5 }); // tablets
+        setGrid({ rows: 8, cols: 8 }); // tablets
       } else {
-        setGrid({ rows: 6, cols: 6 }); // desktops
+        setGrid({ rows: 8, cols: 8 }); // desktops
       }
     };
     updateGrid();
