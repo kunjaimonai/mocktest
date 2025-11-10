@@ -229,7 +229,7 @@ if (!q) {
               />
             )}
             <div>
-              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
+              <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
                 {schoolData.name}
               </h1>
               <p className="text-sm text-slate-600 mt-1">ph:{schoolData.number}</p>
@@ -297,7 +297,7 @@ if (!q) {
               </div>
 
               <div className="p-4 border rounded-xl mb-4 bg-gradient-to-r from-white to-slate-50">
-                <div className="text-lg font-medium mb-3 text-slate-900">
+                <div className="text-lg md:text-xl font-medium mb-3 text-slate-900">
                   {q && q.q}
                   {q.sign && (
                     <Image
@@ -336,7 +336,7 @@ if (!q) {
                       >
                         <div className="flex items-center">
                           <div
-                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm ${
+                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm md:text-lg ${
                               showResult && correct
                                 ? "border-white"
                                 : "border-slate-400"
