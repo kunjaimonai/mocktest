@@ -2,1714 +2,1714 @@ import json
 import csv
 
 data = [
-{
+  {
     "id": 31,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Right reverse bend",
-      "Right hairpin bend",
-      "Right \"U\" turn bend",
-      "Turn right and go straight"
+      "വലത്തോട്ടുള്ള റിവേഴ്സ് ബെൻഡ്",
+      "വലത്തോട്ടുള്ള ഹെയർപിൻ ബെൻഡ്",
+      "വലത്തോട്ടുള്ള \"യു\" ടേൺ ബെൻഡ്",
+      "വലത്തേക്ക് തിരിഞ്ഞ് നേരെ പോകുക"
     ],
     "sign": "/signs/sign_31.png",
     "answerIndex": 0
   },
   {
     "id": 32,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Steep ascent",
-      "Steep descent",
-      "Gravel road",
-      "Towing vehicle"
+      "കുത്തനെയുള്ള കയറ്റം",
+      "കുത്തനെയുള്ള ഇറക്കം",
+      "ചരൽ റോഡ്",
+      "കെട്ടിവലിക്കുന്ന വാഹനം"
     ],
     "sign": "/signs/sign_32.png",
     "answerIndex": 0
   },
   {
     "id": 33,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Steep ascent",
-      "Gravel road",
-      "Slippery road",
-      "Steep descent"
+      "കുത്തനെയുള്ള കയറ്റം",
+      "ചരൽ റോഡ്",
+      "വഴുവഴുപ്പുള്ള റോഡ്",
+      "കുത്തനെയുള്ള ഇറക്കം"
     ],
     "sign": "/signs/sign_33.png",
     "answerIndex": 3
   },
   {
     "id": 34,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Narrow road ahead",
-      "Tunnel entrance",
-      "Roads on both sides ahead",
-      "Narrow bridge ahead"
+      "മുന്നിൽ വീതി കുറഞ്ഞ റോഡ്",
+      "തുരങ്കത്തിലേക്കുള്ള പ്രവേശനം",
+      "മുന്നിൽ ഇരുവശത്തും റോഡുകൾ",
+      "മുന്നിൽ വീതി കുറഞ്ഞ പാലം"
     ],
     "sign": "/signs/sign_34.png",
     "answerIndex": 0
   },
   {
     "id": 35,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Narrow road ahead",
-      "Y-intersection",
-      "Road widens ahead",
-      "Roads on both sides ahead"
+      "മുന്നിൽ വീതി കുറഞ്ഞ റോഡ്",
+      "Y-ഇന്റർസെക്ഷൻ",
+      "മുന്നിൽ റോഡിന് വീതി കൂടുന്നു",
+      "മുന്നിൽ ഇരുവശത്തും റോഡുകൾ"
     ],
     "sign": "/signs/sign_35.png",
     "answerIndex": 2
   },
   {
     "id": 36,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Roads on both sides ahead",
-      "Narrow bridge ahead",
-      "Narrow road ahead",
-      "Road widens ahead"
+      "മുന്നിൽ ഇരുവശത്തും റോഡുകൾ",
+      "മുന്നിൽ വീതി കുറഞ്ഞ പാലം",
+      "മുന്നിൽ വീതി കുറഞ്ഞ റോഡ്",
+      "മുന്നിൽ റോഡിന് വീതി കൂടുന്നു"
     ],
     "sign": "/signs/sign_36.png",
     "answerIndex": 1
   },
   {
     "id": 37,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Slippery road",
-      "Gravel road",
-      "Towing vehicle",
-      "Rough road"
+      "വഴുവഴുപ്പുള്ള റോഡ്",
+      "ചരൽ റോഡ്",
+      "കെട്ടിവലിക്കുന്ന വാഹനം",
+      "മോശം റോഡ്"
     ],
     "sign": "/signs/sign_37.png",
     "answerIndex": 0
   },
   {
     "id": 38,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Falling rocks",
-      "Slippery road",
-      "Potholes on the road",
-      "Loose gravel"
+      "പാറകൾ വീഴാൻ സാധ്യത",
+      "വഴുവഴുപ്പുള്ള റോഡ്",
+      "റോഡിലെ കുഴികൾ",
+      "ഇളകിയ ചരൽ"
     ],
     "sign": "/signs/sign_38.png",
     "answerIndex": 3
   },
   {
     "id": 39,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Cycle track",
-      "Bicycle crossing prohibited",
-      "Bicycle crossing",
-      "Motorcycle track"
+      "സൈക്കിൾ ട്രാക്ക്",
+      "സൈക്കിൾ ക്രോസിംഗ് നിരോധിച്ചിരിക്കുന്നു",
+      "സൈക്കിൾ ക്രോസിംഗ്",
+      "മോട്ടോർസൈക്കിൾ ട്രാക്ക്"
     ],
     "sign": "/signs/sign_39.png",
     "answerIndex": 0
   },
   {
     "id": 40,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Footpath",
-      "Pedestrians may enter",
-      "Pedestrians prohibited",
-      "Pedestrian crossing"
+      "ഫുട്പാത്ത്",
+      "കാൽനടയാത്രക്കാർക്ക് പ്രവേശിക്കാം",
+      "കാൽനടയാത്രക്കാർക്ക് നിരോധനം",
+      "കാൽനടയാത്രാ ക്രോസിംഗ്"
     ],
     "sign": "/signs/sign_40.png",
     "answerIndex": 3
   },
   {
     "id": 41,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Cattle prohibited",
-      "Possibility of cattle on the road",
-      "Vehicles carrying cattle prohibited",
-      "Vehicles carrying cattle allowed"
+      "കന്നുകാലികളെ നിരോധിച്ചിരിക്കുന്നു",
+      "റോഡിൽ കന്നുകാലികൾ ഉണ്ടാകാൻ സാധ്യത",
+      "കന്നുകാലികളെ കൊണ്ടുപോകുന്ന വാഹനങ്ങൾ നിരോധിച്ചിരിക്കുന്നു",
+      "കന്നുകാലികളെ കൊണ്ടുപോകുന്ന വാഹനങ്ങൾ അനുവദനീയമാണ്"
     ],
     "sign": "/signs/sign_41.png",
     "answerIndex": 1
   },
   {
     "id": 42,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "School ahead",
-      "Pedestrians crossing",
-      "Footpath with school children",
-      "Pedestrian crossing for school children"
+      "മുന്നിൽ സ്കൂൾ",
+      "കാൽനടയാത്രക്കാർ മുറിച്ചുകടക്കുന്നു",
+      "സ്കൂൾ കുട്ടികളുള്ള ഫുട്പാത്ത്",
+      "സ്കൂൾ കുട്ടികൾക്കുള്ള കാൽനട ക്രോസിംഗ്"
     ],
     "sign": "/signs/sign_42.png",
     "answerIndex": 0
   },
   {
     "id": 43,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Bridge ahead",
-      "Ferry",
-      "Airport ahead",
-      "Seaport ahead"
+      "മുന്നിൽ പാലം",
+      "ഫെറി",
+      "മുന്നിൽ എയർപോർട്ട്",
+      "മുന്നിൽ തുറമുഖം"
     ],
     "sign": "/signs/sign_43.png",
     "answerIndex": 1
   },
   {
     "id": 44,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Hilly area",
-      "Ghat road",
-      "Falling rocks",
-      "Quarry/mining area"
+      "മലമ്പ്രദേശം",
+      "ഘട്ട് റോഡ്",
+      "പാറകൾ വീഴാൻ സാധ്യത",
+      "ക്വാറി/ഖനന പ്രദേശം"
     ],
     "sign": "/signs/sign_44.png",
     "answerIndex": 2
   },
   {
     "id": 45,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Cattle prohibited",
-      "Possibility of cattle on the road",
-      "Vehicles carrying cattle prohibited",
-      "Vehicles carrying cattle allowed"
+      "കന്നുകാലികളെ നിരോധിച്ചിരിക്കുന്നു",
+      "റോഡിൽ കന്നുകാലികൾ ഉണ്ടാകാൻ സാധ്യത",
+      "കന്നുകാലികളെ കൊണ്ടുപോകുന്ന വാഹനങ്ങൾ നിരോധിച്ചിരിക്കുന്നു",
+      "കന്നുകാലികളെ കൊണ്ടുപോകുന്ന വാഹനങ്ങൾ അനുവദനീയമാണ്"
     ],
     "sign": "/signs/sign_45.png",
     "answerIndex": 1
   },
   {
     "id": 46,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "School ahead",
-      "Pedestrians crossing",
-      "Footpath with school children",
-      "Pedestrian crossing for school children"
+      "മുന്നിൽ സ്കൂൾ",
+      "കാൽനടയാത്രക്കാർ മുറിച്ചുകടക്കുന്നു",
+      "സ്കൂൾ കുട്ടികളുള്ള ഫുട്പാത്ത്",
+      "സ്കൂൾ കുട്ടികൾക്കുള്ള കാൽനട ക്രോസിംഗ്"
     ],
     "sign": "/signs/sign_46.png",
     "answerIndex": 0
   },
   {
     "id": 47,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Bridge ahead",
-      "Ferry",
-      "Airport ahead",
-      "Seaport ahead"
+      "മുന്നിൽ പാലം",
+      "ഫെറി",
+      "മുന്നിൽ എയർപോർട്ട്",
+      "മുന്നിൽ തുറമുഖം"
     ],
     "sign": "/signs/sign_47.png",
     "answerIndex": 1
   },
   {
     "id": 48,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Hilly area",
-      "Ghat road",
-      "Falling rocks",
-      "Quarry/mining area"
+      "മലമ്പ്രദേശം",
+      "ഘട്ട് റോഡ്",
+      "പാറകൾ വീഴാൻ സാധ്യത",
+      "ക്വാറി/ഖനന പ്രദേശം"
     ],
     "sign": "/signs/sign_48.png",
     "answerIndex": 2
   },
   {
     "id": 49,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Narrow road ahead",
-      "Hump or rough road",
-      "Tunnel",
-      "Dangerous dip"
+      "മുന്നിൽ വീതി കുറഞ്ഞ റോഡ്",
+      "ഹംപ് അല്ലെങ്കിൽ മോശം റോഡ്",
+      "തുരങ്കം",
+      "അപകടകരമായ ഇറക്കം"
     ],
     "sign": "/signs/sign_49.png",
     "answerIndex": 3
   },
   {
     "id": 50,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Dangerous dip",
-      "Zigzag road",
-      "Ghat road",
-      "Hump or rough road"
+      "അപകടകരമായ ഇറക്കം",
+      "വളഞ്ഞുപുളഞ്ഞ റോഡ്",
+      "ഘട്ട് റോഡ്",
+      "ഹംപ് അല്ലെങ്കിൽ മോശം റോഡ്"
     ],
     "sign": "/signs/sign_50.png",
     "answerIndex": 3
   },
   {
     "id": 51,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Barrier ahead",
-      "Railway cross ahead",
-      "Suspension bridge ahead",
-      "Ferry"
+      "മുന്നിൽ തടസ്സം",
+      "മുന്നിൽ റെയിൽവേ ക്രോസ്",
+      "മുന്നിൽ തൂക്കുപാലം",
+      "ഫെറി"
     ],
     "sign": "/signs/sign_51.png",
     "answerIndex": 0
   },
   {
     "id": 52,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Drainage in the middle",
-      "Bridge ahead",
-      "Gap in  median",
-      "Suspension bridge"
+      "നടുവിലൂടെ ഓട",
+      "മുന്നിൽ പാലം",
+      "മീഡിയനിലെ വിടവ്",
+      "തൂക്കുപാലം"
     ],
     "sign": "/signs/sign_52.png",
     "answerIndex": 2
   },
   {
     "id": 53,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Do not park",
-      "Cross road",
-      "Road ends",
-      "No entry"
+      "പാർക്ക് ചെയ്യരുത്",
+      "കുറുകെയുള്ള റോഡ്",
+      "റോഡ് അവസാനിക്കുന്നു",
+      "പ്രവേശനമില്ല"
     ],
     "sign": "/signs/sign_53.png",
     "answerIndex": 1
   },
   {
     "id": 54,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Turn to the left side",
-      "Junction with a road on the left side",
-      "T-road",
-      "Compulsory to go straight or turn left"
+      "ഇടത് വശത്തേക്ക് തിരിയുക",
+      "ഇടത് വശത്ത് ഒരു റോഡുമായി ചേരുന്നു",
+      "ടി-റോഡ്",
+      "നിർബന്ധമായും നേരെ പോകുക അല്ലെങ്കിൽ ഇടത്തേക്ക് തിരിയുക"
     ],
     "sign": "/signs/sign_54.png",
     "answerIndex": 1
   },
   {
     "id": 55,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Turn right",
-      "Turn right or go straight",
-      "T-road",
-      "Junction with a road on the right side"
+      "വലത്തേക്ക് തിരിയുക",
+      "വലത്തേക്ക് തിരിയുക അല്ലെങ്കിൽ നേരെ പോകുക",
+      "ടി-റോഡ്",
+      "വലത് വശത്ത് ഒരു റോഡുമായി ചേരുന്നു"
     ],
     "sign": "/signs/sign_55.png",
     "answerIndex": 3
   },
   {
     "id": 56,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Y-intersection left",
-      "Junction with a road on the left side",
-      "Ascent to the left side ahead",
-      "Compulsory to go straight or turn left"
+      "Y-ഇന്റർസെക്ഷൻ ഇടത്",
+      "ഇടത് വശത്ത് ഒരു റോഡുമായി ചേരുന്നു",
+      "മുന്നിൽ ഇടത് വശത്തേക്ക് കയറ്റം",
+      "നിർബന്ധമായും നേരെ പോകുക അല്ലെങ്കിൽ ഇടത്തേക്ക് തിരിയുക"
     ],
     "sign": "/signs/sign_56.png",
     "answerIndex": 0
   },
   {
     "id": 57,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Junction with a road on the right side",
-      "Y-intersection right",
-      "Ascent to the right side ahead",
-      "Compulsory to go straight or turn right"
+      "വലത് വശത്ത് ഒരു റോഡുമായി ചേരുന്നു",
+      "Y-ഇന്റർസെക്ഷൻ വലത്",
+      "മുന്നിൽ വലത് വശത്തേക്ക് കയറ്റം",
+      "നിർബന്ധമായും നേരെ പോകുക അല്ലെങ്കിൽ വലത്തേക്ക് തിരിയുക"
     ],
     "sign": "/signs/sign_57.png",
     "answerIndex": 1
   },
   {
     "id": 58,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Ascent to the right and left ahead",
-      "Compulsory to go right or left",
-      "Y-intersection",
-      "Curves to the right and left ahead"
+      "മുന്നിൽ വലത്തോട്ടും ഇടത്തോട്ടും കയറ്റം",
+      "നിർബന്ധമായും വലത്തോട്ടോ ഇടത്തോട്ടോ പോകുക",
+      "Y-ഇന്റർസെക്ഷൻ",
+      "മുന്നിൽ വലത്തോട്ടും ഇടത്തോട്ടും വളവുകൾ"
     ],
     "sign": "/signs/sign_58.png",
     "answerIndex": 2
   },
   {
     "id": 59,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Right and left road splits",
-      "Staggered junction ahead",
-      "T-intersection",
-      "Junction ahead"
+      "വലത്തോട്ടും ഇടത്തോട്ടും റോഡുകൾ പിരിയുന്നു",
+      "മുന്നിൽ സ്റ്റാഗേർഡ് ജംഗ്ഷൻ",
+      "ടി-ഇന്റർസെക്ഷൻ",
+      "മുന്നിൽ ജംഗ്ഷൻ"
     ],
     "sign": "/signs/sign_59.png",
     "answerIndex": 1
   },
   {
     "id": 60,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Junction",
-      "Roads from three sides join",
-      "Roundabout",
-      "Road restricted"
+      "ജംഗ്ഷൻ",
+      "മൂന്ന് വശങ്ങളിൽ നിന്നുള്ള റോഡുകൾ ചേരുന്നു",
+      "റൗണ്ട് എബൗട്ട്",
+      "റോഡ് നിയന്ത്രിത മേഖല"
     ],
     "sign": "/signs/sign_60.png",
     "answerIndex": 2
   },
   {
     "id": 61,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Men at work on the road",
-      "Children playing",
-      "Pedestrian crossing",
-      "Mud on the road"
+      "ആളുകൾ റോഡിൽ ജോലി ചെയ്യുന്നു",
+      "കുട്ടികൾ കളിക്കുന്നു",
+      "കാൽനടയാത്രാ ക്രോസിംഗ്",
+      "റോഡിൽ ചെളി"
     ],
     "sign": "/signs/sign_61.png",
     "answerIndex": 0
   },
   {
     "id": 62,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Unmanned level cross",
-      "Manned level cross",
-      "Barrier ahead",
-      "Road closed"
+      "ആളില്ലാ ലെവൽ ക്രോസ്",
+      "ആളുള്ള ലെവൽ ക്രോസ്",
+      "മുന്നിൽ തടസ്സം",
+      "റോഡ് അടച്ചിരിക്കുന്നു"
     ],
     "sign": "/signs/sign_62.png",
     "answerIndex": 1
   },
   {
     "id": 63,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Railway station nearby",
-      "Unmanned level cross",
-      "Manned level crossing",
-      "Train approaching"
+      "അടുത്ത് റെയിൽവേ സ്റ്റേഷൻ",
+      "ആളില്ലാ ലെവൽ ക്രോസ്",
+      "ആളുള്ള ലെവൽ ക്രോസിംഗ്",
+      "ട്രെയിൻ വരുന്നു"
     ],
     "sign": "/signs/sign_63.png",
     "answerIndex": 1
   },
   {
     "id": 64,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Load limit",
-      "Prescribed speed limit",
-      "Axle weight limit",
-      "Height limit"
+      "ലോഡ് പരിധി",
+      "നിർദ്ദിഷ്ട വേഗപരിധി",
+      "ആക്സിൽ ഭാര പരിധി",
+      "ഉയര പരിധി"
     ],
     "sign": "/signs/sign_64.png",
     "answerIndex": 2
   },
   {
     "id": 65,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "First aid",
-      "Resting place",
-      "Hospital",
-      "Clinic"
+      "പ്രഥമശുശ്രൂഷ",
+      "വിശ്രമ സ്ഥലം",
+      "ആശുപത്രി",
+      "ക്ലിനിക്ക്"
     ],
     "sign": "/signs/sign_65.png",
     "answerIndex": 2
   },
   {
     "id": 66,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "First aid",
-      "Resting place",
-      "Hospital",
-      "Clinic"
+      "പ്രഥമശുശ്രൂഷ",
+      "വിശ്രമ സ്ഥലം",
+      "ആശുപത്രി",
+      "ക്ലിനിക്ക്"
     ],
     "sign": "/signs/sign_66.png",
     "answerIndex": 0
   },
   {
     "id": 67,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Hospital",
-      "Resting place",
-      "First aid post",
-      "Clinic"
+      "ആശുപത്രി",
+      "വിശ്രമ സ്ഥലം",
+      "പ്രഥമശുശ്രൂഷാ പോസ്റ്റ്",
+      "ക്ലിനിക്ക്"
     ],
     "sign": "/signs/sign_67.png",
     "answerIndex": 1
   },
   {
     "id": 68,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "No side road ahead",
-      "Left turn",
-      "Bridge ahead",
-      "Service road on the left"
+      "മുന്നിൽ സൈഡ് റോഡ് ഇല്ല",
+      "ഇടത്തേക്ക് തിരിയുക",
+      "മുന്നിൽ പാലം",
+      "ഇടതുവശത്ത് സർവീസ് റോഡ്"
     ],
     "sign": "/signs/sign_68.png",
     "answerIndex": 0
   },
   {
     "id": 69,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Service road ahead",
-      "Main road ahead",
-      "No side road ahead",
-      "Bridge ahead"
+      "മുന്നിൽ സർവീസ് റോഡ്",
+      "മുന്നിൽ പ്രധാന റോഡ്",
+      "മുന്നിൽ സൈഡ് റോഡ് ഇല്ല",
+      "മുന്നിൽ പാലം"
     ],
     "sign": "/signs/sign_69.png",
     "answerIndex": 2
   },
   {
     "id": 70,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Petrol pump on both sides",
-      "Parking on both sides",
-      "Police aid post",
-      "Service road on both sides"
+      "ഇരുവശത്തും പെട്രോൾ പമ്പ്",
+      "ഇരുവശത്തും പാർക്കിംഗ്",
+      "പോലീസ് സഹായ കേന്ദ്രം",
+      "ഇരുവശത്തും സർവീസ് റോഡ്"
     ],
     "sign": "/signs/sign_70.png",
     "answerIndex": 1
   },
   {
     "id": 71,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Parking for scooters and motorcycles",
-      "Scooters and motorcycles prohibited",
-      "Repairing scooters and motorcycles",
-      "Fine for parking scooters"
+      "സ്കൂട്ടറുകൾക്കും മോട്ടോർസൈക്കിളുകൾക്കുമുള്ള പാർക്കിംഗ്",
+      "സ്കൂട്ടറുകളും മോട്ടോർസൈക്കിളുകളും നിരോധിച്ചിരിക്കുന്നു",
+      "സ്കൂട്ടറുകളും മോട്ടോർസൈക്കിളുകളും റിപ്പയർ ചെയ്യുന്നു",
+      "സ്കൂട്ടറുകൾ പാർക്ക് ചെയ്യുന്നതിന് പിഴ"
     ],
     "sign": "/signs/sign_71.png",
     "answerIndex": 0
   },
   {
     "id": 72,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "No entry for private vehicles",
-      "Parking place Taxi/Taxi stand",
-      "Parking for police vehicles",
-      "No entry for taxis"
+      "സ്വകാര്യ വാഹനങ്ങൾക്ക് പ്രവേശനമില്ല",
+      "പാർക്കിംഗ് സ്ഥലം ടാക്സി/ടാക്സി സ്റ്റാൻഡ്",
+      "പോലീസ് വാഹനങ്ങൾക്കുള്ള പാർക്കിംഗ്",
+      "ടാക്സികൾക്ക് പ്രവേശനമില്ല"
     ],
     "sign": "/signs/sign_72.png",
     "answerIndex": 1
   },
   {
     "id": 73,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Petrol pump",
-      "Parking place cycle rickshaws",
-      "Autorickshaw parking prohibited",
-      "Parking place autorickshaws"
+      "പെട്രോൾ പമ്പ്",
+      "പാർക്കിംഗ് സ്ഥലം സൈക്കിൾ റിക്ഷകൾ",
+      "ഓട്ടോറിക്ഷ പാർക്കിംഗ് നിരോധിച്ചിരിക്കുന്നു",
+      "പാർക്കിംഗ് സ്ഥലം ഓട്ടോറിക്ഷകൾ"
     ],
     "sign": "/signs/sign_73.png",
     "answerIndex": 3
   },
   {
     "id": 70,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Police aid post on the right",
-      "Compulsory right turn",
-      "Parking allowed on the right",
-      "Petrol pump on the right"
+      "വലതുവശത്ത് പോലീസ് സഹായ കേന്ദ്രം",
+      "നിർബന്ധമായും വലത്തേക്ക് തിരിയുക",
+      "വലതുവശത്ത് പാർക്കിംഗ് അനുവദനീയമാണ്",
+      "വലതുവശത്ത് പെട്രോൾ പമ്പ്"
     ],
     "sign": "/signs/sign_70.png",
     "answerIndex": 1
   },
   {
     "id": 71,
-    "q": "Which light comes after the amber light at a traffic signal?",
+    "q": "ട്രാഫിക് സിഗ്നലിൽ ആംബർ ലൈറ്റിന് ശേഷം ഏത് ലൈറ്റ് ആണ് വരുന്നത്?",
     "options": [
-      "Red",
-      "Green",
-      "Green arrow light",
-      "Red or Green"
+      "ചുവപ്പ്",
+      "പച്ച",
+      "പച്ച ആരോ ലൈറ്റ്",
+      "ചുവപ്പ് അല്ലെങ്കിൽ പച്ച"
     ],
     "sign": "/signs/sign_71.png",
     "answerIndex": 3
   },
   {
     "id": 72,
-    "q": "What should you do when a vehicle approaches with a flashing red or blue light?",
+    "q": "മിന്നുന്ന ചുവപ്പ് അല്ലെങ്കിൽ നീല ലൈറ്റുമായി ഒരു വാഹനം വരുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Slow down and move the vehicle to the left side of the road",
-      "Stop where you are",
-      "Ignore the vehicle",
-      "Drive as fast as possible"
+      "വേഗത കുറച്ച് വാഹനം റോഡിന്റെ ഇടതുവശത്തേക്ക് മാറ്റുക",
+      "നിങ്ങൾ ഉള്ളിടത്ത് നിർത്തുക",
+      "വാഹനം അവഗണിക്കുക",
+      "കഴിയുന്നത്ര വേഗത്തിൽ ഓടിക്കുക"
     ],
     "sign": "/signs/sign_72.png",
     "answerIndex": 0
   },
   {
     "id": 73,
-    "q": "When can you safely open the right-side doors of the vehicle?",
+    "q": "വാഹനത്തിന്റെ വലതുവശത്തെ ഡോറുകൾ എപ്പോഴാണ് സുരക്ഷിതമായി തുറക്കാൻ കഴിയുന്നത്?",
     "options": [
-      "If there is no other traffic",
-      "Immediately after stopping the vehicle",
-      "After other cars have signalled to the side",
-      "If you can open and close it quickly"
+      "മറ്റ് ട്രാഫിക് ഇല്ലെങ്കിൽ",
+      "വാഹനം നിർത്തിയ ഉടൻ",
+      "മറ്റ് കാറുകൾ വശത്തേക്ക് സിഗ്നൽ നൽകിയ ശേഷം",
+      "നിങ്ങൾക്ക് വേഗത്തിൽ തുറക്കാനും അടക്കാനും കഴിയുമെങ്കിൽ"
     ],
     "sign": "/signs/sign_73.png",
     "answerIndex": 0
   },
   {
     "id": 74,
-    "q": "What should you do when you see a flashing amber traffic light at a junction?",
+    "q": "ഒരു ജംഗ്ഷനിൽ മിന്നുന്ന ആംബർ ട്രാഫിക് ലൈറ്റ് കാണുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Cross quickly",
-      "Stop at the stop line",
-      "Proceed through the junction with caution",
-      "None of the above"
+      "വേഗത്തിൽ കടന്നുപോകുക",
+      "സ്റ്റോപ്പ് ലൈനിൽ നിർത്തുക",
+      "ജംഗ്ഷനിലൂടെ ജാഗ്രതയോടെ പോകുക",
+      "മുകളിൽ പറഞ്ഞവയൊന്നുമല്ല"
     ],
     "sign": "/signs/sign_74.png",
     "answerIndex": 2
   },
   {
     "id": 75,
-    "q": "What should you do when entering a roundabout?",
+    "q": "ഒരു റൗണ്ട് എബൗട്ടിൽ പ്രവേശിക്കുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Enter the roundabout at low speed",
-      "Give priority to vehicles coming from the correct direction",
-      "Use only the outer lane",
-      "Use only the inner lane"
+      "കുറഞ്ഞ വേഗതയിൽ റൗണ്ട് എബൗട്ടിൽ പ്രവേശിക്കുക",
+      "ശരിയായ ദിശയിൽ നിന്ന് വരുന്ന വാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക",
+      "പുറം ലെയ്ൻ മാത്രം ഉപയോഗിക്കുക",
+      "ഉൾ ലെയ്ൻ മാത്രം ഉപയോഗിക്കുക"
     ],
     "sign": "/signs/sign_75.png",
     "answerIndex": 1
   },
   {
     "id": 76,
-    "q": "What should you do when you reach a junction on a main road with no traffic lights, \t\t\tpolicemen, or traffic signals?",
+    "q": "ട്രാഫിക് ലൈറ്റുകളോ പോലീസുകാരോ ട്രാഫിക് സിഗ്നലുകളോ ഇല്ലാത്ത ഒരു പ്രധാന റോഡിലെ ജംഗ്ഷനിൽ എത്തുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Stop the vehicle, get out, check that there are no vehicles on other roads, and then proceed",
-      "Stop the vehicle and proceed with caution",
-      "If the way is clear, proceed at speed",
-      "Slow down and proceed with caution"
+      "വാഹനം നിർത്തുക, പുറത്തിറങ്ങുക, മറ്റ് റോഡുകളിൽ വാഹനങ്ങളില്ലെന്ന് ഉറപ്പുവരുത്തുക, തുടർന്ന് പോകുക",
+      "വാഹനം നിർത്തി ജാഗ്രതയോടെ പോകുക",
+      "വഴി വ്യക്തമാണെങ്കിൽ, വേഗത്തിൽ പോകുക",
+      "വേഗത കുറച്ച് ജാഗ്രതയോടെ പോകുക"
     ],
     "sign": "/signs/sign_76.png",
     "answerIndex": 3
   },
   {
     "id": 77,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicles coming from the front to stop and let vehicles from the left pass",
-      "Requests vehicles from the front to stop and let vehicles from behind pass",
-      "Requests vehicles from the front and back to stop",
-      "Requests vehicles from the front and back to pass"
+      "മുന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്തി ഇടതുവശത്ത് നിന്നുള്ള വാഹനങ്ങളെ കടത്തിവിടാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "മുന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്തി പിന്നിൽ നിന്നുള്ള വാഹനങ്ങളെ കടത്തിവിടാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "മുന്നിൽ നിന്നും പിന്നിൽ നിന്നും വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "മുന്നിൽ നിന്നും പിന്നിൽ നിന്നും വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_77.png",
     "answerIndex": 2
   },
   {
     "id": 78,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicles coming from the front to stop",
-      "Requests vehicles coming from the back to stop",
-      "Requests vehicles from the front to pass",
-      "Requests vehicles coming from the back to stop"
+      "മുന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "പിന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "മുന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "പിന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_78.png",
     "answerIndex": 0
   },
   {
     "id": 79,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicles coming from the back to stop",
-      "Requests vehicles coming from the back to pass",
-      "Requests vehicles from the front to stop",
-      "Requests vehicles from the left to pass"
+      "പിന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "പിന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "മുന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "ഇടതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_79.png",
     "answerIndex": 0
   },
   {
     "id": 78,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicles from the left to stop",
-      "Requests vehicles coming from behind to pass",
-      "Requests vehicles from the right to stop",
-      "Requests vehicles from one side to pass"
+      "ഇടതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "പിന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "വലതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "ഒരു വശത്ത് നിന്നുള്ള വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_78.png",
     "answerIndex": 3
   },
   {
     "id": 78,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicle to stop at the rear",
-      "Requests vehicles from the right and left to pass",
-      "Requests vehicles from the right and left to stop",
-      "Requests vehicles from the front and back to pass"
+      "പിന്നിൽ വാഹനം നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "വലതുവശത്ത് നിന്നും ഇടതുവശത്ത് നിന്നും വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "വലതുവശത്ത് നിന്നും ഇടതുവശത്ത് നിന്നും വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "മുന്നിൽ നിന്നും പിന്നിൽ നിന്നും വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_78.png",
     "answerIndex": 2
   },
   {
     "id": 78,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicles from the left to stop",
-      "Requests vehicles to start at the T-point",
-      "Requests vehicles from the right to stop",
-      "Requests vehicles from the left to stop and vehicles from the front to pass"
+      "ഇടതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "ടി-പോയിന്റിൽ വാഹനങ്ങൾ സ്റ്റാർട്ട് ചെയ്യാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "വലതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "ഇടതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താനും മുന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാനും അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_78.png",
     "answerIndex": 1
   },
   {
     "id": 79,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicles from the right and left to stop",
-      "Requests vehicle to stop at the front and back",
-      "Change of sign",
-      "Requests vehicles from the right and left to pass"
+      "വലതുവശത്ത് നിന്നും ഇടതുവശത്ത് നിന്നും വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "മുന്നിലും പിന്നിലും വാഹനം നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "ചിഹ്നം മാറ്റുന്നു",
+      "വലതുവശത്ത് നിന്നും ഇടതുവശത്ത് നിന്നും വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_79.png",
     "answerIndex": 2
   },
   {
     "id": 80,
-    "q": "What does the traffic sign in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ ട്രാഫിക് ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Requests vehicles from the left to start",
-      "Requests vehicles from the right to start",
-      "Requests vehicles from the left to pass and vehicles from the front to stop",
-      "Requests vehicles from the right and left to pass",
-      "Right answer \t\tmark on"
+      "ഇടതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് സ്റ്റാർട്ട് ചെയ്യാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "വലതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് സ്റ്റാർട്ട് ചെയ്യാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "ഇടതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാനും മുന്നിൽ നിന്ന് വരുന്ന വാഹനങ്ങളോട് നിർത്താനും അഭ്യർത്ഥിക്കുന്നു",
+      "വലതുവശത്ത് നിന്നും ഇടതുവശത്ത് നിന്നും വരുന്ന വാഹനങ്ങളോട് കടന്നുപോകാൻ അഭ്യർത്ഥിക്കുന്നു",
+      "ശരിയായ ഉത്തരം അടയാളപ്പെടുത്തുക"
     ],
     "sign": "/signs/sign_80.png",
     "answerIndex": 2
   },
   {
     "id": 81,
-    "q": "Over speeding or dangerous driving is……",
+    "q": "അമിതവേഗതയോ അപകടകരമായ ഡ്രൈവിംഗോ……",
     "options": [
-      "A stern warning to authorities",
-      "A crime and is punishable",
-      "Attractive to other road users",
-      "A way to reach the destination without delay"
+      "അധികാരികൾക്ക് കർശനമായ മുന്നറിയിപ്പാണ്",
+      "ഒരു കുറ്റകൃത്യവും ശിക്ഷാർഹവുമാണ്",
+      "മറ്റ് റോഡ് ഉപയോക്താക്കൾക്ക് ആകർഷകമാണ്",
+      "താമസിയാതെ ലക്ഷ്യസ്ഥാനത്ത് എത്താനുള്ള ഒരു മാർഗമാണ്"
     ],
     "sign": "/signs/sign_81.png",
     "answerIndex": 1
   },
   {
     "id": 82,
-    "q": "What does clutch riding mean?",
+    "q": "ക്ലച്ച് റൈഡിംഗ് എന്നാൽ എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Using the clutch frequently",
-      "Driving with your foot on the clutch pedal",
-      "Not using the clutch at all",
-      "Always disengaging the clutch"
+      "ക്ലച്ച് പതിവായി ഉപയോഗിക്കുന്നത്",
+      "ക്ലച്ച് പെഡലിൽ കാൽ വെച്ച് ഓടിക്കുന്നത്",
+      "ക്ലച്ച് ഒട്ടും ഉപയോഗിക്കാത്തത്",
+      "എല്ലായ്പ്പോഴും ക്ലച്ച് വിച്ഛേദിക്കുന്നത്"
     ],
     "sign": "/signs/sign_82.png",
     "answerIndex": 1
   },
   {
     "id": 83,
-    "q": "What is the safe way to stop a vehicle?",
+    "q": "വാഹനം നിർത്താനുള്ള സുരക്ഷിതമായ മാർഗം എന്താണ്?",
     "options": [
-      "Press the clutch and then brake",
-      "Press the brake and then the clutch",
-      "Press the clutch and brake simultaneously",
-      "All of the above are correct"
+      "ക്ലച്ച് അമർത്തിയ ശേഷം ബ്രേക്ക് അമർത്തുക",
+      "ബ്രേക്ക് അമർത്തിയ ശേഷം ക്ലച്ച് അമർത്തുക",
+      "ക്ലച്ചും ബ്രേക്കും ഒരേസമയം അമർത്തുക",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം ശരിയാണ്"
     ],
     "sign": "/signs/sign_83.png",
     "answerIndex": 1
   },
   {
     "id": 84,
-    "q": "The safest way to drive down a steep descent",
+    "q": "കുത്തനെയുള്ള ഇറക്കത്തിൽ ഓടിക്കാനുള്ള ഏറ്റവും സുരക്ഷിതമായ മാർഗം",
     "options": [
-      "High torque gear with brakes",
-      "Use top gear with brakes",
-      "Use brake and clutch simultaneously",
-      "Use high torque gear along with brake and clutch"
+      "ബ്രേക്കിനൊപ്പം കുറഞ്ഞ ഗിയർ (ഹൈ ടോർക്ക് ഗിയർ) ഉപയോഗിക്കുക",
+      "ബ്രേക്കിനൊപ്പം ടോപ്പ് ഗിയർ ഉപയോഗിക്കുക",
+      "ബ്രേക്കും ക്ലച്ചും ഒരേസമയം ഉപയോഗിക്കുക",
+      "ബ്രേക്കും ക്ലച്ചും സഹിതം കുറഞ്ഞ ഗിയർ (ഹൈ ടോർക്ക് ഗിയർ) ഉപയോഗിക്കുക"
     ],
     "sign": "/signs/sign_84.png",
     "answerIndex": 0
   },
   {
     "id": 85,
-    "q": "If your vehicle breaks down at night",
+    "q": "രാത്രിയിൽ നിങ്ങളുടെ വാഹനം ബ്രേക്ക്ഡൗൺ ആയാൽ",
     "options": [
-      "Stop, apply handbrake, turn on park lights",
-      "Stop and turn on the red light",
-      "Stop, apply handbrake, turn on brake light",
-      "Stop and display the hazard warning light"
+      "നിർത്തുക, ഹാൻഡ്‌ബ്രേക്ക് ഇടുക, പാർക്ക് ലൈറ്റുകൾ ഓൺ ചെയ്യുക",
+      "നിർത്തി ചുവന്ന ലൈറ്റ് ഓൺ ചെയ്യുക",
+      "നിർത്തുക, ഹാൻഡ്‌ബ്രേക്ക് ഇടുക, ബ്രേക്ക് ലൈറ്റ് ഓൺ ചെയ്യുക",
+      "നിർത്തി ഹസാർഡ് വാണിംഗ് ലൈറ്റ് ഓൺ ചെയ്യുക"
     ],
     "sign": "/signs/sign_85.png",
     "answerIndex": 3
   },
   {
     "id": 86,
-    "q": "When a cow is standing across the road…",
+    "q": "ഒരു പശു റോഡിന് കുറുകെ നിൽക്കുമ്പോൾ...",
     "options": [
-      "Wait until it moves from the road",
-      "Pass in front of the cow",
-      "Pass behind the cow",
-      "Pass on the left side"
+      "അത് റോഡിൽ നിന്ന് മാറുന്നത് വരെ കാത്തിരിക്കുക",
+      "പശുവിന്റെ മുന്നിലൂടെ കടന്നുപോകുക",
+      "പശുവിന്റെ പിന്നിലൂടെ കടന്നുപോകുക",
+      "ഇടതുവശത്തുകൂടി കടന്നുപോകുക"
     ],
     "sign": "/signs/sign_86.png",
     "answerIndex": 2
   },
   {
     "id": 87,
-    "q": "Painting a private motor car with olive green paint is…..",
+    "q": "ഒരു സ്വകാര്യ മോട്ടോർ കാറിന് ഒലീവ് ഗ്രീൻ പെയിന്റ് അടിക്കുന്നത്.....",
     "options": [
-      "Not allowed",
-      "Allowed",
-      "Requires special permission",
-      "Allowed only for motorcycles"
+      "അനുവദനീയമല്ല",
+      "അനുവദനീയമാണ്",
+      "പ്രത്യേക അനുമതി ആവശ്യമാണ്",
+      "മോട്ടോർസൈക്കിളുകൾക്ക് മാത്രം അനുവദനീയമാണ്"
     ],
     "sign": "/signs/sign_87.png",
     "answerIndex": 0
   },
   {
     "id": 88,
-    "q": "When turning right or left, which is safer?",
+    "q": "വലത്തോട്ടോ ഇടത്തോട്ടോ തിരിയുമ്പോൾ, ഏതാണ് കൂടുതൽ സുരക്ഷിതം?",
     "options": [
-      "Use indicators only",
-      "Show hand signal only",
-      "Use both electronic indicators and hand signal",
-      "Hand signals are only required for left-hand steering vehicles"
+      "ഇൻഡിക്കേറ്ററുകൾ മാത്രം ഉപയോഗിക്കുക",
+      "കൈകൊണ്ട് മാത്രം സിഗ്നൽ കാണിക്കുക",
+      "ഇലക്ട്രോണിക് ഇൻഡിക്കേറ്ററുകളും കൈകൊണ്ടുള്ള സിഗ്നലും ഉപയോഗിക്കുക",
+      "ഇടത് വശത്ത് സ്റ്റിയറിംഗ് ഉള്ള വാഹനങ്ങൾക്ക് മാത്രമേ കൈ സിഗ്നലുകൾ ആവശ്യമുള്ളൂ"
     ],
     "sign": "/signs/sign_88.png",
     "answerIndex": 2
   },
   {
     "id": 89,
-    "q": "When a driver is driving on a one-way road………",
+    "q": "ഒരു ഡ്രൈവർ വൺ-വേ റോഡിൽ വാഹനമോടിക്കുമ്പോൾ.........",
     "options": [
-      "Can drive only in the direction permitted by the sign board",
-      "Can drive in the opposite direction in emergency situations",
-      "Can drive in both directions on Sundays",
-      "Is not allowed to drive on a one-way street"
+      "സൈൻ ബോർഡ് അനുവദിക്കുന്ന ദിശയിൽ മാത്രം ഓടിക്കാം",
+      "അടിയന്തര സാഹചര്യങ്ങളിൽ വിപരീത ദിശയിൽ ഓടിക്കാം",
+      "ഞായറാഴ്ചകളിൽ രണ്ട് ദിശകളിലും ഓടിക്കാം",
+      "വൺ-വേ സ്ട്രീറ്റിൽ ഓടിക്കാൻ അനുവാദമില്ല"
     ],
     "sign": "/signs/sign_89.png",
     "answerIndex": 0
   },
   {
     "id": 90,
-    "q": "What should a driver do when visibility is very low during the day in rainy season?",
+    "q": "മഴക്കാലത്ത് പകൽ സമയത്ത് കാഴ്ച വളരെ കുറവാണെങ്കിൽ ഡ്രൈവർ എന്തുചെയ്യണം?",
     "options": [
-      "Stop the vehicle",
-      "Ensure wiper blades are not old",
-      "Use the washer to clear the windscreen",
-      "Reduce the vehicle's speed and use the headlights"
+      "വാഹനം നിർത്തുക",
+      "വൈപ്പർ ബ്ലേഡുകൾ പഴയതല്ലെന്ന് ഉറപ്പാക്കുക",
+      "വിൻഡ്‌സ്‌ക്രീൻ വൃത്തിയാക്കാൻ വാഷർ ഉപയോഗിക്കുക",
+      "വാഹനത്തിന്റെ വേഗത കുറച്ച് ഹെഡ്‌ലൈറ്റുകൾ ഉപയോഗിക്കുക"
     ],
     "sign": "/signs/sign_90.png",
     "answerIndex": 3
   },
   {
     "id": 91,
-    "q": "On a road with two-way traffic, if not directed by a uniformed police officer or appropriate road signs, a driver should drive their vehicle on the side",
+    "q": "ഇരുവശത്തേക്കും ട്രാഫിക്കുള്ള റോഡിൽ, യൂണിഫോം ധരിച്ച പോലീസ് ഉദ്യോഗസ്ഥനോ ഉചിതമായ റോഡ് ചിഹ്നങ്ങളോ നിർദ്ദേശിക്കുന്നില്ലെങ്കിൽ, ഒരു ഡ്രൈവർ തന്റെ വാഹനം ഏത് വശത്തുകൂടി ഓടിക്കണം?",
     "options": [
-      "Left",
-      "Right",
-      "Middle",
-      "Diagonal"
+      "ഇടത്",
+      "വലത്",
+      "നടുക്ക്",
+      "കോണോടുകോൺ"
     ],
     "sign": "/signs/sign_91.png",
     "answerIndex": 0
   },
   {
     "id": 92,
-    "q": "What does the hand signal in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ കൈകൊണ്ടുള്ള സിഗ്നൽ എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Intends to turn left",
-      "Intends to turn right",
-      "Intends to slow down the vehicle",
-      "Requests all other vehicles to stop"
+      "ഇടത്തേക്ക് തിരിയാൻ ഉദ്ദേശിക്കുന്നു",
+      "വലത്തേക്ക് തിരിയാൻ ഉദ്ദേശിക്കുന്നു",
+      "വാഹനത്തിന്റെ വേഗത കുറയ്ക്കാൻ ഉദ്ദേശിക്കുന്നു",
+      "മറ്റെല്ലാ വാഹനങ്ങളോടും നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു"
     ],
     "sign": "/signs/sign_92.png",
     "answerIndex": 0
   },
   {
     "id": 93,
-    "q": "What does the hand signal in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ കൈകൊണ്ടുള്ള സിഗ്നൽ എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Intends to turn right",
-      "Requests oncoming vehicles to stop",
-      "Intends to slow down",
-      "Intends to turn left"
+      "വലത്തേക്ക് തിരിയാൻ ഉദ്ദേശിക്കുന്നു",
+      "എതിരെ വരുന്ന വാഹനങ്ങളോട് നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "വേഗത കുറയ്ക്കാൻ ഉദ്ദേശിക്കുന്നു",
+      "ഇടത്തേക്ക് തിരിയാൻ ഉദ്ദേശിക്കുന്നു"
     ],
     "sign": "/signs/sign_93.png",
     "answerIndex": 2
   },
   {
     "id": 94,
-    "q": "What does the hand signal in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ കൈകൊണ്ടുള്ള സിഗ്നൽ എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Intends to go straight",
-      "Intends to slow down the vehicle",
-      "Intends to turn right",
-      "Intends to stop the vehicle"
+      "നേരെ പോകാൻ ഉദ്ദേശിക്കുന്നു",
+      "വാഹനത്തിന്റെ വേഗത കുറയ്ക്കാൻ ഉദ്ദേശിക്കുന്നു",
+      "വലത്തേക്ക് തിരിയാൻ ഉദ്ദേശിക്കുന്നു",
+      "വാഹനം നിർത്താൻ ഉദ്ദേശിക്കുന്നു"
     ],
     "sign": "/signs/sign_94.png",
     "answerIndex": 2
   },
   {
     "id": 95,
-    "q": "What does the hand signal in this picture indicate?",
+    "q": "ഈ ചിത്രത്തിലെ കൈകൊണ്ടുള്ള സിഗ്നൽ എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Request for the following vehicle to stop",
-      "Intends to turn right",
-      "Intends to go straight",
-      "Intends to stop the vehicle"
+      "പിന്നാലെ വരുന്ന വാഹനം നിർത്താൻ അഭ്യർത്ഥിക്കുന്നു",
+      "വലത്തേക്ക് തിരിയാൻ ഉദ്ദേശിക്കുന്നു",
+      "നേരെ പോകാൻ ഉദ്ദേശിക്കുന്നു",
+      "വാഹനം നിർത്താൻ ഉദ്ദേശിക്കുന്നു"
     ],
     "sign": "/signs/sign_95.png",
     "answerIndex": 3
   },
   {
     "id": 96,
-    "q": "What does the sign on the instrument console indicate?",
+    "q": "ഇൻസ്ട്രുമെന്റ് കൺസോളിലെ ചിഹ്നം എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "Warning lamp",
-      "Road sign",
-      "Hazard lamp",
-      "Engine brake"
+      "വാണിംഗ് ലാമ്പ്",
+      "റോഡ് ചിഹ്നം",
+      "ഹസാർഡ് ലാമ്പ്",
+      "എഞ്ചിൻ ബ്രേക്ക്"
     ],
     "sign": "/signs/sign_96.png",
     "answerIndex": 0
   },
   {
     "id": 97,
-    "q": "What does a continuous yellow line in the middle of the road mean?",
+    "q": "റോഡിന്റെ നടുവിലുള്ള തുടർച്ചയായ മഞ്ഞ വര എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Overtake with caution",
-      "Overtaking is prohibited",
-      "Stop with caution",
-      "Not a parking zone"
+      "ജാഗ്രതയോടെ ഓവർടേക്ക് ചെയ്യുക",
+      "ഓവർടേക്കിംഗ് നിരോധിച്ചിരിക്കുന്നു",
+      "ജാഗ്രതയോടെ നിർത്തുക",
+      "പാർക്കിംഗ് സോൺ അല്ല"
     ],
     "sign": "/signs/sign_97.png",
     "answerIndex": 1
   },
   {
     "id": 98,
-    "q": "What should you do if you encounter an obstruction on your side of the road?",
+    "q": "നിങ്ങളുടെ വശത്തുള്ള റോഡിൽ ഒരു തടസ്സം നേരിട്ടാൽ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "You can use the opposite lane without giving priority to oncoming traffic",
-      "Accelerate to move quickly",
-      "Give priority to oncoming traffic",
-      "Stop the vehicle"
+      "എതിരെ വരുന്ന ട്രാഫിക്കിന് മുൻഗണന നൽകാതെ എതിർവശത്തെ ലെയ്ൻ ഉപയോഗിക്കാം",
+      "വേഗത്തിൽ നീങ്ങാൻ ആക്സിലറേറ്റ് ചെയ്യുക",
+      "എതിരെ വരുന്ന ട്രാഫിക്കിന് മുൻഗണന നൽകുക",
+      "വാഹനം നിർത്തുക"
     ],
     "sign": "/signs/sign_98.png",
     "answerIndex": 2
   },
   {
     "id": 99,
-    "q": "A white line drawn on the side of the road means?",
+    "q": "റോഡിന്റെ വശത്ത് വരച്ച വെള്ള വര അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Means no parking",
-      "Means no overtaking",
-      "Edge of the carriageway",
-      "Do not stop"
+      "പാർക്കിംഗ് ഇല്ലെന്ന് അർത്ഥമാക്കുന്നു",
+      "ഓവർടേക്കിംഗ് പാടില്ലെന്ന് അർത്ഥമാക്കുന്നു",
+      "റോഡിൻ്റെ (ക്യാരേജ് വേ) അഗ്രം",
+      "നിർത്തരുത്"
     ],
     "sign": "/signs/sign_99.png",
     "answerIndex": 2
   },
   {
     "id": 100,
-    "q": "When approaching a road under repair, you must observe the permitted speed limit…..",
+    "q": "അറ്റകുറ്റപ്പണി നടക്കുന്ന റോഡിനെ സമീപിക്കുമ്പോൾ, അനുവദനീയമായ വേഗപരിധി പാലിക്കണം.....",
     "options": [
-      "During daytime and working hours",
-      "Only at night",
-      "During working hours",
-      "At all times"
+      "പകൽ സമയത്തും പ്രവൃത്തി സമയങ്ങളിലും",
+      "രാത്രിയിൽ മാത്രം",
+      "പ്രവൃത്തി സമയങ്ങളിൽ",
+      "എല്ലാ സമയത്തും"
     ],
     "sign": "/signs/sign_100.png",
     "answerIndex": 3
   },
   {
     "id": 101,
-    "q": "When a motorcycle rider sees a \"Restrictions End\" signboard, how fast can he travel afterwards?",
+    "q": "ഒരു മോട്ടോർസൈക്കിൾ റൈഡർ \"നിയന്ത്രണങ്ങൾ അവസാനിച്ചു\" എന്ന സൈൻബോർഡ് കാണുമ്പോൾ, അതിനുശേഷം അവന് എത്ര വേഗത്തിൽ യാത്ര ചെയ്യാം?",
     "options": [
-      "More than 50 km per hour",
-      "The maximum speed of the vehicle",
-      "Not exceeding 50 km per hour",
-      "Depends on the speed limit of the specified road"
+      "മണിക്കൂറിൽ 50 കി.മീ കൂടുതൽ",
+      "വാഹനത്തിന്റെ പരമാവധി വേഗത",
+      "മണിക്കൂറിൽ 50 കി.മീ കവിയരുത്",
+      "നിർദ്ദിഷ്ട റോഡിന്റെ വേഗപരിധിയെ ആശ്രയിച്ചിരിക്കുന്നു"
     ],
     "sign": "/signs/sign_101.png",
     "answerIndex": 3
   },
   {
     "id": 102,
-    "q": "If a pedestrian steps onto the zebra line in front of you to cross the road……..?",
+    "q": "ഒരു കാൽനടയാത്രക്കാരൻ റോഡ് മുറിച്ചുകടക്കാൻ നിങ്ങളുടെ മുന്നിലുള്ള സീബ്ര ലൈനിലേക്ക് കാലെടുത്തുവെച്ചാൽ........?",
     "options": [
-      "Stop before the stop line and treat it as a stop signal",
-      "You must stop the vehicle at the zebra line and let them cross",
-      "If you are in an emergency, honk and increase the speed of the vehicle",
-      "If it is a red signal, stop the vehicle for crossing, otherwise it is not necessary"
+      "സ്റ്റോപ്പ് ലൈനിന് മുമ്പ് നിർത്തി അതിനെ ഒരു സ്റ്റോപ്പ് സിഗ്നലായി പരിഗണിക്കുക",
+      "നിങ്ങൾ സീബ്ര ലൈനിൽ വാഹനം നിർത്തി അവരെ കടന്നുപോകാൻ അനുവദിക്കണം",
+      "നിങ്ങൾ അടിയന്തര സാഹചര്യത്തിലാണെങ്കിൽ, ഹോൺ അടിച്ച് വാഹനത്തിന്റെ വേഗത കൂട്ടുക",
+      "ചുവന്ന സിഗ്നലാണെങ്കിൽ, മുറിച്ചുകടക്കാൻ വാഹനം നിർത്തുക, അല്ലാത്തപക്ഷം ആവശ്യമില്ല"
     ],
     "sign": "/signs/sign_102.png",
     "answerIndex": 0
   },
   {
     "id": 103,
-    "q": "When can a free turn be taken at a junction, if permitted by law?",
+    "q": "നിയമപ്രകാരം അനുവദനീയമാണെങ്കിൽ, ഒരു ജംഗ്ഷനിൽ എപ്പോഴാണ് ഒരു ഫ്രീ ടേൺ എടുക്കാൻ കഴിയുന്നത്?",
     "options": [
-      "When traveling straight",
-      "When turning left",
-      "When turning right",
-      "All of the above"
+      "നേരെ യാത്ര ചെയ്യുമ്പോൾ",
+      "ഇടത്തേക്ക് തിരിയുമ്പോൾ",
+      "വലത്തേക്ക് തിരിയുമ്പോൾ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_103.png",
     "answerIndex": 1
   },
   {
     "id": 104,
-    "q": "What does the intermittent white line in the middle of the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിന്റെ മധ്യത്തിലുള്ള ഇടവിട്ട വെള്ള വര എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "There is no restriction on crossing the lines",
-      "You can cross the line when it is safe to do so; you must return to your lane after overtaking",
-      "You can enter or leave the road",
-      "All of the above"
+      "വരകൾ മുറിച്ചുകടക്കുന്നതിന് നിയന്ത്രണങ്ങളില്ല",
+      "അങ്ങനെ ചെയ്യുന്നത് സുരക്ഷിതമാകുമ്പോൾ നിങ്ങൾക്ക് വര മുറിച്ചുകടക്കാം; ഓവർടേക്ക് ചെയ്ത ശേഷം നിങ്ങളുടെ ലെയ്നിലേക്ക് മടങ്ങണം",
+      "നിങ്ങൾക്ക് റോഡിലേക്ക് പ്രവേശിക്കുകയോ പുറത്തുപോകുകയോ ചെയ്യാം",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_104.png",
     "answerIndex": 3
   },
   {
     "id": 105,
-    "q": "What does the continuous white line in the middle of the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിന്റെ മധ്യത്തിലുള്ള തുടർച്ചയായ വെള്ള വര എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "There are no restrictions on crossing the lines",
-      "You cannot cross the lines under any circumstances",
-      "In emergencies, you can cross the lines and drive fast",
-      "You can cross the line when it is safe, and must return to your lane after overtaking"
+      "വരകൾ മുറിച്ചുകടക്കുന്നതിന് നിയന്ത്രണങ്ങളില്ല",
+      "നിങ്ങൾക്ക് ഒരു സാഹചര്യത്തിലും വരകൾ മുറിച്ചുകടക്കാൻ കഴിയില്ല",
+      "അടിയന്തര സാഹചര്യങ്ങളിൽ, നിങ്ങൾക്ക് വരകൾ മുറിച്ചുകടന്ന് വേഗത്തിൽ ഓടിക്കാം",
+      "സുരക്ഷിതമാകുമ്പോൾ നിങ്ങൾക്ക് വര മുറിച്ചുകടക്കാം, ഓവർടേക്ക് ചെയ്ത ശേഷം നിങ്ങളുടെ ലെയ്നിലേക്ക് മടങ്ങണം"
     ],
     "sign": "/signs/sign_105.png",
     "answerIndex": 1
   },
   {
     "id": 106,
-    "q": "What do the two continuous white lines in the middle of the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിന്റെ മധ്യത്തിലുള്ള രണ്ട് തുടർച്ചയായ വെള്ള വരകൾ എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "You cannot cross the lines under any circumstances",
-      "They act as a median between the two lanes",
-      "These lines are double dividing lines",
-      "All of the above"
+      "നിങ്ങൾക്ക് ഒരു സാഹചര്യത്തിലും വരകൾ മുറിച്ചുകടക്കാൻ കഴിയില്ല",
+      "അവ രണ്ട് ലെയ്‌നുകൾക്കിടയിലുള്ള മീഡിയനായി പ്രവർത്തിക്കുന്നു",
+      "ഈ വരകൾ ഇരട്ട വിഭജന വരകളാണ്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_106.png",
     "answerIndex": 3
   },
   {
     "id": 107,
-    "q": "What does the continuous yellow line in the middle of the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിന്റെ മധ്യത്തിലുള്ള തുടർച്ചയായ മഞ്ഞ വര എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "No restriction on crossing the line",
-      "Stop line",
-      "You cannot cross the line under any circumstances",
-      "When it is safe, you can cross the line and must return to your lane after overtaking"
+      "വര മുറിച്ചുകടക്കുന്നതിന് നിയന്ത്രണമില്ല",
+      "സ്റ്റോപ്പ് ലൈൻ",
+      "നിങ്ങൾക്ക് ഒരു സാഹചര്യത്തിലും വര മുറിച്ചുകടക്കാൻ കഴിയില്ല",
+      "സുരക്ഷിതമാകുമ്പോൾ, നിങ്ങൾക്ക് വര മുറിച്ചുകടക്കാം, ഓവർടേക്ക് ചെയ്ത ശേഷം നിങ്ങളുടെ ലെയ്നിലേക്ക് മടങ്ങണം"
     ],
     "sign": "/signs/sign_107.png",
     "answerIndex": 2
   },
   {
     "id": 108,
-    "q": "What does \"edge line,\" as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ \"എഡ്ജ് ലൈൻ\" എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "The edge line marked on the side of the road",
-      "Edge lines are continuous white or yellow lines",
-      "Helps you see which lane you are in",
-      "All of the above"
+      "റോഡിന്റെ വശത്ത് അടയാളപ്പെടുത്തിയിരിക്കുന്ന എഡ്ജ് ലൈൻ",
+      "എഡ്ജ് ലൈനുകൾ തുടർച്ചയായ വെള്ളയോ മഞ്ഞയോ വരകളാണ്",
+      "നിങ്ങൾ ഏത് ലെയ്‌നിലാണെന്ന് കാണാൻ സഹായിക്കുന്നു",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_108.png",
     "answerIndex": 3
   },
   {
     "id": 109,
-    "q": "What do \"rumble strips,\" as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ \"റംബിൾ സ്ട്രിപ്പുകൾ\" എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Rumble strips are raised surfaces marked across the road",
-      "Rumble strips can be placed on edge lines or dividing line",
-      "When you drive over rumble strips, they make a rumbling sound and your vehicle vibrates to warn you",
-      "All of the above"
+      "റോഡിന് കുറുകെ അടയാളപ്പെടുത്തിയിരിക്കുന്ന ഉയർന്ന പ്രതലങ്ങളാണ് റംബിൾ സ്ട്രിപ്പുകൾ",
+      "റംബിൾ സ്ട്രിപ്പുകൾ എഡ്ജ് ലൈനുകളിലോ വിഭജന വരയിലോ സ്ഥാപിക്കാം",
+      "നിങ്ങൾ റംബിൾ സ്ട്രിപ്പുകൾക്ക് മുകളിലൂടെ ഓടിക്കുമ്പോൾ, അവ ഒരു മുഴങ്ങുന്ന ശബ്ദമുണ്ടാക്കുകയും നിങ്ങളുടെ വാഹനം വൈബ്രേറ്റ് ചെയ്ത് നിങ്ങൾക്ക് മുന്നറിയിപ്പ് നൽകുകയും ചെയ്യുന്നു",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_109.png",
     "answerIndex": 3
   },
   {
     "id": 110,
-    "q": "What does the continuous yellow line on the edge of the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിന്റെ അരികിലുള്ള തുടർച്ചയായ മഞ്ഞ വര എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Curb lines indicate stopping restrictions",
-      "You can park vehicles there",
-      "You can stop vehicles there",
-      "All of the above"
+      "കർബ് ലൈനുകൾ നിർത്തുന്നതിനുള്ള നിയന്ത്രണങ്ങളെ സൂചിപ്പിക്കുന്നു",
+      "നിങ്ങൾക്ക് അവിടെ വാഹനങ്ങൾ പാർക്ക് ചെയ്യാം",
+      "നിങ്ങൾക്ക് അവിടെ വാഹനങ്ങൾ നിർത്താം",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_110.png",
     "answerIndex": 0
   },
   {
     "id": 111,
-    "q": "What does the traffic island or median strip marked in the middle of the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിന്റെ മധ്യത്തിൽ അടയാളപ്പെടുത്തിയിരിക്കുന്ന ട്രാഫിക് ഐലൻഡ് അല്ലെങ്കിൽ മീഡിയൻ സ്ട്രിപ്പ് എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "A traffic island is a raised area of the road marked to direct traffic",
-      "A median strip is the part that separates vehicles traveling in opposite directions",
-      "You should not stop or park on a median strip unless a board says it is a parking area",
-      "All of the above"
+      "ട്രാഫിക്കിനെ നയിക്കാൻ അടയാളപ്പെടുത്തിയിരിക്കുന്ന റോഡിലെ ഉയർന്ന പ്രദേശമാണ് ട്രാഫിക് ഐലൻഡ്",
+      "വിപരീത ദിശകളിൽ സഞ്ചരിക്കുന്ന വാഹനങ്ങളെ വേർതിരിക്കുന്ന ഭാഗമാണ് മീഡിയൻ സ്ട്രിപ്പ്",
+      "ഒരു മീഡിയൻ സ്ട്രിപ്പിൽ പാർക്കിംഗ് ഏരിയയാണെന്ന് ഒരു ബോർഡ് പറയുന്നില്ലെങ്കിൽ നിങ്ങൾ അവിടെ നിർത്തുകയോ പാർക്ക് ചെയ്യുകയോ അരുത്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_111.png",
     "answerIndex": 3
   },
   {
     "id": 112,
-    "q": "What do the white or yellow zigzag lines on the side of the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിന്റെ വശത്തുള്ള വെള്ളയോ മഞ്ഞയോ സിഗ്സാഗ് വരകൾ എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Indicates to drivers that stopping or parking in the area with these lines is prohibited for smooth traffic flow",
-      "These lines are commonly found near pedestrian crossings and outside important buildings such as schools, police stations, and hospitals",
-      "These lines were introduced to prevent accidents and for a safe road culture",
-      "All of the above"
+      "സുഗമമായ ട്രാഫിക് ഒഴുക്കിനായി ഈ വരകളുള്ള ഭാഗത്ത് നിർത്തുന്നതോ പാർക്ക് ചെയ്യുന്നതോ നിരോധിച്ചിരിക്കുന്നുവെന്ന് ഡ്രൈവർമാരെ സൂചിപ്പിക്കുന്നു",
+      "ഈ വരകൾ സാധാരണയായി കാൽനട ക്രോസിംഗുകൾക്ക് സമീപവും സ്കൂളുകൾ, പോലീസ് സ്റ്റേഷനുകൾ, ആശുപത്രികൾ തുടങ്ങിയ പ്രധാന കെട്ടിടങ്ങൾക്ക് പുറത്തും കാണപ്പെടുന്നു",
+      "അപകടങ്ങൾ തടയുന്നതിനും സുരക്ഷിതമായ റോഡ് സംസ്കാരത്തിനുമായാണ് ഈ ലൈനുകൾ അവതരിപ്പിച്ചത്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_112.png",
     "answerIndex": 3
   },
   {
     "id": 113,
-    "q": "What should you do if the vehicle in front of you stops on a zigzag line?",
+    "q": "നിങ്ങളുടെ മുന്നിലുള്ള വാഹനം ഒരു സിഗ്സാഗ് ലൈനിൽ നിർത്തിയാൽ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "You should reverse your vehicle",
-      "You can overtake if no vehicle is coming from the opposite direction",
-      "Wait until the vehicle in front of you moves, as pedestrians may be crossing",
-      "You can overtake by honking or giving a signal"
+      "നിങ്ങളുടെ വാഹനം റിവേഴ്സ് ചെയ്യണം",
+      "എതിർദിശയിൽ നിന്ന് വാഹനം വരുന്നില്ലെങ്കിൽ നിങ്ങൾക്ക് ഓവർടേക്ക് ചെയ്യാം",
+      "മുന്നിലുള്ള വാഹനം നീങ്ങുന്നത് വരെ കാത്തിരിക്കുക, കാരണം കാൽനടയാത്രക്കാർ മുറിച്ചുകടക്കുന്നുണ്ടാകാം",
+      "ഹോൺ അടിച്ചോ സിഗ്നൽ നൽകിയോ നിങ്ങൾക്ക് ഓവർടേക്ക് ചെയ്യാം"
     ],
     "sign": "/signs/sign_113.png",
     "answerIndex": 2
   },
   {
     "id": 114,
-    "q": "What does the yellow box junction marked on the road, as shown in the picture, mean?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ റോഡിൽ അടയാളപ്പെടുത്തിയിരിക്കുന്ന യെല്ലോ ബോക്സ് ജംഗ്ഷൻ എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "You can enter a yellow box junction if the exit ahead is clear",
-      "Before entering a yellow box junction, ensure that your vehicle has space to cross the junction without stopping in the box",
-      "Stopping in a yellow box junction is a punishable offence",
-      "All of the above"
+      "മുന്നിലുള്ള എക്സിറ്റ് വ്യക്തമാണെങ്കിൽ നിങ്ങൾക്ക് ഒരു യെല്ലോ ബോക്സ് ജംഗ്ഷനിൽ പ്രവേശിക്കാം",
+      "ഒരു യെല്ലോ ബോക്സ് ജംഗ്ഷനിൽ പ്രവേശിക്കുന്നതിന് മുമ്പ്, ബോക്സിൽ നിർത്താതെ ജംഗ്ഷൻ കടക്കാൻ നിങ്ങളുടെ വാഹനത്തിന് സ്ഥലമുണ്ടെന്ന് ഉറപ്പാക്കുക",
+      "യെല്ലോ ബോക്സ് ജംഗ്ഷനിൽ നിർത്തുന്നത് ശിക്ഷാർഹമായ കുറ്റമാണ്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_114.png",
     "answerIndex": 3
   },
   {
     "id": 115,
-    "q": "What type of traffic is shown in the picture?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നത് ഏത് തരം ട്രാഫിക് ആണ്?",
     "options": [
-      "Single lane traffic",
-      "Double lane traffic",
-      "One-way traffic",
-      "Two-way traffic"
+      "ഒറ്റ ലെയ്ൻ ട്രാഫിക്",
+      "ഇരട്ട ലെയ്ൻ ട്രാഫിക്",
+      "വൺ-വേ ട്രാഫിക്",
+      "ടു-വേ ട്രാഫിക്"
     ],
     "sign": "/signs/sign_115.png",
     "answerIndex": 3
   },
   {
     "id": 116,
-    "q": "Vehicles next to the continuous yellow line, as shown in the picture….",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്നതുപോലെ തുടർച്ചയായ മഞ്ഞ വരയോട് ചേർന്നുള്ള വാഹനങ്ങൾ....",
     "options": [
-      "Cannot cross the intermittent yellow line",
-      "Cannot cross the continuous yellow line; overtaking is prohibited",
-      "Can cross in case of emergency",
-      "Can stop in case of emergency"
+      "ഇടവിട്ട മഞ്ഞ വര മുറിച്ചുകടക്കാൻ കഴിയില്ല",
+      "തുടർച്ചയായ മഞ്ഞ വര മുറിച്ചുകടക്കാൻ കഴിയില്ല; ഓവർടേക്കിംഗ് നിരോധിച്ചിരിക്കുന്നു",
+      "അടിയന്തര സാഹചര്യങ്ങളിൽ മുറിച്ചുകടക്കാം",
+      "അടിയന്തര സാഹചര്യങ്ങളിൽ നിർത്താം"
     ],
     "sign": "/signs/sign_116.png",
     "answerIndex": 1
   },
   {
     "id": 117,
-    "q": "If you want to make a \"U\" turn on this road in the picture, what should you do?",
+    "q": "ചിത്രത്തിലെ ഈ റോഡിൽ നിങ്ങൾക്ക് ഒരു \"യു\" ടേൺ എടുക്കണമെങ്കിൽ, നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Proceed forward as turning is prohibited",
-      "Look in the mirror, signal, and turn",
-      "Show a signal for the oncoming vehicle to pass and then turn",
-      "If you have an emergency and no vehicle is coming from the opposite direction, you can proceed"
+      "തിരിയുന്നത് നിരോധിച്ചിരിക്കുന്നതിനാൽ മുന്നോട്ട് പോകുക",
+      "കണ്ണാടിയിൽ നോക്കുക, സിഗ്നൽ നൽകുക, തിരിയുക",
+      "എതിരെ വരുന്ന വാഹനത്തിന് കടന്നുപോകാൻ സിഗ്നൽ കാണിക്കുക, എന്നിട്ട് തിരിയുക",
+      "നിങ്ങൾക്ക് അടിയന്തര സാഹചര്യമുണ്ടെങ്കിൽ, എതിർദിശയിൽ നിന്ന് വാഹനം വരുന്നില്ലെങ്കിൽ, നിങ്ങൾക്ക് പോകാം"
     ],
     "sign": "/signs/sign_117.png",
     "answerIndex": 0
   },
   {
     "id": 118,
-    "q": "If you want to change from one lane to another, what should you do?",
+    "q": "നിങ്ങൾക്ക് ഒരു ലെയ്നിൽ നിന്ന് മറ്റൊന്നിലേക്ക് മാറണമെങ്കിൽ, നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Check for a safe space through the rearview mirror and change lanes if it is safe",
-      "Before you intend to change lanes, check the blind spot and give the correct turn signal",
-      "Check twice for a safe space and change lanes gradually with the correct signal",
-      "All of the above"
+      "റിയർവ്യൂ മിററിലൂടെ സുരക്ഷിതമായ സ്ഥലമുണ്ടോയെന്ന് പരിശോധിച്ച് സുരക്ഷിതമാണെങ്കിൽ ലെയ്ൻ മാറുക",
+      "ലെയ്ൻ മാറാൻ ഉദ്ദേശിക്കുന്നതിന് മുമ്പ്, ബ്ലൈൻഡ് സ്പോട്ട് പരിശോധിച്ച് ശരിയായ ടേൺ സിഗ്നൽ നൽകുക",
+      "സുരക്ഷിതമായ സ്ഥലത്തിനായി രണ്ടുതവണ പരിശോധിച്ച് ശരിയായ സിഗ്നലോടെ ക്രമേണ ലെയ്ൻ മാറുക",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_118.png",
     "answerIndex": 3
   },
   {
     "id": 119,
-    "q": "Which vehicle shown in the picture can cross the road?",
+    "q": "ചിത്രത്തിൽ കാണിച്ചിരിക്കുന്ന ഏത് വാഹനത്തിന് റോഡ് മുറിച്ചുകടക്കാൻ കഴിയും?",
     "options": [
-      "Both cars can cross the road with caution",
-      "The maroon car on the side of the continuous yellow line can pass with caution",
-      "The white car on the side of the broken yellow line can pass with caution",
-      "Both cars cannot cross the road due to the yellow line"
+      "രണ്ട് കാറുകൾക്കും ജാഗ്രതയോടെ റോഡ് മുറിച്ചുകടക്കാം",
+      "തുടർച്ചയായ മഞ്ഞ വരയുടെ വശത്തുള്ള മെറൂൺ കാറിന് ജാഗ്രതയോടെ കടന്നുപോകാം",
+      "മുറിഞ്ഞ മഞ്ഞ വരയുടെ വശത്തുള്ള വെള്ള കാറിന് ജാഗ്രതയോടെ കടന്നുപോകാം",
+      "മഞ്ഞ വര കാരണം രണ്ട് കാറുകൾക്കും റോഡ് മുറിച്ചുകടക്കാൻ കഴിയില്ല"
     ],
     "sign": "/signs/sign_119.png",
     "answerIndex": 2
   },
   {
     "id": 120,
-    "q": "What do the intermittent double white lines across the road mean?",
+    "q": "റോഡിന് കുറുകെയുള്ള ഇടവിട്ട ഇരട്ട വെള്ള വരകൾ എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Entering the main road, give priority to vehicles coming from the right",
-      "Entering the main road, you can turn left or right",
-      "Proceed after stopping",
-      "Do not cross the lines"
+      "പ്രധാന റോഡിലേക്ക് പ്രവേശിക്കുമ്പോൾ, വലതുവശത്ത് നിന്ന് വരുന്ന വാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക",
+      "പ്രധാന റോഡിലേക്ക് പ്രവേശിക്കുമ്പോൾ, നിങ്ങൾക്ക് ഇടത്തോട്ടോ വലത്തോട്ടോ തിരിയാം",
+      "നിർത്തിയ ശേഷം പോകുക",
+      "വരകൾ മുറിച്ചുകടക്കരുത്"
     ],
     "sign": "/signs/sign_120.png",
     "answerIndex": 0
   },
   {
     "id": 121,
-    "q": "What does this directional arrow between the broken lines indicate?",
+    "q": "മുറിഞ്ഞ വരകൾക്കിടയിലുള്ള ഈ ദിശാസൂചക അമ്പടയാളം എന്തിനെ സൂചിപ്പിക്കുന്നു?",
     "options": [
-      "Turn left and move forward",
-      "Warns the driver to return to the lane if overtaking",
-      "Area where overtaking is permitted",
-      "Left road lane"
+      "ഇടത്തേക്ക് തിരിഞ്ഞ് മുന്നോട്ട് നീങ്ങുക",
+      "ഓവർടേക്ക് ചെയ്യുകയാണെങ്കിൽ ലെയ്നിലേക്ക് മടങ്ങാൻ ഡ്രൈവർക്ക് മുന്നറിയിപ്പ് നൽകുന്നു",
+      "ഓവർടേക്കിംഗ് അനുവദനീയമായ പ്രദേശം",
+      "ഇടത് റോഡ് ലെയ്ൻ"
     ],
     "sign": "/signs/sign_121.png",
     "answerIndex": 1
   },
   {
     "id": 122,
-    "q": "What should you do when you reach a junction with limited visibility?",
+    "q": "കാഴ്ച പരിമിതമായ ഒരു ജംഗ്ഷനിൽ എത്തുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Look both ways and move slowly",
-      "Look to the right and move slowly",
-      "Move quickly",
-      "Move slowly"
+      "ഇരുവശത്തേക്കും നോക്കി പതുക്കെ നീങ്ങുക",
+      "വലത്തേക്ക് നോക്കി പതുക്കെ നീങ്ങുക",
+      "വേഗത്തിൽ നീങ്ങുക",
+      "പതുക്കെ നീങ്ങുക"
     ],
     "sign": "/signs/sign_122.png",
     "answerIndex": 0
   },
   {
     "id": 123,
-    "q": "You are driving at night on a well-lit road. You must……..",
+    "q": "നിങ്ങൾ രാത്രിയിൽ നല്ല വെളിച്ചമുള്ള റോഡിലൂടെ വാഹനമോടിക്കുകയാണ്. നിങ്ങൾ നിർബന്ധമായും........",
     "options": [
-      "Use your headlights on high beam",
-      "Always use your headlights on low beam",
-      "Always use the hazard lights",
-      "Always use the fog lamps"
+      "നിങ്ങളുടെ ഹെഡ്‌ലൈറ്റുകൾ ഹൈ ബീമിൽ ഉപയോഗിക്കുക",
+      "എല്ലായ്പ്പോഴും നിങ്ങളുടെ ഹെഡ്‌ലൈറ്റുകൾ ലോ ബീമിൽ ഉപയോഗിക്കുക",
+      "എല്ലായ്പ്പോഴും ഹസാർഡ് ലൈറ്റുകൾ ഉപയോഗിക്കുക",
+      "എല്ലായ്പ്പോഴും ഫോഗ് ലാമ്പുകൾ ഉപയോഗിക്കുക"
     ],
     "sign": "/signs/sign_123.png",
     "answerIndex": 1
   },
   {
     "id": 124,
-    "q": "What should your vehicle's lights be like when traveling on the road behind other vehicles at night?",
+    "q": "രാത്രിയിൽ മറ്റ് വാഹനങ്ങൾക്ക് പിന്നിൽ റോഡിലൂടെ സഞ്ചരിക്കുമ്പോൾ നിങ്ങളുടെ വാഹനത്തിന്റെ ലൈറ്റുകൾ എങ്ങനെയായിരിക്കണം?",
     "options": [
-      "Hazard warning lights",
-      "Low beam headlights",
-      "High beam headlights",
-      "Use flashlights"
+      "ഹസാർഡ് വാണിംഗ് ലൈറ്റുകൾ",
+      "ലോ ബീം ഹെഡ്‌ലൈറ്റുകൾ",
+      "ഹൈ ബീം ഹെഡ്‌ലൈറ്റുകൾ",
+      "ഫ്ലാഷ്‌ലൈറ്റുകൾ ഉപയോഗിക്കുക"
     ],
     "sign": "/signs/sign_124.png",
     "answerIndex": 1
   },
   {
     "id": 125,
-    "q": "What should you do when you are about to enter a bridge?",
+    "q": "നിങ്ങൾ ഒരു പാലത്തിലേക്ക് പ്രവേശിക്കാൻ പോകുമ്പോൾ എന്തുചെയ്യണം?",
     "options": [
-      "Slow down, do not overtake",
-      "Watch out for pedestrians",
-      "Turn on headlights",
-      "Move the vehicle as fast as possible to cross the bridge quickly"
+      "വേഗത കുറയ്ക്കുക, ഓവർടേക്ക് ചെയ്യരുത്",
+      "കാൽനടയാത്രക്കാരെ ശ്രദ്ധിക്കുക",
+      "ഹെഡ്‌ലൈറ്റുകൾ ഓൺ ചെയ്യുക",
+      "പാലം വേഗത്തിൽ കടക്കാൻ കഴിയുന്നത്ര വേഗത്തിൽ വാഹനം നീക്കുക"
     ],
     "sign": "/signs/sign_125.png",
     "answerIndex": 0
   },
   {
     "id": 126,
-    "q": "Why should you keep to the left on a two-lane road when approaching a right-hand curve?",
+    "q": "ഒരു വലത് വശത്തെ വളവിനെ സമീപിക്കുമ്പോൾ രണ്ട് ലെയ്ൻ റോഡിൽ നിങ്ങൾ എന്തിന് ഇടതുവശം ചേർന്ന് പോകണം?",
     "options": [
-      "To improve your view of the road",
-      "To avoid skidding",
-      "To let vehicles from behind pass",
-      "To give space for other vehicles to overtake"
+      "റോഡിന്റെ കാഴ്ച മെച്ചപ്പെടുത്താൻ",
+      "തെന്നിമാറുന്നത് ഒഴിവാക്കാൻ",
+      "പിന്നിൽ നിന്നുള്ള വാഹനങ്ങളെ കടന്നുപോകാൻ അനുവദിക്കാൻ",
+      "മറ്റ് വാഹനങ്ങൾക്ക് ഓവർടേക്ക് ചെയ്യാൻ സ്ഥലം നൽകാൻ"
     ],
     "sign": "/signs/sign_126.png",
     "answerIndex": 0
   },
   {
     "id": 127,
-    "q": "When driving on a main road, another vehicle reverses onto the road from a side road. What should you do?",
+    "q": "ഒരു പ്രധാന റോഡിലൂടെ വാഹനമോടിക്കുമ്പോൾ, മറ്റൊരു വാഹനം സൈഡ് റോഡിൽ നിന്ന് റോഡിലേക്ക് റിവേഴ്സ് എടുക്കുന്നു. നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Move to the opposite side of the road",
-      "Sound your horn and be prepared to stop",
-      "Turn on the headlights",
-      "Speed up and drive fast"
+      "റോഡിന്റെ എതിർവശത്തേക്ക് മാറുക",
+      "ഹോൺ മുഴക്കി നിർത്താൻ തയ്യാറാവുക",
+      "ഹെഡ്‌ലൈറ്റുകൾ ഓൺ ചെയ്യുക",
+      "വേഗത കൂട്ടി വേഗത്തിൽ ഓടിക്കുക"
     ],
     "sign": "/signs/sign_127.png",
     "answerIndex": 1
   },
   {
     "id": 128,
-    "q": "When approaching a crossroad, the driver of a long vehicle in front of you signals right and moves to the left. What should you do?",
+    "q": "ഒരു ക്രോസ്റോഡിനെ സമീപിക്കുമ്പോൾ, നിങ്ങളുടെ മുന്നിലുള്ള ഒരു നീണ്ട വാഹനത്തിന്റെ ഡ്രൈവർ വലത്തേക്ക് സിഗ്നൽ നൽകി ഇടതുവശത്തേക്ക് നീങ്ങുന്നു. നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Honk to warn the driver",
-      "Wait behind the vehicle",
-      "Overtake on the right",
-      "You must stop the vehicle"
+      "ഡ്രൈവർക്ക് മുന്നറിയിപ്പ് നൽകാൻ ഹോൺ അടിക്കുക",
+      "വാഹനത്തിന് പിന്നിൽ കാത്തുനിൽക്കുക",
+      "വലതുവശത്തുകൂടി ഓവർടേക്ക് ചെയ്യുക",
+      "നിങ്ങൾ വാഹനം നിർത്തണം"
     ],
     "sign": "/signs/sign_128.png",
     "answerIndex": 1
   },
   {
     "id": 129,
-    "q": "What should you consider before making a \"U\" turn?",
+    "q": "ഒരു \"യു\" ടേൺ എടുക്കുന്നതിന് മുമ്പ് നിങ്ങൾ എന്താണ് പരിഗണിക്കേണ്ടത്?",
     "options": [
-      "Use indicator and select neutral gear",
-      "Turn on the signal for turning right, look in the rearview mirror and turn slowly",
-      "Wait for the signal to turn red",
-      "Shift down and turn right"
+      "ഇൻഡിക്കേറ്റർ ഉപയോഗിച്ച് ന്യൂട്രൽ ഗിയർ തിരഞ്ഞെടുക്കുക",
+      "വലത്തേക്ക് തിരിയാനുള്ള സിഗ്നൽ ഓണാക്കുക, റിയർവ്യൂ മിററിൽ നോക്കി പതുക്കെ തിരിയുക",
+      "സിഗ്നൽ ചുവപ്പാകാൻ കാത്തിരിക്കുക",
+      "ഗിയർ ഡൗൺ ചെയ്ത് വലത്തേക്ക് തിരിയുക"
     ],
     "sign": "/signs/sign_129.png",
     "answerIndex": 1
   },
   {
     "id": 130,
-    "q": "If you intend to turn left, where should your vehicle be positioned?",
+    "q": "നിങ്ങൾ ഇടത്തേക്ക് തിരിയാൻ ഉദ്ദേശിക്കുന്നുവെങ്കിൽ, നിങ്ങളുടെ വാഹനം എവിടെയായിരിക്കണം?",
     "options": [
-      "In the middle of the road",
-      "At the stop line",
-      "On the shoulder line of the road",
-      "In the leftmost lane"
+      "റോഡിന്റെ മധ്യത്തിൽ",
+      "സ്റ്റോപ്പ് ലൈനിൽ",
+      "റോഡിന്റെ ഷോൾഡർ ലൈനിൽ",
+      "ഏറ്റവും ഇടത് ലെയ്നിൽ"
     ],
     "sign": "/signs/sign_130.png",
     "answerIndex": 1
   },
   {
     "id": 131,
-    "q": "When should you not reverse your vehicle?",
+    "q": "എപ്പോഴാണ് നിങ്ങളുടെ വാഹനം റിവേഴ്സ് എടുക്കാൻ പാടില്ലാത്തത്?",
     "options": [
-      "On a busy road",
-      "On a one-way road",
-      "From a side road onto a main road",
-      "All of the above"
+      "തിരക്കേറിയ റോഡിൽ",
+      "വൺ-വേ റോഡിൽ",
+      "ഒരു സൈഡ് റോഡിൽ നിന്ന് പ്രധാന റോഡിലേക്ക്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_131.png",
     "answerIndex": 3
   },
   {
     "id": 132,
-    "q": "What should you do when approaching vehicles stopped in two lanes at a signal from behind?",
+    "q": "ഒരു സിഗ്നലിൽ രണ്ട് ലെയ്‌നുകളിലായി നിർത്തിയിട്ടിരിക്കുന്ന വാഹനങ്ങളെ പിന്നിൽ നിന്ന് സമീപിക്കുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Pass the entire line of vehicles and stop in front",
-      "Stop behind the last vehicle in the appropriate lane",
-      "Stop wherever you find space",
-      "You should follow other drivers"
+      "വാഹനങ്ങളുടെ മുഴുവൻ നിരയെയും മറികടന്ന് മുന്നിൽ നിർത്തുക",
+      "ഉചിതമായ ലെയ്നിലെ അവസാനത്തെ വാഹനത്തിന് പിന്നിൽ നിർത്തുക",
+      "നിങ്ങൾക്ക് സ്ഥലം കിട്ടുന്നിടത്ത് നിർത്തുക",
+      "നിങ്ങൾ മറ്റ് ഡ്രൈവർമാരെ പിന്തുടരണം"
     ],
     "sign": "/signs/sign_132.png",
     "answerIndex": 1
   },
   {
     "id": 133,
-    "q": "What should you do if you start to feel tired or unable to concentrate while driving?",
+    "q": "ഡ്രൈവ് ചെയ്യുമ്പോൾ നിങ്ങൾക്ക് ക്ഷീണമോ ശ്രദ്ധ കേന്ദ്രീകരിക്കാൻ കഴിയാതെ വരികയോ ചെയ്താൽ എന്തുചെയ്യണം?",
     "options": [
-      "Stop the vehicle as soon as it is safe and take a rest",
-      "Turn on the stereo to help you concentrate",
-      "Speed up to reach your destination faster",
-      "Make a phone call and try to concentrate"
+      "സുരക്ഷിതമായ ഉടൻ വാഹനം നിർത്തി വിശ്രമിക്കുക",
+      "ശ്രദ്ധ കേന്ദ്രീകരിക്കാൻ സഹായിക്കുന്നതിന് സ്റ്റീരിയോ ഓൺ ചെയ്യുക",
+      "നിങ്ങളുടെ ലക്ഷ്യസ്ഥാനത്ത് വേഗത്തിൽ എത്താൻ വേഗത കൂട്ടുക",
+      "ഒരു ഫോൺ കോൾ ചെയ്ത് ശ്രദ്ധ കേന്ദ്രീകരിക്കാൻ ശ്രമിക്കുക"
     ],
     "sign": "/signs/sign_133.png",
     "answerIndex": 0
   },
   {
     "id": 134,
-    "q": "What should you do if you feel sick and unable to concentrate while driving a car?",
+    "q": "ഒരു കാർ ഓടിക്കുമ്പോൾ നിങ്ങൾക്ക് അസുഖം തോന്നുകയും ശ്രദ്ധ കേന്ദ്രീകരിക്കാൻ കഴിയാതെ വരികയും ചെയ്താൽ എന്തുചെയ്യണം?",
     "options": [
-      "Turn on the stereo to help you concentrate",
-      "Continue your journey, keep the windows open",
-      "Stop in a safe place, seek medical help if possible",
-      "Speed up to reach the destination as soon as possible"
+      "ശ്രദ്ധ കേന്ദ്രീകരിക്കാൻ സഹായിക്കുന്നതിന് സ്റ്റീരിയോ ഓൺ ചെയ്യുക",
+      "യാത്ര തുടരുക, ജനലുകൾ തുറന്നിടുക",
+      "സുരക്ഷിതമായ സ്ഥലത്ത് നിർത്തുക, സാധ്യമെങ്കിൽ വൈദ്യസഹായം തേടുക",
+      "കഴിയുന്നത്ര വേഗം ലക്ഷ്യസ്ഥാനത്ത് എത്താൻ വേഗത കൂട്ടുക"
     ],
     "sign": "/signs/sign_134.png",
     "answerIndex": 2
   },
   {
     "id": 135,
-    "q": "When stopping on an upward gradient, one should?",
+    "q": "ഒരു കയറ്റത്തിൽ നിർത്തുമ്പോൾ, ഒരാൾ എന്തുചെയ്യണം?",
     "options": [
-      "Stop the vehicle in clutch",
-      "Stop the vehicle on the brake",
-      "Put the vehicle in high gear after stopping, then use the parking brake",
-      "Hold the vehicle in gear"
+      "ക്ലച്ചിൽ വാഹനം നിർത്തുക",
+      "ബ്രേക്കിൽ വാഹനം നിർത്തുക",
+      "നിർത്തിയ ശേഷം വാഹനം ഉയർന്ന ഗിയറിലിടുക, തുടർന്ന് പാർക്കിംഗ് ബ്രേക്ക് ഉപയോഗിക്കുക",
+      "വാഹനം ഗിയറിൽ നിർത്തുക"
     ],
     "sign": "/signs/sign_135.png",
     "answerIndex": 2
   },
   {
     "id": 137,
-    "q": "Hazard warning lights should only be used…",
+    "q": "ഹസാർഡ് വാണിംഗ് ലൈറ്റുകൾ എപ്പോൾ മാത്രമേ ഉപയോഗിക്കാവൂ...",
     "options": [
-      "to proceed straight at a four-way junction.",
-      "to slow down the vehicle behind.",
-      "to drive the vehicle faster at a busy junction.",
-      "for emergency parking, especially on highways and busy roads."
+      "ഒരു നാല്-വഴി ജംഗ്ഷനിൽ നേരെ പോകാൻ.",
+      "പിന്നിലുള്ള വാഹനത്തിന്റെ വേഗത കുറയ്ക്കാൻ.",
+      "തിരക്കുള്ള ജംഗ്ഷനിൽ വാഹനം വേഗത്തിൽ ഓടിക്കാൻ.",
+      "അടിയന്തര പാർക്കിംഗിനായി, പ്രത്യേകിച്ച് ഹൈവേകളിലും തിരക്കേറിയ റോഡുകളിലും."
     ],
     "sign": "/signs/sign_137.png",
     "answerIndex": 3
   },
   {
     "id": 138,
-    "q": "What should you do before opening the right-side doors after parking the vehicle?",
+    "q": "വാഹനം പാർക്ക് ചെയ്ത ശേഷം വലതുവശത്തെ ഡോറുകൾ തുറക്കുന്നതിന് മുമ്പ് നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Make sure no vehicle is passing by",
-      "Open the door quickly and get out",
-      "You must open your window glass",
-      "Do not open the right doors, get out through the left side"
+      "ഒരു വാഹനവും അരികിലൂടെ കടന്നുപോകുന്നില്ലെന്ന് ഉറപ്പാക്കുക",
+      "വേഗത്തിൽ വാതിൽ തുറന്ന് പുറത്തിറങ്ങുക",
+      "നിങ്ങളുടെ വിൻഡോ ഗ്ലാസ് തുറക്കണം",
+      "വലതുവശത്തെ ഡോറുകൾ തുറക്കരുത്, ഇടതുവശത്തുകൂടി പുറത്തിറങ്ങുക"
     ],
     "sign": "/signs/sign_138.png",
     "answerIndex": 0
   },
   {
     "id": 139,
-    "q": "When loading a vehicle, which of the following is most important?",
+    "q": "ഒരു വാഹനത്തിൽ ലോഡ് കയറ്റുമ്പോൾ, ഇനിപ്പറയുന്നവയിൽ ഏതാണ് ഏറ്റവും പ്രധാനം?",
     "options": [
-      "Load at the back",
-      "Distribute the load evenly everywhere",
-      "Load in the canter of the vehicle",
-      "Load at the front"
+      "പിന്നിൽ ലോഡ് ചെയ്യുക",
+      "എല്ലായിടത്തും ലോഡ് തുല്യമായി വിതരണം ചെയ്യുക",
+      "വാഹനത്തിന്റെ മധ്യഭാഗത്ത് ലോഡ് ചെയ്യുക",
+      "മുന്നിൽ ലോഡ് ചെയ്യുക"
     ],
     "sign": "/signs/sign_139.png",
     "answerIndex": 2
   },
   {
     "id": 140,
-    "q": "You are driving a tipper vehicle carrying dry sand. Why should you cover this load properly?",
+    "q": "നിങ്ങൾ ഉണങ്ങിയ മണൽ കയറ്റിയ ഒരു ടിപ്പർ വാഹനം ഓടിക്കുകയാണ്. എന്തുകൊണ്ടാണ് നിങ്ങൾ ഈ ലോഡ് ശരിയായി മൂടേണ്ടത്?",
     "options": [
-      "To make handling effective",
-      "To adjust your rearward view",
-      "To prevent sand from blowing into the eyes of other pedestrians",
-      "To prevent water from getting in"
+      "കൈകാര്യം ചെയ്യുന്നത് ഫലപ്രദമാക്കാൻ",
+      "നിങ്ങളുടെ പിന്നോട്ടുള്ള കാഴ്ച ക്രമീകരിക്കാൻ",
+      "മറ്റ് കാൽനടയാത്രക്കാരുടെ കണ്ണിൽ മണൽ വീശുന്നത് തടയാൻ",
+      "വെള്ളം കയറുന്നത് തടയാൻ"
     ],
     "sign": "/signs/sign_140.png",
     "answerIndex": 2
   },
   {
     "id": 141,
-    "q": "What should be checked first before turning left?",
+    "q": "ഇടത്തേക്ക് തിരിയുന്നതിന് മുമ്പ് ആദ്യം എന്താണ് പരിശോധിക്കേണ്ടത്?",
     "options": [
-      "Right-side rearview mirror",
-      "Left-side rearview mirror",
-      "Look back over your right shoulder",
-      "In the interior mirror"
+      "വലതുവശത്തെ റിയർവ്യൂ മിറർ",
+      "ഇടതുവശത്തെ റിയർവ്യൂ മിറർ",
+      "നിങ്ങളുടെ വലത് തോളിലൂടെ പിന്നിലേക്ക് നോക്കുക",
+      "ഇന്റീരിയർ മിററിൽ"
     ],
     "sign": "/signs/sign_141.png",
     "answerIndex": 1
   },
   {
     "id": 142,
-    "q": "You are driving a vehicle equipped with a speed governor. What should be noted?",
+    "q": "നിങ്ങൾ ഒരു സ്പീഡ് ഗവർണർ ഘടിപ്പിച്ച വാഹനമാണ് ഓടിക്കുന്നത്. എന്താണ് ശ്രദ്ധിക്കേണ്ടത്?",
     "options": [
-      "Over speeding",
-      "Cornering",
-      "Braking",
-      "Overtaking another vehicle"
+      "അമിത വേഗത",
+      "വളവ് തിരിയുന്നത്",
+      "ബ്രേക്കിംഗ്",
+      "മറ്റൊരു വാഹനത്തെ ഓവർടേക്ക് ചെയ്യുന്നത്"
     ],
     "sign": "/signs/sign_142.png",
     "answerIndex": 3
   },
   {
     "id": 143,
-    "q": "What is the braking distance a driver of a motor car should maintain when driving behind a long truck?",
+    "q": "ഒരു നീണ്ട ട്രക്കിന് പിന്നിൽ ഓടിക്കുമ്പോൾ ഒരു മോട്ടോർ കാർ ഡ്രൈവർ പാലിക്കേണ്ട ബ്രേക്കിംഗ് ദൂരം എത്രയാണ്?",
     "options": [
-      "A safe distance"
+      "ഒരു സുരക്ഷിത ദൂരം"
     ],
     "sign": "/signs/sign_143.png",
     "answerIndex": 0
   },
   {
     "id": 2,
-    "q": "5 meters",
+    "q": "5 മീറ്റർ",
     "options": [
-      "About half the length of the truck",
-      "The length of the truck"
+      "ട്രക്കിന്റെ നീളത്തിന്റെ പകുതിയോളം",
+      "ട്രക്കിന്റെ നീളം"
     ],
     "sign": "/signs/sign_2.png",
     "answerIndex": -1
   },
   {
     "id": 144,
-    "q": "Pedestrians should walk on the side of the road",
+    "q": "കാൽനടയാത്രക്കാർ റോഡിന്റെ ഏത് വശത്തുകൂടി നടക്കണം?",
     "options": [
-      "right side",
-      "left side",
-      "middle",
-      "none of the above"
+      "വലതുവശം",
+      "ഇടതുവശം",
+      "നടുക്ക്",
+      "മുകളിൽ പറഞ്ഞവയൊന്നുമല്ല"
     ],
     "sign": "/signs/sign_144.png",
     "answerIndex": 0
   },
   {
     "id": 145,
-    "q": "Mandatory signs that give orders are mostly found in……",
+    "q": "നിർബന്ധമായും പാലിക്കേണ്ട, ഉത്തരവുകൾ നൽകുന്ന ചിഹ്നങ്ങൾ മിക്കവാറും കാണപ്പെടുന്നത്......",
     "options": [
-      "Red/blue circles",
-      "Red triangles",
-      "Blue rectangles",
-      "Yellow circles"
+      "ചുവപ്പ്/നീല വൃത്തങ്ങളിൽ",
+      "ചുവന്ന ത്രികോണങ്ങളിൽ",
+      "നീല ദീർഘചതുരങ്ങളിൽ",
+      "മഞ്ഞ വൃത്തങ്ങളിൽ"
     ],
     "sign": "/signs/sign_145.png",
     "answerIndex": 0
   },
   {
     "id": 146,
-    "q": "Things to check before a long-distance journey",
+    "q": "ഒരു ദീർഘദൂര യാത്രയ്ക്ക് മുമ്പ് പരിശോധിക്കേണ്ട കാര്യങ്ങൾ",
     "options": [
-      "Fuel, engine oil, brake fluid, coolant level",
-      "Tire condition, spare wheel, necessary tools",
-      "Condition of brakes, tension of all drive belts",
-      "All of the above"
+      "ഇന്ധനം, എഞ്ചിൻ ഓയിൽ, ബ്രേക്ക് ഫ്ലൂയിഡ്, കൂളന്റ് ലെവൽ",
+      "ടയറിന്റെ അവസ്ഥ, സ്പെയർ വീൽ, ആവശ്യമായ ഉപകരണങ്ങൾ",
+      "ബ്രേക്കുകളുടെ അവസ്ഥ, എല്ലാ ഡ്രൈവ് ബെൽറ്റുകളുടെയും വലിവ്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_146.png",
     "answerIndex": 3
   },
   {
     "id": 147,
-    "q": "When is reverse driving allowed?",
+    "q": "എപ്പോഴാണ് റിവേഴ്സ് ഡ്രൈവിംഗ് അനുവദനീയമായിട്ടുള്ളത്?",
     "options": [
-      "The minimum distance required to change direction",
-      "During night driving",
-      "When driving on ghat roads",
-      "Only on one-way roads"
+      "ദിശ മാറ്റാൻ ആവശ്യമായ ഏറ്റവും കുറഞ്ഞ ദൂരം",
+      "രാത്രി ഡ്രൈവിംഗ് സമയത്ത്",
+      "ഘട്ട് റോഡുകളിൽ ഓടിക്കുമ്പോൾ",
+      "വൺ-വേ റോഡുകളിൽ മാത്രം"
     ],
     "sign": "/signs/sign_147.png",
     "answerIndex": 0
   },
   {
     "id": 148,
-    "q": "What precautions should be taken during night parking?",
+    "q": "രാത്രി പാർക്കിംഗ് സമയത്ത് എന്ത് മുൻകരുതലുകൾ എടുക്കണം?",
     "options": [
-      "Park on the service road, use park light and handbrake",
-      "Park off the road, use park light and handbrake",
-      "Use a tire jack to prevent rolling",
-      "Park the vehicle on the footpath away from traffic"
+      "സർവീസ് റോഡിൽ പാർക്ക് ചെയ്യുക, പാർക്ക് ലൈറ്റും ഹാൻഡ്‌ബ്രേക്കും ഉപയോഗിക്കുക",
+      "റോഡിന് പുറത്ത് പാർക്ക് ചെയ്യുക, പാർക്ക് ലൈറ്റും ഹാൻഡ്‌ബ്രേക്കും ഉപയോഗിക്കുക",
+      "ഉരുളുന്നത് തടയാൻ ടയർ ജാക്ക് ഉപയോഗിക്കുക",
+      "ട്രാഫിക്കിൽ നിന്ന് അകലെ ഫുട്പാത്തിൽ വാഹനം പാർക്ക് ചെയ്യുക"
     ],
     "sign": "/signs/sign_148.png",
     "answerIndex": 1
   },
   {
     "id": 149,
-    "q": "You are driving on a four-lane road and the vehicle in front of you is moving slowly in the right lane. If the road ahead is clear, how can you overtake that vehicle?",
+    "q": "നിങ്ങൾ നാല് ലെയ്ൻ റോഡിലൂടെ ഓടിക്കുകയാണ്, നിങ്ങളുടെ മുന്നിലുള്ള വാഹനം വലത് ലെയ്നിൽ പതുക്കെ നീങ്ങുന്നു. മുന്നിലുള്ള റോഡ് വ്യക്തമാണെങ്കിൽ, നിങ്ങൾക്ക് ആ വാഹനത്തെ എങ്ങനെ ഓവർടേക്ക് ചെയ്യാം?",
     "options": [
-      "You should not overtake",
-      "Pass the vehicle on the left side",
-      "Pass the vehicle on the convenient side",
-      "Pass the vehicle on the right side after receiving a signal from the vehicle in front"
+      "നിങ്ങൾ ഓവർടേക്ക് ചെയ്യാൻ പാടില്ല",
+      "ഇടതുവശത്തുകൂടി വാഹനം കടന്നുപോകുക",
+      "സൗകര്യപ്രദമായ വശത്തുകൂടി വാഹനം കടന്നുപോകുക",
+      "മുന്നിലുള്ള വാഹനത്തിൽ നിന്ന് സിഗ്നൽ ലഭിച്ച ശേഷം വലതുവശത്തുകൂടി വാഹനം കടന്നുപോകുക"
     ],
     "sign": "/signs/sign_149.png",
     "answerIndex": 3
   },
   {
     "id": 150,
-    "q": "When driving on a wet or slippery road……….",
+    "q": "നനഞ്ഞതോ വഴുവഴുപ്പുള്ളതോ ആയ റോഡിൽ വാഹനമോടിക്കുമ്പോൾ.........",
     "options": [
-      "Tire pressure should be reduced",
-      "Avoid sudden braking and acceleration",
-      "The vehicle should be driven at high speed",
-      "Avoid straight driving"
+      "ടയർ പ്രഷർ കുറയ്ക്കണം",
+      "പെട്ടെന്നുള്ള ബ്രേക്കിംഗും ആക്സിലറേഷനും ഒഴിവാക്കുക",
+      "വാഹനം അതിവേഗതയിൽ ഓടിക്കണം",
+      "നേരെയുള്ള ഡ്രൈവിംഗ് ഒഴിവാക്കുക"
     ],
     "sign": "/signs/sign_150.png",
     "answerIndex": 1
   },
   {
     "id": 151,
-    "q": "In which of the following situations should a vehicle not be overtaken?",
+    "q": "താഴെ പറയുന്ന ഏത് സാഹചര്യത്തിലാണ് ഒരു വാഹനത്തെ ഓവർടേക്ക് ചെയ്യാൻ പാടില്ലാത്തത്?",
     "options": [
-      "When the way ahead is not visible",
-      "On curves",
-      "At junctions",
-      "All of the above"
+      "മുന്നോട്ടുള്ള വഴി കാണാത്തപ്പോൾ",
+      "വളവുകളിൽ",
+      "ജംഗ്ഷനുകളിൽ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_151.png",
     "answerIndex": 3
   },
   {
     "id": 152,
-    "q": "When riding a motorcycle or autorickshaw, hand signals can be shown using………",
+    "q": "ഒരു മോട്ടോർസൈക്കിളോ ഓട്ടോറിക്ഷയോ ഓടിക്കുമ്പോൾ, കൈ സിഗ്നലുകൾ എങ്ങനെ കാണിക്കാം.........",
     "options": [
-      "Both hands",
-      "Right hand only",
-      "Left hand only",
-      "All of the above"
+      "രണ്ട് കൈകളും ഉപയോഗിച്ച്",
+      "വലതു കൈ മാത്രം ഉപയോഗിച്ച്",
+      "ഇടതു കൈ മാത്രം ഉപയോഗിച്ച്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_152.png",
     "answerIndex": 1
   },
   {
     "id": 153,
-    "q": "When parking a vehicle, you should…….",
+    "q": "ഒരു വാഹനം പാർക്ക് ചെയ്യുമ്പോൾ, നിങ്ങൾ......",
     "options": [
-      "Park the vehicle on the carriageway and use the park brake",
-      "Park the vehicle parallel to the curb",
-      "Park the vehicle in such a way that it does not cause obstruction or inconvenience to other road users",
-      "Park on the service road using the parking brake"
+      "വാഹനം ക്യാരേജ്‌വേയിൽ പാർക്ക് ചെയ്ത് പാർക്ക് ബ്രേക്ക് ഉപയോഗിക്കുക",
+      "കർബിന് സമാന്തരമായി വാഹനം പാർക്ക് ചെയ്യുക",
+      "മറ്റ് റോഡ് ഉപയോക്താക്കൾക്ക് തടസ്സമോ അസൗകര്യമോ ഉണ്ടാകാത്ത വിധത്തിൽ വാഹനം പാർക്ക് ചെയ്യുക",
+      "പാർക്കിംഗ് ബ്രേക്ക് ഉപയോഗിച്ച് സർവീസ് റോഡിൽ പാർക്ക് ചെയ്യുക"
     ],
     "sign": "/signs/sign_153.png",
     "answerIndex": 2
   },
   {
     "id": 154,
-    "q": "Can a vehicle with an expired insurance be driven on a public road?",
+    "q": "ഇൻഷുറൻസ് കാലാവധി കഴിഞ്ഞ ഒരു വാഹനം പൊതു റോഡിൽ ഓടിക്കാൻ കഴിയുമോ?",
     "options": [
-      "The vehicle should be driven with care to avoid any accident or loss to a third party",
-      "The vehicle should not be driven on a public road",
-      "Can drive if the driver has a valid personal life insurance policy",
-      "Can drive if all passengers give their consent"
+      "ഒരു മൂന്നാം കക്ഷിക്ക് അപകടമോ നഷ്ടമോ ഉണ്ടാകാതിരിക്കാൻ വാഹനം ശ്രദ്ധയോടെ ഓടിക്കണം",
+      "വാഹനം പൊതു റോഡിൽ ഓടിക്കാൻ പാടില്ല",
+      "ഡ്രൈവർക്ക് സാധുവായ വ്യക്തിഗത ലൈഫ് ഇൻഷുറൻസ് പോളിസി ഉണ്ടെങ്കിൽ ഓടിക്കാം",
+      "എല്ലാ യാത്രക്കാരും സമ്മതം നൽകിയാൽ ഓടിക്കാം"
     ],
     "sign": "/signs/sign_154.png",
     "answerIndex": 1
   },
   {
     "id": 155,
-    "q": "Before whom does one apply for compensation for a person involved in a vehicle accident?",
+    "q": "വാഹനാപകടത്തിൽ പെട്ട ഒരാൾക്ക് നഷ്ടപരിഹാരത്തിനായി ആർക്കാണ് അപേക്ഷ നൽകേണ്ടത്?",
     "options": [
       "RTO",
-      "Police Station",
-      "Driver or owner",
-      "Motor Accidents Claims Tribunal"
+      "പോലീസ് സ്റ്റേഷൻ",
+      "ഡ്രൈവർ അല്ലെങ്കിൽ ഉടമ",
+      "മോട്ടോർ ആക്സിഡന്റ് ക്ലെയിംസ് ട്രിബ്യൂണൽ"
     ],
     "sign": "/signs/sign_155.png",
     "answerIndex": 3
   },
   {
     "id": 156,
-    "q": "How to stop a motorcycle?",
+    "q": "ഒരു മോട്ടോർസൈക്കിൾ എങ്ങനെ നിർത്താം?",
     "options": [
-      "Apply the rear brakes, and after slowing down, apply the front brakes",
-      "Use front and rear brakes simultaneously",
-      "Use only the rear brake",
-      "Use only the front brake"
+      "പിൻ ബ്രേക്കുകൾ പ്രയോഗിക്കുക, വേഗത കുറച്ച ശേഷം മുൻ ബ്രേക്കുകൾ പ്രയോഗിക്കുക",
+      "മുൻ പിൻ ബ്രേക്കുകൾ ഒരേസമയം ഉപയോഗിക്കുക",
+      "പിൻ ബ്രേക്ക് മാത്രം ഉപയോഗിക്കുക",
+      "മുൻ ബ്രേക്ക് മാത്രം ഉപയോഗിക്കുക"
     ],
     "sign": "/signs/sign_156.png",
     "answerIndex": 1
   },
   {
     "id": 157,
-    "q": "Driving with worn-out tires is dangerous because…..",
+    "q": "തേയ്മാനം സംഭവിച്ച ടയറുകൾ ഉപയോഗിച്ച് വാഹനമോടിക്കുന്നത് അപകടകരമാണ്, കാരണം.....",
     "options": [
-      "The vehicle accelerates faster",
-      "It has less road grip",
-      "High fuel consumption",
-      "High vehicle vibration"
+      "വാഹനം വേഗത്തിൽ ആക്സിലറേറ്റ് ചെയ്യുന്നു",
+      "അതിന് റോഡ് ഗ്രിപ്പ് കുറവാണ്",
+      "ഉയർന്ന ഇന്ധന ഉപഭോഗം",
+      "ഉയർന്ന വാഹന വൈബ്രേഷൻ"
     ],
     "sign": "/signs/sign_157.png",
     "answerIndex": 1
   },
   {
     "id": 158,
-    "q": "On ghat roads, when vehicles are coming from opposite directions, the driver going downhill",
+    "q": "ഘട്ട് റോഡുകളിൽ, എതിർദിശകളിൽ നിന്ന് വാഹനങ്ങൾ വരുമ്പോൾ, ഇറക്കം ഇറങ്ങുന്ന ഡ്രൈവർ",
     "options": [
-      "Drive fast before the opposing vehicle enters",
-      "Turn on the headlights",
-      "Give priority to vehicles going downhill",
-      "Give priority to vehicles going uphill"
+      "എതിർ വാഹനം പ്രവേശിക്കുന്നതിന് മുമ്പ് വേഗത്തിൽ ഓടിക്കുക",
+      "ഹെഡ്‌ലൈറ്റുകൾ ഓൺ ചെയ്യുക",
+      "ഇറക്കം ഇറങ്ങുന്ന വാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക",
+      "കയറ്റം കയറുന്ന വാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക"
     ],
     "sign": "/signs/sign_158.png",
     "answerIndex": 3
   },
   {
     "id": 159,
-    "q": "The Anti-lock Braking System prevents the wheels from locking. This prevents the tires from-…….",
+    "q": "ആന്റി-ലോക്ക് ബ്രേക്കിംഗ് സിസ്റ്റം ചക്രങ്ങൾ ലോക്ക് ചെയ്യുന്നത് തടയുന്നു. ഇത് ടയറുകളെ-...... തടയുന്നു.",
     "options": [
-      "getting punctured",
-      "skidding",
-      "wearing out",
-      "low tire pressure"
+      "പഞ്ചറാകുന്നത്",
+      "തെന്നിമാറുന്നത്",
+      "തേയ്മാനം സംഭവിക്കുന്നത്",
+      "കുറഞ്ഞ ടയർ പ്രഷർ"
     ],
     "sign": "/signs/sign_159.png",
     "answerIndex": 1
   },
   {
     "id": 160,
-    "q": "What is the advantage of the rear mirror being slightly convex?",
+    "q": "പിൻവശത്തെ കണ്ണാടി ചെറുതായി കോൺവെക്സ് ആയിരിക്കുന്നതിന്റെ പ്രയോജനം എന്താണ്?",
     "options": [
-      "Provide a wider field of view",
-      "Completely cover the blind spot",
-      "Determine the speed of the following vehicle",
-      "All of the above"
+      "വിശാലമായ കാഴ്ച നൽകുന്നു",
+      "ബ്ലൈൻഡ് സ്പോട്ട് പൂർണ്ണമായും മറയ്ക്കുന്നു",
+      "പിന്നാലെ വരുന്ന വാഹനത്തിന്റെ വേഗത നിർണ്ണയിക്കാൻ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_160.png",
     "answerIndex": 0
   },
   {
     "id": 161,
-    "q": "Fitting multi-tone horns in a motor vehicle is……..",
+    "q": "ഒരു മോട്ടോർ വാഹനത്തിൽ മൾട്ടി-ടോൺ ഹോണുകൾ ഘടിപ്പിക്കുന്നത്........",
     "options": [
-      "Allowed for emergency purposes only",
-      "Permitted only for interstate buses",
-      "Allowed for all vehicles",
-      "A punishable offence by law as it causes noise pollution"
+      "അടിയന്തര ആവശ്യങ്ങൾക്ക് മാത്രം അനുവദനീയം",
+      "ഇന്റർസ്റ്റേറ്റ് ബസുകൾക്ക് മാത്രം അനുവാദമുണ്ട്",
+      "എല്ലാ വാഹനങ്ങൾക്കും അനുവദനീയം",
+      "ശബ്ദ മലിനീകരണത്തിന് കാരണമാകുന്നതിനാൽ നിയമപ്രകാരം ശിക്ഷാർഹമായ കുറ്റമാണ്"
     ],
     "sign": "/signs/sign_161.png",
     "answerIndex": 3
   },
   {
     "id": 162,
-    "q": "What is the common cause of skidding?",
+    "q": "തെന്നിമാറുന്നതിനുള്ള പൊതുവായ കാരണം എന്താണ്?",
     "options": [
-      "Poor condition of tires and road",
-      "Driver's fault",
-      "Sudden braking",
-      "All of the above"
+      "ടയറുകളുടെയും റോഡിന്റെയും മോശം അവസ്ഥ",
+      "ഡ്രൈവറുടെ പിഴവ്",
+      "പെട്ടെന്നുള്ള ബ്രേക്കിംഗ്",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_162.png",
     "answerIndex": 3
   },
   {
     "id": 163,
-    "q": "What is a blind spot?",
+    "q": "എന്താണ് ഒരു ബ്ലൈൻഡ് സ്പോട്ട്?",
     "options": [
-      "The area not visible in your rearview mirrors",
-      "An area not covered by headlights",
-      "An area inside your vehicle not covered by the rearview mirror",
-      "An area with a high accident rate"
+      "നിങ്ങളുടെ റിയർവ്യൂ മിററുകളിൽ കാണാൻ കഴിയാത്ത പ്രദേശം",
+      "ഹെഡ്‌ലൈറ്റുകൾ കവർ ചെയ്യാത്ത ഒരു പ്രദേശം",
+      "റിയർവ്യൂ മിറർ കവർ ചെയ്യാത്ത നിങ്ങളുടെ വാഹനത്തിനുള്ളിലെ ഒരു പ്രദേശം",
+      "ഉയർന്ന അപകട സാധ്യതയുള്ള ഒരു പ്രദേശം"
     ],
     "sign": "/signs/sign_163.png",
     "answerIndex": 0
   },
   {
     "id": 164,
-    "q": "How does alcohol affect your driving?",
+    "q": "മദ്യം നിങ്ങളുടെ ഡ്രൈവിംഗിനെ എങ്ങനെ ബാധിക്കുന്നു?",
     "options": [
-      "It reduces your attention",
-      "It reduces your concentration and attention",
-      "It increases your confidence",
-      "It reduces your concentration"
+      "ഇത് നിങ്ങളുടെ ശ്രദ്ധ കുറയ്ക്കുന്നു",
+      "ഇത് നിങ്ങളുടെ ഏകാഗ്രതയും ശ്രദ്ധയും കുറയ്ക്കുന്നു",
+      "ഇത് നിങ്ങളുടെ ആത്മവിശ്വാസം വർദ്ധിപ്പിക്കുന്നു",
+      "ഇത് നിങ്ങളുടെ ഏകാഗ്രത കുറയ്ക്കുന്നു"
     ],
     "sign": "/signs/sign_164.png",
     "answerIndex": 1
   },
   {
     "id": 165,
-    "q": "You are driving behind a large vehicle. How can you improve your view?",
+    "q": "നിങ്ങൾ ഒരു വലിയ വാഹനത്തിന് പിന്നിൽ ഓടിക്കുകയാണ്. നിങ്ങളുടെ കാഴ്ച എങ്ങനെ മെച്ചപ്പെടുത്താം?",
     "options": [
-      "Overtake as soon as possible",
-      "Move to the left",
-      "Maintain a greater distance",
-      "Increase your speed",
+      "കഴിയുന്നത്ര വേഗം ഓവർടേക്ക് ചെയ്യുക",
+      "ഇടത്തേക്ക് നീങ്ങുക",
+      "കൂടുതൽ അകലം പാലിക്കുക",
+      "നിങ്ങളുടെ വേഗത വർദ്ധിപ്പിക്കുക",
       "\\"
     ],
     "sign": "/signs/sign_165.png",
@@ -1717,1012 +1717,1012 @@ data = [
   },
   {
     "id": 166,
-    "q": "What is the benefit of power-assisted steering?",
+    "q": "പവർ അസിസ്റ്റഡ് സ്റ്റിയറിംഗിന്റെ പ്രയോജനം എന്താണ്?",
     "options": [
-      "Reduce tire wear",
-      "Assist in braking",
-      "Reduce driving effort",
-      "Increase driving effort"
+      "ടയർ തേയ്മാനം കുറയ്ക്കുക",
+      "ബ്രേക്കിംഗിൽ സഹായിക്കുക",
+      "ഡ്രൈവിംഗ് ആയാസം കുറയ്ക്കുക",
+      "ഡ്രൈവിംഗ് ആയാസം വർദ്ധിപ്പിക്കുക"
     ],
     "sign": "/signs/sign_166.png",
     "answerIndex": 2
   },
   {
     "id": 167,
-    "q": "In which situation does the weight of passengers shift?",
+    "q": "ഏത് സാഹചര്യത്തിലാണ് യാത്രക്കാരുടെ ഭാരം മാറുന്നത്?",
     "options": [
-      "Braking",
-      "Cornering",
-      "Acceleration",
-      "All of the above"
+      "ബ്രേക്കിംഗ്",
+      "വളവ് തിരിയുമ്പോൾ",
+      "ആക്സിലറേഷൻ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_167.png",
     "answerIndex": 3
   },
   {
     "id": 168,
-    "q": "What does laminated safety windscreen glass mean?",
+    "q": "ലാമിനേറ്റഡ് സേഫ്റ്റി വിൻഡ്‌സ്‌ക്രീൻ ഗ്ലാസ് എന്നാൽ എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "Does not shatter",
-      "A plastic layer is glued between dual glasses",
-      "Not a plain glass",
-      "All of the above"
+      "ചിതറിത്തെറിക്കില്ല",
+      "ഇരട്ട ഗ്ലാസുകൾക്കിടയിൽ ഒരു പ്ലാസ്റ്റിക് പാളി ഒട്ടിച്ചിരിക്കുന്നു",
+      "ഒരു സാധാരണ ഗ്ലാസ് അല്ല",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_168.png",
     "answerIndex": 3
   },
   {
     "id": 169,
-    "q": "What should you do if your vehicle is involved in an accident?",
+    "q": "നിങ്ങളുടെ വാഹനം ഒരു അപകടത്തിൽപ്പെട്ടാൽ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Stop at the accident site, provide first aid to the victim if possible, and help get medical assistance",
-      "Drive the vehicle to the nearest police station",
-      "Inform the insurance authorities as soon as possible",
-      "Do not stop the vehicle if there is a crowd"
+      "അപകടസ്ഥലത്ത് നിർത്തുക, സാധ്യമെങ്കിൽ ഇരയ്ക്ക് പ്രഥമശുശ്രൂഷ നൽകുക, വൈദ്യസഹായം ലഭിക്കാൻ സഹായിക്കുക",
+      "വാഹനം അടുത്തുള്ള പോലീസ് സ്റ്റേഷനിലേക്ക് ഓടിക്കുക",
+      "കഴിയുന്നതും വേഗം ഇൻഷുറൻസ് അധികൃതരെ അറിയിക്കുക",
+      "ആൾക്കൂട്ടമുണ്ടെങ്കിൽ വാഹനം നിർത്തരുത്"
     ],
     "sign": "/signs/sign_169.png",
     "answerIndex": 0
   },
   {
     "id": 170,
-    "q": "Your vehicle hits a parked vehicle. At that time, the owner of that vehicle could not be found. What should you do?",
+    "q": "നിങ്ങളുടെ വാഹനം പാർക്ക് ചെയ്തിരുന്ന ഒരു വാഹനത്തെ ഇടിച്ചു. ആ സമയത്ത്, ആ വാഹനത്തിന്റെ ഉടമയെ കണ്ടെത്താൻ കഴിഞ്ഞില്ല. നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Drive the vehicle away from the accident site and repair the damage as soon as possible",
-      "Inform the insurance authorities as soon as possible",
-      "Inform the police station within the jurisdiction of the accident site within 24 hours",
-      "Inform the locals"
+      "അപകടസ്ഥലത്ത് നിന്ന് വാഹനം ഓടിച്ചുമാറ്റി കേടുപാടുകൾ എത്രയും വേഗം തീർക്കുക",
+      "കഴിയുന്നതും വേഗം ഇൻഷുറൻസ് അധികൃതരെ അറിയിക്കുക",
+      "അപകടസ്ഥലത്തിന്റെ അധികാരപരിധിയിലുള്ള പോലീസ് സ്റ്റേഷനിൽ 24 മണിക്കൂറിനുള്ളിൽ അറിയിക്കുക",
+      "നാട്ടുകാരെ അറിയിക്കുക"
     ],
     "sign": "/signs/sign_170.png",
     "answerIndex": 2
   },
   {
     "id": 171,
-    "q": "The wiper fitted on the vehicle's windscreen is for…….",
+    "q": "വാഹനത്തിന്റെ വിൻഡ്‌സ്‌ക്രീനിൽ ഘടിപ്പിച്ചിരിക്കുന്ന വൈപ്പർ എന്തിനാണ്.......",
     "options": [
-      "wiping water when washing",
-      "cleaning the windshield in any season",
-      "as a signal to stop an approaching vehicle",
-      "protecting the screen"
+      "കഴുകുമ്പോൾ വെള്ളം തുടയ്ക്കാൻ",
+      "ഏത് കാലാവസ്ഥയിലും വിൻഡ്ഷീൽഡ് വൃത്തിയാക്കാൻ",
+      "എതിരെ വരുന്ന വാഹനം നിർത്താനുള്ള സിഗ്നലായി",
+      "സ്ക്രീൻ സംരക്ഷിക്കാൻ"
     ],
     "sign": "/signs/sign_171.png",
     "answerIndex": 1
   },
   {
     "id": 172,
-    "q": "Which safety device fitted in a light motor vehicle protects the driver from injury?",
+    "q": "ഒരു ലൈറ്റ് മോട്ടോർ വാഹനത്തിൽ ഘടിപ്പിച്ചിരിക്കുന്ന ഏത് സുരക്ഷാ ഉപകരണമാണ് ഡ്രൈവറെ പരിക്കിൽ നിന്ന് സംരക്ഷിക്കുന്നത്?",
     "options": [
-      "Seat position",
-      "Seat belt",
-      "Seat tightener",
-      "Headrest"
+      "സീറ്റ് പൊസിഷൻ",
+      "സീറ്റ് ബെൽറ്റ്",
+      "സീറ്റ് ടൈറ്റ്നർ",
+      "ഹെഡ്‌റെസ്റ്റ്"
     ],
     "sign": "/signs/sign_172.png",
     "answerIndex": 1
   },
   {
     "id": 173,
-    "q": "If a car drives towards you at night with its high beam on, the driver of that car is",
+    "q": "ഒരു കാർ രാത്രിയിൽ ഹൈ ബീം ഓണാക്കി നിങ്ങളുടെ നേരെ ഓടിച്ചാൽ, ആ കാറിന്റെ ഡ്രൈവർ",
     "options": [
-      "driving with bad behaviour as high beams blind others",
-      "a safe driver as the high beam illuminates the road",
-      "protecting other road users",
-      "none of the above."
+      "മോശം പെരുമാറ്റത്തോടെയാണ് വാഹനമോടിക്കുന്നത്, കാരണം ഹൈ ബീമുകൾ മറ്റുള്ളവരുടെ കാഴ്ച മറയ്ക്കുന്നു",
+      "ഒരു സുരക്ഷിത ഡ്രൈവറാണ്, കാരണം ഹൈ ബീം റോഡിനെ പ്രകാശിപ്പിക്കുന്നു",
+      "മറ്റ് റോഡ് ഉപയോക്താക്കളെ സംരക്ഷിക്കുന്നു",
+      "മുകളിൽ പറഞ്ഞവയൊന്നുമല്ല."
     ],
     "sign": "/signs/sign_173.png",
     "answerIndex": 0
   },
   {
     "id": 174,
-    "q": "How should a vehicle be driven when passing a procession, a group of soldiers, or a work site?",
+    "q": "ഒരു ഘോഷയാത്ര, ഒരു കൂട്ടം സൈനികർ, അല്ലെങ്കിൽ ഒരു വർക്ക് സൈറ്റ് എന്നിവ കടന്നുപോകുമ്പോൾ ഒരു വാഹനം എങ്ങനെ ഓടിക്കണം?",
     "options": [
-      "Continue at the usual speed",
-      "Stop the vehicle to complete the work",
-      "Drive with care and do not exceed a speed of 25 km per hour",
-      "Proceed after stopping"
+      "സാധാരണ വേഗതയിൽ തുടരുക",
+      "ജോലി പൂർത്തിയാക്കാൻ വാഹനം നിർത്തുക",
+      "ശ്രദ്ധയോടെ ഓടിക്കുക, മണിക്കൂറിൽ 25 കി.മീ വേഗതയിൽ കൂടരുത്",
+      "നിർത്തിയ ശേഷം പോകുക"
     ],
     "sign": "/signs/sign_174.png",
     "answerIndex": 2
   },
   {
     "id": 175,
-    "q": "What is the colour of the registration plate of a motor cab?",
+    "q": "ഒരു മോട്ടോർ ക്യാബിന്റെ രജിസ്ട്രേഷൻ പ്ലേറ്റിന്റെ നിറം എന്താണ്?",
     "options": [
-      "Black letters on a white background",
-      "White letters on a yellow background",
-      "Yellow letters on a black background",
-      "Black letters on a yellow background"
+      "വെള്ള പശ്ചാത്തലത്തിൽ കറുത്ത അക്ഷരങ്ങൾ",
+      "മഞ്ഞ പശ്ചാത്തലത്തിൽ വെള്ള അക്ഷരങ്ങൾ",
+      "കറുത്ത പശ്ചാത്തലത്തിൽ മഞ്ഞ അക്ഷരങ്ങൾ",
+      "മഞ്ഞ പശ്ചാത്തലത്തിൽ കറുത്ത അക്ഷരങ്ങൾ"
     ],
     "sign": "/signs/sign_175.png",
     "answerIndex": 3
   },
   {
     "id": 176,
-    "q": "What is the colour of the registration plate of a rent-a-cab?",
+    "q": "ഒരു റെന്റ്-എ-ക്യാബിന്റെ രജിസ്ട്രേഷൻ പ്ലേറ്റിന്റെ നിറം എന്താണ്?",
     "options": [
-      "Black letters on a white background",
-      "White letters on a yellow background",
-      "Yellow letters on a black background",
-      "Black letters on a yellow background"
+      "വെള്ള പശ്ചാത്തലത്തിൽ കറുത്ത അക്ഷരങ്ങൾ",
+      "മഞ്ഞ പശ്ചാത്തലത്തിൽ വെള്ള അക്ഷരങ്ങൾ",
+      "കറുത്ത പശ്ചാത്തലത്തിൽ മഞ്ഞ അക്ഷരങ്ങൾ",
+      "മഞ്ഞ പശ്ചാത്തലത്തിൽ കറുത്ത അക്ഷരങ്ങൾ"
     ],
     "sign": "/signs/sign_176.png",
     "answerIndex": 2
   },
   {
     "id": 177,
-    "q": "What is the colour of the registration plate of an electric non-transport vehicle?",
+    "q": "ഒരു ഇലക്ട്രിക് നോൺ-ട്രാൻസ്പോർട്ട് വാഹനത്തിന്റെ രജിസ്ട്രേഷൻ പ്ലേറ്റിന്റെ നിറം എന്താണ്?",
     "options": [
-      "Black letters on a green background",
-      "White letters on a green background",
-      "Yellow letters on a green background",
-      "Green letters on a white background"
+      "പച്ച പശ്ചാത്തലത്തിൽ കറുത്ത അക്ഷരങ്ങൾ",
+      "പച്ച പശ്ചാത്തലത്തിൽ വെള്ള അക്ഷരങ്ങൾ",
+      "പച്ച പശ്ചാത്തലത്തിൽ മഞ്ഞ അക്ഷരങ്ങൾ",
+      "വെള്ള പശ്ചാത്തലത്തിൽ പച്ച അക്ഷരങ്ങൾ"
     ],
     "sign": "/signs/sign_177.png",
     "answerIndex": 1
   },
   {
     "id": 178,
-    "q": "What is the cooler of the registration number plate of an electric transport vehicle?",
+    "q": "ഒരു ഇലക്ട്രിക് ട്രാൻസ്പോർട്ട് വാഹനത്തിന്റെ രജിസ്ട്രേഷൻ നമ്പർ പ്ലേറ്റിന്റെ നിറം എന്താണ്?",
     "options": [
-      "Black letters on a green background",
-      "White letters on a green background",
-      "Yellow letters on a green background",
-      "Green letters on a white background"
+      "പച്ച പശ്ചാത്തലത്തിൽ കറുത്ത അക്ഷരങ്ങൾ",
+      "പച്ച പശ്ചാത്തലത്തിൽ വെള്ള അക്ഷരങ്ങൾ",
+      "പച്ച പശ്ചാത്തലത്തിൽ മഞ്ഞ അക്ഷരങ്ങൾ",
+      "വെള്ള പശ്ചാത്തലത്തിൽ പച്ച അക്ഷരങ്ങൾ"
     ],
     "sign": "/signs/sign_178.png",
     "answerIndex": 2
   },
   {
     "id": 179,
-    "q": "When pedestrians are waiting to cross the road near a pedestrian crossing, you should?",
+    "q": "ഒരു കാൽനട ക്രോസിംഗിന് സമീപം കാൽനടയാത്രക്കാർ റോഡ് മുറിച്ചുകടക്കാൻ കാത്തുനിൽക്കുമ്പോൾ, നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Honk and move forward",
-      "Honk slowly and pass by",
-      "Stop the vehicle and wait until the pedestrians cross the road, then proceed",
-      "If the pedestrians are on the right, you can pass by keeping to the left, or vice versa"
+      "ഹോൺ അടിച്ച് മുന്നോട്ട് പോകുക",
+      "പതുക്കെ ഹോൺ അടിച്ച് കടന്നുപോകുക",
+      "വാഹനം നിർത്തി കാൽനടയാത്രക്കാർ റോഡ് മുറിച്ചുകടക്കുന്നതുവരെ കാത്തിരിക്കുക, തുടർന്ന് പോകുക",
+      "കാൽനടയാത്രക്കാർ വലതുവശത്താണെങ്കിൽ, നിങ്ങൾക്ക് ഇടതുവശം ചേർന്ന് കടന്നുപോകാം, അല്ലെങ്കിൽ തിരിച്ചും"
     ],
     "sign": "/signs/sign_179.png",
     "answerIndex": 2
   },
   {
     "id": 180,
-    "q": "When a vehicle approaches an unmanned railway level crossing, before crossing it, the driver….",
+    "q": "ഒരു വാഹനം ആളില്ലാ റെയിൽവേ ലെവൽ ക്രോസിംഗിനെ സമീപിക്കുമ്പോൾ, അത് മുറിച്ചുകടക്കുന്നതിന് മുമ്പ്, ഡ്രൈവർ....",
     "options": [
-      "must stop the vehicle on the left side of the road, get out of the vehicle, go to the railway track, ensure no train or trolley is coming from either side, and then proceed.",
-      "Honk and cross the track as fast as possible.",
-      "Wait for the train to pass.",
-      "Slow down the vehicle, ensure no train or trolley is coming from either side through the crossing, and then proceed."
+      "റോഡിന്റെ ഇടതുവശത്ത് വാഹനം നിർത്തണം, വാഹനത്തിൽ നിന്ന് പുറത്തിറങ്ങി റെയിൽവേ ട്രാക്കിൽ പോകണം, ഇരുവശത്തുനിന്നും ട്രെയിനോ ട്രോളിയോ വരുന്നില്ലെന്ന് ഉറപ്പുവരുത്തണം, തുടർന്ന് പോകണം.",
+      "ഹോൺ അടിച്ച് കഴിയുന്നത്ര വേഗത്തിൽ ട്രാക്ക് മുറിച്ചുകടക്കുക.",
+      "ട്രെയിൻ കടന്നുപോകാൻ കാത്തിരിക്കുക.",
+      "വാഹനത്തിന്റെ വേഗത കുറയ്ക്കുക, ക്രോസിംഗിലൂടെ ഇരുവശത്തുനിന്നും ട്രെയിനോ ട്രോളിയോ വരുന്നില്ലെന്ന് ഉറപ്പുവരുത്തുക, തുടർന്ന് പോകുക."
     ],
     "sign": "/signs/sign_180.png",
     "answerIndex": 0
   },
   {
     "id": 181,
-    "q": "How can a transport vehicle be identified?",
+    "q": "ഒരു ട്രാൻസ്പോർട്ട് വാഹനം എങ്ങനെ തിരിച്ചറിയാം?",
     "options": [
-      "By looking at the tire size",
-      "According to the colour of the vehicle",
-      "By looking at the vehicle's number plate",
-      "MVD vehicles"
+      "ടയർ വലുപ്പം നോക്കി",
+      "വാഹനത്തിന്റെ നിറം അനുസരിച്ച്",
+      "വാഹനത്തിന്റെ നമ്പർ പ്ലേറ്റ് നോക്കി",
+      "MVD വാഹനങ്ങൾ"
     ],
     "sign": "/signs/sign_181.png",
     "answerIndex": 2
   },
   {
     "id": 182,
-    "q": "On a road without a footpath, pedestrians",
+    "q": "ഫുട്പാത്ത് ഇല്ലാത്ത റോഡിൽ, കാൽനടയാത്രക്കാർ",
     "options": [
-      "should walk on the left side of the road.",
-      "should walk on the right side of the road.",
-      "can walk on either side of the road.",
-      "are not allowed to walk on the road."
+      "റോഡിന്റെ ഇടതുവശത്തുകൂടി നടക്കണം.",
+      "റോഡിന്റെ വലതുവശത്തുകൂടി നടക്കണം.",
+      "റോഡിന്റെ ഇരുവശത്തുകൂടിയും നടക്കാം.",
+      "റോഡിലൂടെ നടക്കാൻ അനുവാദമില്ല."
     ],
     "sign": "/signs/sign_182.png",
     "answerIndex": 1
   },
   {
     "id": 183,
-    "q": "To which of the following types of vehicles should right of way be given?",
+    "q": "താഴെ പറയുന്ന ഏത് തരം വാഹനങ്ങൾക്കാണ് വഴി നൽകേണ്ടത്?",
     "options": [
-      "Police vehicles",
-      "Ambulance, fire service vehicles",
-      "MVD vehicles",
-      "Goods vehicles"
+      "പോലീസ് വാഹനങ്ങൾ",
+      "ആംബുലൻസ്, ഫയർ സർവീസ് വാഹനങ്ങൾ",
+      "MVD വാഹനങ്ങൾ",
+      "ചരക്ക് വാഹനങ്ങൾ"
     ],
     "sign": "/signs/sign_183.png",
     "answerIndex": 1
   },
   {
     "id": 184,
-    "q": "In which of the following situations can a driver of a vehicle overtake?",
+    "q": "താഴെ പറയുന്ന ഏത് സാഹചര്യത്തിലാണ് ഒരു വാഹനത്തിന്റെ ഡ്രൈവർക്ക് ഓവർടേക്ക് ചെയ്യാൻ കഴിയുന്നത്?",
     "options": [
-      "When descending a hill",
-      "If the road is wide enough",
-      "When the driver of the vehicle in front shows a signal",
-      "If no vehicles are coming from the opposite direction"
+      "ഒരു കുന്നിറങ്ങുമ്പോൾ",
+      "റോഡിന് ആവശ്യത്തിന് വീതിയുണ്ടെങ്കിൽ",
+      "മുന്നിലുള്ള വാഹനത്തിന്റെ ഡ്രൈവർ സിഗ്നൽ കാണിക്കുമ്പോൾ",
+      "എതിർദിശയിൽ നിന്ന് വാഹനങ്ങൾ വരുന്നില്ലെങ്കിൽ"
     ],
     "sign": "/signs/sign_184.png",
     "answerIndex": 2
   },
   {
     "id": 185,
-    "q": "A driver of a motor vehicle should drive",
+    "q": "ഒരു മോട്ടോർ വാഹനത്തിന്റെ ഡ്രൈവർ ഓടിക്കണം",
     "options": [
-      "on the right side of the road",
-      "on the left side of the road",
-      "in the middle of the road",
-      "on any side of the road"
+      "റോഡിന്റെ വലതുവശത്തുകൂടി",
+      "റോഡിന്റെ ഇടതുവശത്തുകൂടി",
+      "റോഡിന്റെ മധ്യത്തിലൂടെ",
+      "റോഡിന്റെ ഏത് വശത്തുകൂടിയും"
     ],
     "sign": "/signs/sign_185.png",
     "answerIndex": 1
   },
   {
     "id": 186,
-    "q": "When a vehicle is parked on the roadside at night……",
+    "q": "രാത്രിയിൽ റോഡരികിൽ വാഹനം പാർക്ക് ചെയ്യുമ്പോൾ......",
     "options": [
-      "The vehicle must be locked",
-      "A person licensed to drive such a vehicle must be in the driving seat",
-      "The park light must be on",
-      "All of the above"
+      "വാഹനം ലോക്ക് ചെയ്തിരിക്കണം",
+      "അത്തരം വാഹനം ഓടിക്കാൻ ലൈസൻസുള്ള ഒരാൾ ഡ്രൈവിംഗ് സീറ്റിൽ ഉണ്ടായിരിക്കണം",
+      "പാർക്ക് ലൈറ്റ് ഓണായിരിക്കണം",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_186.png",
     "answerIndex": 2
   },
   {
     "id": 187,
-    "q": "When are fog lamps used?",
+    "q": "എപ്പോഴാണ് ഫോഗ് ലാമ്പുകൾ ഉപയോഗിക്കുന്നത്?",
     "options": [
-      "Along with low beam headlamps",
-      "When it is foggy",
-      "When there is dust, storm, rain, and snow",
-      "All of the above"
+      "ലോ ബീം ഹെഡ്‌ലാമ്പുകൾക്കൊപ്പം",
+      "മൂടൽമഞ്ഞുള്ളപ്പോൾ",
+      "പൊടി, കൊടുങ്കാറ്റ്, മഴ, മഞ്ഞ് എന്നിവയുള്ളപ്പോൾ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_187.png",
     "answerIndex": 3
   },
   {
     "id": 188,
-    "q": "Zebra lines are meant for",
+    "q": "സീബ്ര ലൈനുകൾ എന്തിനാണ്?",
     "options": [
-      "stopping vehicles",
-      "crossing for pedestrians",
-      "giving priority to vehicles",
-      "slowing down vehicles"
+      "വാഹനങ്ങൾ നിർത്താൻ",
+      "കാൽനടയാത്രക്കാർക്ക് മുറിച്ചുകടക്കാൻ",
+      "വാഹനങ്ങൾക്ക് മുൻഗണന നൽകാൻ",
+      "വാഹനങ്ങളുടെ വേഗത കുറയ്ക്കാൻ"
     ],
     "sign": "/signs/sign_188.png",
     "answerIndex": 1
   },
   {
     "id": 189,
-    "q": "When an ambulance approaches …….",
+    "q": "ഒരു ആംബുലൻസ് വരുമ്പോൾ.......",
     "options": [
-      "Allow it to pass if there are no vehicles from the opposite side",
-      "No need to give priority",
-      "Move the vehicle to the side of the road and allow it to pass freely",
-      "You can drive the vehicle faster than the ambulance"
+      "എതിർവശത്ത് നിന്ന് വാഹനങ്ങളില്ലെങ്കിൽ അതിനെ കടന്നുപോകാൻ അനുവദിക്കുക",
+      "മുൻഗണന നൽകേണ്ട ആവശ്യമില്ല",
+      "വാഹനം റോഡിന്റെ വശത്തേക്ക് മാറ്റി അതിനെ സ്വതന്ത്രമായി കടന്നുപോകാൻ അനുവദിക്കുക",
+      "നിങ്ങൾക്ക് ആംബുലൻസിനേക്കാൾ വേഗത്തിൽ വാഹനം ഓടിക്കാം"
     ],
     "sign": "/signs/sign_189.png",
     "answerIndex": 2
   },
   {
     "id": 190,
-    "q": "What does a red traffic light indicate?",
+    "q": "ചുവന്ന ട്രാഫിക് ലൈറ്റ് എന്തിനെയാണ് സൂചിപ്പിക്കുന്നത്?",
     "options": [
-      "The vehicle can proceed with caution",
-      "Stop the vehicle",
-      "To slow down",
-      "All of the above"
+      "വാഹനത്തിന് ജാഗ്രതയോടെ പോകാം",
+      "വാഹനം നിർത്തുക",
+      "വേഗത കുറയ്ക്കാൻ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_190.png",
     "answerIndex": 1
   },
   {
     "id": 191,
-    "q": "Overtaking is prohibited in the following situations",
+    "q": "താഴെ പറയുന്ന സാഹചര്യങ്ങളിൽ ഓവർടേക്കിംഗ് നിരോധിച്ചിരിക്കുന്നു",
     "options": [
-      "When it is likely to cause inconvenience or danger to other traffic",
-      "When the vehicle in front speeds up",
-      "When the driver of the vehicle in front shows a signal",
-      "All of the above"
+      "ഇത് മറ്റ് ട്രാഫിക്കിന് അസൗകര്യമോ അപകടമോ ഉണ്ടാക്കാൻ സാധ്യതയുള്ളപ്പോൾ",
+      "മുന്നിലുള്ള വാഹനം വേഗത കൂട്ടുമ്പോൾ",
+      "മുന്നിലുള്ള വാഹനത്തിന്റെ ഡ്രൈവർ സിഗ്നൽ കാണിക്കുമ്പോൾ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_191.png",
     "answerIndex": 3
   },
   {
     "id": 192,
-    "q": "Overtaking when approaching a curve is",
+    "q": "ഒരു വളവിനെ സമീപിക്കുമ്പോൾ ഓവർടേക്ക് ചെയ്യുന്നത്",
     "options": [
-      "permissible",
-      "not permissible",
-      "permissible with caution",
-      "permissible if no vehicles are coming from the opposite direction"
+      "അനുവദനീയമാണ്",
+      "അനുവദനീയമല്ല",
+      "ജാഗ്രതയോടെ അനുവദനീയമാണ്",
+      "എതിർദിശയിൽ നിന്ന് വാഹനങ്ങൾ വരുന്നില്ലെങ്കിൽ അനുവദനീയമാണ്"
     ],
     "sign": "/signs/sign_192.png",
     "answerIndex": 1
   },
   {
     "id": 193,
-    "q": "Drunk driving…",
+    "q": "മദ്യപിച്ച് വാഹനമോടിക്കുന്നത്...",
     "options": [
-      "is allowed in private vehicles.",
-      "is allowed at night.",
-      "is prohibited in all vehicles.",
-      "is allowed in transport vehicles."
+      "സ്വകാര്യ വാഹനങ്ങളിൽ അനുവദനീയമാണ്.",
+      "രാത്രിയിൽ അനുവദനീയമാണ്.",
+      "എല്ലാ വാഹനങ്ങളിലും നിരോധിച്ചിരിക്കുന്നു.",
+      "ട്രാൻസ്പോർട്ട് വാഹനങ്ങളിൽ അനുവദനീയമാണ്."
     ],
     "sign": "/signs/sign_193.png",
     "answerIndex": 2
   },
   {
     "id": 194,
-    "q": "The use of a rearview mirror is for",
+    "q": "റിയർവ്യൂ മിററിന്റെ ഉപയോഗം എന്തിനാണ്?",
     "options": [
-      "seeing the blind spot.",
-      "monitoring traffic coming from behind.",
-      "seeing the rear seat passenger.",
-      "none of the above."
+      "ബ്ലൈൻഡ് സ്പോട്ട് കാണാൻ.",
+      "പിന്നിൽ നിന്ന് വരുന്ന ട്രാഫിക് നിരീക്ഷിക്കാൻ.",
+      "പിൻസീറ്റ് യാത്രക്കാരനെ കാണാൻ.",
+      "മുകളിൽ പറഞ്ഞവയൊന്നുമല്ല."
     ],
     "sign": "/signs/sign_194.png",
     "answerIndex": 1
   },
   {
     "id": 195,
-    "q": "Getting on and off a moving vehicle…",
+    "q": "ഓടുന്ന വാഹനത്തിൽ കയറുന്നതും ഇറങ്ങുന്നതും...",
     "options": [
-      "is permissible in a bus.",
-      "is permissible in an auto-rickshaw.",
-      "is permissible for a pillion rider sitting side-saddle on a motorcycle.",
-      "is prohibited in all vehicles."
+      "ഒരു ബസിൽ അനുവദനീയമാണ്.",
+      "ഒരു ഓട്ടോറിക്ഷയിൽ അനുവദനീയമാണ്.",
+      "ഒരു മോട്ടോർസൈക്കിളിൽ വശത്തിരുന്ന് യാത്ര ചെയ്യുന്ന പില്യൺ റൈഡർക്ക് അനുവദനീയമാണ്.",
+      "എല്ലാ വാഹനങ്ങളിലും നിരോധിച്ചിരിക്കുന്നു."
     ],
     "sign": "/signs/sign_195.png",
     "answerIndex": 3
   },
   {
     "id": 196,
-    "q": "Parking is allowed",
+    "q": "പാർക്കിംഗ് അനുവദനീയമാണ്",
     "options": [
-      "on turns.",
-      "on the footpath.",
-      "where parking is not prohibited.",
-      "none of the above."
+      "വളവുകളിൽ.",
+      "ഫുട്പാത്തിൽ.",
+      "പാർക്കിംഗ് നിരോധിച്ചിട്ടില്ലാത്ത സ്ഥലത്ത്.",
+      "മുകളിൽ പറഞ്ഞവയൊന്നുമല്ല."
     ],
     "sign": "/signs/sign_196.png",
     "answerIndex": 2
   },
   {
     "id": 197,
-    "q": "When refuelling a vehicle…..",
+    "q": "വാഹനത്തിൽ ഇന്ധനം നിറയ്ക്കുമ്പോൾ.....",
     "options": [
-      "do not check the air pressure.",
-      "do not smoke.",
-      "do not use any lights of the vehicle.",
-      "all of the above."
+      "എയർ പ്രഷർ പരിശോധിക്കരുത്.",
+      "പുകവലിക്കരുത്.",
+      "വാഹനത്തിന്റെ ലൈറ്റുകൾ ഉപയോഗിക്കരുത്.",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം."
     ],
     "sign": "/signs/sign_197.png",
     "answerIndex": 1
   },
   {
     "id": 198,
-    "q": "Pedestrians should not cross the road at sharp bends or near a stopped vehicle. Why?",
+    "q": "കാൽനടയാത്രക്കാർ മൂർച്ചയുള്ള വളവുകളിലോ നിർത്തിയിട്ട വാഹനത്തിന് സമീപമോ റോഡ് മുറിച്ചുകടക്കരുത്. എന്തുകൊണ്ട്?",
     "options": [
-      "Inconvenience to other vehicles",
-      "Inconvenience to other road users",
-      "Drivers of other vehicles coming from a distance do not see the people crossing the road",
-      "Inconvenience to stopped vehicles"
+      "മറ്റ് വാഹനങ്ങൾക്ക് അസൗകര്യം",
+      "മറ്റ് റോഡ് ഉപയോക്താക്കൾക്ക് അസൗകര്യം",
+      "ദൂരെ നിന്ന് വരുന്ന മറ്റ് വാഹനങ്ങളുടെ ഡ്രൈവർമാർ റോഡ് മുറിച്ചുകടക്കുന്നവരെ കാണില്ല",
+      "നിർത്തിയിട്ട വാഹനങ്ങൾക്ക് അസൗകര്യം"
     ],
     "sign": "/signs/sign_198.png",
     "answerIndex": 2
   },
   {
     "id": 199,
-    "q": "What should you do when turning into a road on the left side of the road you are on?",
+    "q": "നിങ്ങൾ ഉള്ള റോഡിന്റെ ഇടതുവശത്തുള്ള ഒരു റോഡിലേക്ക് തിരിയുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Show the left turn signal, drive to the centre and turn left",
-      "Honk and turn left",
-      "If you are on the left side of the road, you can turn left",
-      "Show the left turn signal, keep to the left side of the road, and turn left"
+      "ഇടത് ടേൺ സിഗ്നൽ കാണിക്കുക, മധ്യഭാഗത്തേക്ക് ഓടിച്ച് ഇടത്തേക്ക് തിരിയുക",
+      "ഹോൺ അടിച്ച് ഇടത്തേക്ക് തിരിയുക",
+      "നിങ്ങൾ റോഡിന്റെ ഇടതുവശത്താണെങ്കിൽ, നിങ്ങൾക്ക് ഇടത്തേക്ക് തിരിയാം",
+      "ഇടത് ടേൺ സിഗ്നൽ കാണിക്കുക, റോഡിന്റെ ഇടതുവശം ചേർന്ന് ഇടത്തേക്ക് തിരിയുക"
     ],
     "sign": "/signs/sign_199.png",
     "answerIndex": 3
   },
   {
     "id": 200,
-    "q": "What is the validity of a PUCC certificate?",
+    "q": "ഒരു PUCC സർട്ടിഫിക്കറ്റിന്റെ കാലാവധി എത്രയാണ്?",
     "options": [
-      "Six months",
-      "One year",
-      "Six months for vehicles with pollution standards BS III and below, and one year for those with BS IV and above",
-      "One year for vehicles with pollution standards BS III, and six months for those with BS IV and above"
+      "ആറ് മാസം",
+      "ഒരു വർഷം",
+      "മലിനീകരണ നിലവാരം BS III-ലും താഴെയുള്ള വാഹനങ്ങൾക്ക് ആറ് മാസവും, BS IV-ലും അതിനുമുകളിലുള്ളവയ്ക്ക് ഒരു വർഷവും",
+      "മലിനീകരണ നിലവാരം BS III ഉള്ള വാഹനങ്ങൾക്ക് ഒരു വർഷവും, BS IV-ഉം അതിനുമുകളിലുള്ളവയ്ക്ക് ആറ് മാസവും"
     ],
     "sign": "/signs/sign_200.png",
     "answerIndex": 2
   },
   {
     "id": 201,
-    "q": "If you are driving at night with headlights on and a vehicle comes from the opposite direction, what will you do?",
+    "q": "നിങ്ങൾ രാത്രിയിൽ ഹെഡ്‌ലൈറ്റുകൾ ഓണാക്കി വാഹനമോടിക്കുകയാണെങ്കിൽ, എതിർദിശയിൽ നിന്ന് ഒരു വാഹനം വന്നാൽ, നിങ്ങൾ എന്തുചെയ്യും?",
     "options": [
-      "Continue on the left side",
-      "Dim and brighten the headlights several times",
-      "Dim the headlight until the vehicle passes",
-      "Always use the bright headlight"
+      "ഇടതുവശത്ത് തുടരുക",
+      "ഹെഡ്‌ലൈറ്റുകൾ പലതവണ ഡിം ചെയ്യുകയും ബ്രൈറ്റ് ചെയ്യുകയും ചെയ്യുക",
+      "വാഹനം കടന്നുപോകുന്നതുവരെ ഹെഡ്‌ലൈറ്റ് ഡിം ചെയ്യുക",
+      "എല്ലായ്പ്പോഴും ബ്രൈറ്റ് ഹെഡ്‌ലൈറ്റ് ഉപയോഗിക്കുക"
     ],
     "sign": "/signs/sign_201.png",
     "answerIndex": 2
   },
   {
     "id": 202,
-    "q": "What is the minimum age to obtain a license for riding a motorcycle without gear?",
+    "q": "ഗിയർ ഇല്ലാത്ത മോട്ടോർസൈക്കിൾ ഓടിക്കാൻ ലൈസൻസ് നേടുന്നതിനുള്ള കുറഞ്ഞ പ്രായം എത്രയാണ്?",
     "options": [],
     "sign": "/signs/sign_202.png",
     "answerIndex": -1
   },
   {
     "id": 203,
-    "q": "What should you do when you see a \"School\" traffic sign while driving?",
+    "q": "വാഹനം ഓടിക്കുമ്പോൾ \"സ്കൂൾ\" ട്രാഫിക് ചിഹ്നം കണ്ടാൽ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Stop the vehicle, honk, and proceed",
-      "Slow down and proceed with caution",
-      "Honk continuously and proceed",
-      "All of the above"
+      "വാഹനം നിർത്തുക, ഹോൺ അടിക്കുക, എന്നിട്ട് പോകുക",
+      "വേഗത കുറച്ച് ജാഗ്രതയോടെ പോകുക",
+      "തുടർച്ചയായി ഹോൺ അടിച്ച് പോകുക",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_203.png",
     "answerIndex": 1
   },
   {
     "id": 204,
-    "q": "When turning left, the driver of a two-wheeler should",
+    "q": "ഇടത്തേക്ക് തിരിയുമ്പോൾ, ഒരു ഇരുചക്ര വാഹനത്തിന്റെ ഡ്രൈവർ",
     "options": [
-      "extend his left hand to the left.",
-      "not show a hand signal.",
-      "show a signal for left with his right hand.",
-      "none of the above."
+      "അവന്റെ ഇടത് കൈ ഇടത്തേക്ക് നീട്ടണം.",
+      "കൈ സിഗ്നൽ കാണിക്കരുത്.",
+      "അവന്റെ വലതു കൈകൊണ്ട് ഇടത്തേക്ക് ഒരു സിഗ്നൽ കാണിക്കണം.",
+      "മുകളിൽ പറഞ്ഞവയൊന്നുമല്ല."
     ],
     "sign": "/signs/sign_204.png",
     "answerIndex": 2
   },
   {
     "id": 205,
-    "q": "What is the signal to be shown when making a “U” turn?",
+    "q": "ഒരു “യു” ടേൺ എടുക്കുമ്പോൾ കാണിക്കേണ്ട സിഗ്നൽ എന്താണ്?",
     "options": [
-      "Signal for turning left",
-      "Signal for turning right",
-      "Signal for slowing down",
-      "Slow down while signalling to turn right"
+      "ഇടത്തേക്ക് തിരിയാനുള്ള സിഗ്നൽ",
+      "വലത്തേക്ക് തിരിയാനുള്ള സിഗ്നൽ",
+      "വേഗത കുറയ്ക്കാനുള്ള സിഗ്നൽ",
+      "വലത്തേക്ക് തിരിയാൻ സിഗ്നൽ നൽകുമ്പോൾ വേഗത കുറയ്ക്കുക"
     ],
     "sign": "/signs/sign_205.png",
     "answerIndex": 1
   },
   {
     "id": 206,
-    "q": "For how many years is the one-time tax paid for a new car?",
+    "q": "ഒരു പുതിയ കാറിന് ഒറ്റത്തവണ നികുതി അടയ്ക്കുന്നത് എത്ര വർഷത്തേക്കാണ്?",
     "options": [
-      "Until the registration of the vehicle is canceled",
-      "Five years"
+      "വാഹനത്തിന്റെ രജിസ്ട്രേഷൻ റദ്ദാക്കുന്നത് വരെ",
+      "അഞ്ച് വർഷം"
     ],
     "sign": "/signs/sign_206.png",
     "answerIndex": -1
   },
   {
     "id": 207,
-    "q": "How many people can be carried in the cabin of a goods vehicle?",
+    "q": "ഒരു ചരക്ക് വാഹനത്തിന്റെ ക്യാബിനിൽ എത്ര പേരെ കൊണ്ടുപോകാം?",
     "options": [
-      "Five individuals",
-      "Enough people to load and unload goods",
-      "As many people as recorded in the registration certificate",
-      "Individuals are not allowed"
+      "അഞ്ച് വ്യക്തികൾ",
+      "സാധനങ്ങൾ കയറ്റാനും ഇറക്കാനും ആവശ്യമായ ആളുകൾ",
+      "രജിസ്ട്രേഷൻ സർട്ടിഫിക്കറ്റിൽ രേഖപ്പെടുത്തിയിരിക്കുന്ന അത്രയും ആളുകൾ",
+      "വ്യക്തികളെ അനുവദനീയമല്ല"
     ],
     "sign": "/signs/sign_207.png",
     "answerIndex": 2
   },
   {
     "id": 208,
-    "q": "What should you do when your vehicle is being overtaken?",
+    "q": "നിങ്ങളുടെ വാഹനത്തെ ഓവർടേക്ക് ചെയ്യുമ്പോൾ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Stop your vehicle and allow the vehicle to overtake",
-      "Do not obstruct the other vehicle from overtaking",
-      "Slow down your vehicle and move to the right",
-      "Increase the speed of your vehicle"
+      "നിങ്ങളുടെ വാഹനം നിർത്തി വാഹനത്തെ ഓവർടേക്ക് ചെയ്യാൻ അനുവദിക്കുക",
+      "മറ്റ് വാഹനത്തെ ഓവർടേക്ക് ചെയ്യുന്നതിൽ നിന്ന് തടസ്സപ്പെടുത്തരുത്",
+      "നിങ്ങളുടെ വാഹനത്തിന്റെ വേഗത കുറച്ച് വലത്തേക്ക് നീങ്ങുക",
+      "നിങ്ങളുടെ വാഹനത്തിന്റെ വേഗത വർദ്ധിപ്പിക്കുക"
     ],
     "sign": "/signs/sign_208.png",
     "answerIndex": 1
   },
   {
     "id": 209,
-    "q": "Which of the following is a place where parking is prohibited?",
+    "q": "താഴെ പറയുന്നവയിൽ പാർക്കിംഗ് നിരോധിച്ചിരിക്കുന്ന സ്ഥലം ഏതാണ്?",
     "options": [
-      "Entrance of a hospital",
-      "Where parking is prohibited",
-      "On the footpath",
-      "All of the above"
+      "ഒരു ആശുപത്രിയുടെ പ്രവേശന കവാടം",
+      "പാർക്കിംഗ് നിരോധിച്ചിരിക്കുന്നിടത്ത്",
+      "ഫുട്പാത്തിൽ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_209.png",
     "answerIndex": 3
   },
   {
     "id": 210,
-    "q": "What is the use of the hand brake?",
+    "q": "ഹാൻഡ് ബ്രേക്കിന്റെ ഉപയോഗം എന്താണ്?",
     "options": [
-      "To reduce speed",
-      "For emergency braking along with the service brake",
-      "To park a vehicle",
-      "All of the above"
+      "വേഗത കുറയ്ക്കാൻ",
+      "സർവീസ് ബ്രേക്കിനൊപ്പം എമർജൻസി ബ്രേക്കിംഗിനായി",
+      "ഒരു വാഹനം പാർക്ക് ചെയ്യാൻ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_210.png",
     "answerIndex": 2
   },
   {
     "id": 211,
-    "q": "More than two people travelling on a two-wheeler is……….",
+    "q": "ഒരു ഇരുചക്രവാഹനത്തിൽ രണ്ടിൽ കൂടുതൽ പേർ യാത്ര ചെയ്യുന്നത്.........",
     "options": [
-      "permitted in unavoidable circumstances",
-      "a violation of the law",
-      "permitted when there is less traffic",
-      "all of the above"
+      "ഒഴിവാക്കാനാകാത്ത സാഹചര്യങ്ങളിൽ അനുവദനീയം",
+      "നിയമലംഘനമാണ്",
+      "ട്രാഫിക് കുറവുള്ളപ്പോൾ അനുവദനീയം",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_211.png",
     "answerIndex": 1
   },
   {
     "id": 212,
-    "q": "The minimum age to obtain a driving license for transport vehicles is….",
+    "q": "ട്രാൻസ്പോർട്ട് വാഹനങ്ങൾക്കുള്ള ഡ്രൈവിംഗ് ലൈസൻസ് നേടുന്നതിനുള്ള കുറഞ്ഞ പ്രായം....",
     "options": [],
     "sign": "/signs/sign_212.png",
     "answerIndex": -1
   },
   {
     "id": 213,
-    "q": "In which of the following situations is overtaking prohibited?",
+    "q": "താഴെ പറയുന്ന ഏത് സാഹചര്യത്തിലാണ് ഓവർടേക്കിംഗ് നിരോധിച്ചിരിക്കുന്നത്?",
     "options": [
-      "In heavy traffic",
-      "When taking a curve",
-      "On a narrow bridge",
-      "All of the above"
+      "കനത്ത ട്രാഫിക്കിൽ",
+      "ഒരു വളവ് തിരിയുമ്പോൾ",
+      "വീതി കുറഞ്ഞ പാലത്തിൽ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_213.png",
     "answerIndex": 3
   },
   {
     "id": 214,
-    "q": "While you are driving, if a person in charge of an animal requests to stop the vehicle as they are unable to control the animal, what should you do?",
+    "q": "നിങ്ങൾ വാഹനമോടിക്കുമ്പോൾ, ഒരു മൃഗത്തിന്റെ ചുമതലയുള്ള ഒരാൾ മൃഗത്തെ നിയന്ത്രിക്കാൻ കഴിയാത്തതിനാൽ വാഹനം നിർത്താൻ അഭ്യർത്ഥിച്ചാൽ, നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "The driver must stop the vehicle",
-      "The driver should honk and proceed",
-      "The driver should slow down",
-      "If there is space, the driver can proceed"
+      "ഡ്രൈവർ വാഹനം നിർത്തണം",
+      "ഡ്രൈവർ ഹോൺ അടിച്ച് പോകണം",
+      "ഡ്രൈവർ വേഗത കുറയ്ക്കണം",
+      "സ്ഥലമുണ്ടെങ്കിൽ ഡ്രൈവർക്ക് പോകാം"
     ],
     "sign": "/signs/sign_214.png",
     "answerIndex": 0
   },
   {
     "id": 215,
-    "q": "Over speeding…",
+    "q": "അമിത വേഗത...",
     "options": [
-      "is an offences that can lead to suspension or cancellation of the driving license",
-      "is an offence that leads only to a fine",
-      "is not an offence in case of an emergency",
-      "is not an offence"
+      "ഡ്രൈവിംഗ് ലൈസൻസ് സസ്പെൻഡ് ചെയ്യാനോ റദ്ദാക്കാനോ ഇടയാക്കുന്ന ഒരു കുറ്റമാണ്",
+      "പിഴ മാത്രം ലഭിക്കുന്ന ഒരു കുറ്റമാണ്",
+      "അടിയന്തര സാഹചര്യങ്ങളിൽ ഒരു കുറ്റമല്ല",
+      "ഒരു കുറ്റമല്ല"
     ],
     "sign": "/signs/sign_215.png",
     "answerIndex": 0
   },
   {
     "id": 216,
-    "q": "If a vehicle is involved in an accident…….",
+    "q": "ഒരു വാഹനം അപകടത്തിൽപ്പെട്ടാൽ.......",
     "options": [
-      "it must be reported to the nearest police station immediately",
-      "it must be reported to the nearest police station within 12 hours",
-      "it must be reported to the nearest police station within 24 hours",
-      "it must be reported to the nearest police station within 48 hours"
+      "അത് ഉടൻ തന്നെ അടുത്തുള്ള പോലീസ് സ്റ്റേഷനിൽ റിപ്പോർട്ട് ചെയ്യണം",
+      "അത് 12 മണിക്കൂറിനുള്ളിൽ അടുത്തുള്ള പോലീസ് സ്റ്റേഷനിൽ റിപ്പോർട്ട് ചെയ്യണം",
+      "അത് 24 മണിക്കൂറിനുള്ളിൽ അടുത്തുള്ള പോലീസ് സ്റ്റേഷനിൽ റിപ്പോർട്ട് ചെയ്യണം",
+      "അത് 48 മണിക്കൂറിനുള്ളിൽ അടുത്തുള്ള പോലീസ് സ്റ്റേഷനിൽ റിപ്പോർട്ട് ചെയ്യണം"
     ],
     "sign": "/signs/sign_216.png",
     "answerIndex": 2
   },
   {
     "id": 217,
-    "q": "Smoking while driving a public service vehicle…..",
+    "q": "ഒരു പൊതു സേവന വാഹനം ഓടിക്കുമ്പോൾ പുകവലിക്കുന്നത്.....",
     "options": [
-      "will result in suspension of the driving license",
-      "can only attract a fine",
-      "is not an offence",
-      "smoking is allowed if passengers permit"
+      "ഡ്രൈവിംഗ് ലൈസൻസ് സസ്പെൻഡ് ചെയ്യുന്നതിന് കാരണമാകും",
+      "പിഴ മാത്രം ലഭിക്കാം",
+      "ഒരു കുറ്റമല്ല",
+      "യാത്രക്കാർ അനുവദിക്കുകയാണെങ്കിൽ പുകവലി അനുവദനീയമാണ്"
     ],
     "sign": "/signs/sign_217.png",
     "answerIndex": 0
   },
   {
     "id": 218,
-    "q": "Overloading a goods vehicle…….",
+    "q": "ഒരു ചരക്ക് വാഹനത്തിൽ അമിതഭാരം കയറ്റുന്നത്.......",
     "options": [
-      "is not legally punishable",
-      "only attracts a fine",
-      "is legally punishable, including a fine and license suspension",
-      "None of the above is the correct answer"
+      "നിയമപരമായി ശിക്ഷാർഹമല്ല",
+      "പിഴ മാത്രം ആകർഷിക്കുന്നു",
+      "പിഴയും ലൈസൻസ് സസ്പെൻഷനും ഉൾപ്പെടെ നിയമപരമായി ശിക്ഷാർഹമാണ്",
+      "മുകളിൽ നൽകിയ ഉത്തരങ്ങളൊന്നും ശരിയല്ല"
     ],
     "sign": "/signs/sign_218.png",
     "answerIndex": 2
   },
   {
     "id": 219,
-    "q": "If a taxi driver refuses to go on a trip because the distance is short…..",
+    "q": "ദൂരം കുറവായതിനാൽ ഒരു ടാക്സി ഡ്രൈവർ യാത്ര പോകാൻ വിസമ്മതിച്ചാൽ.....",
     "options": [
-      "it is legally punishable, including a fine and license suspension",
-      "only attracts a fine",
-      "is legally correct",
-      "None of the above is the correct answer"
+      "പിഴയും ലൈസൻസ് സസ്പെൻഷനും ഉൾപ്പെടെ നിയമപരമായി ശിക്ഷാർഹമാണ്",
+      "പിഴ മാത്രം ആകർഷിക്കുന്നു",
+      "നിയമപരമായി ശരിയാണ്",
+      "മുകളിൽ നൽകിയ ഉത്തരങ്ങളൊന്നും ശരിയല്ല"
     ],
     "sign": "/signs/sign_219.png",
     "answerIndex": 0
   },
   {
     "id": 220,
-    "q": "Where the road is marked with a continuous yellow line, a vehicle……",
+    "q": "റോഡിൽ തുടർച്ചയായ മഞ്ഞ വര കൊണ്ട് അടയാളപ്പെടുത്തിയിരിക്കുന്നിടത്ത്, ഒരു വാഹനം......",
     "options": [
-      "must not touch or cross the yellow line",
-      "can overtake only on the right side of the yellow line",
-      "should cross the line only when overtaking the vehicle in front",
-      "None of the above is the correct answer"
+      "മഞ്ഞ വരയിൽ തൊടുകയോ മുറിച്ചുകടക്കുകയോ ചെയ്യരുത്",
+      "മഞ്ഞ വരയുടെ വലതുവശത്ത് മാത്രം ഓവർടേക്ക് ചെയ്യാം",
+      "മുന്നിലുള്ള വാഹനത്തെ ഓവർടേക്ക് ചെയ്യുമ്പോൾ മാത്രം വര മുറിച്ചുകടക്കണം",
+      "മുകളിൽ നൽകിയ ഉത്തരങ്ങളൊന്നും ശരിയല്ല"
     ],
     "sign": "/signs/sign_220.png",
     "answerIndex": 0
   },
   {
     "id": 221,
-    "q": "When you are driving on gradient roads, you should….",
+    "q": "നിങ്ങൾ കയറ്റമുള്ള റോഡുകളിൽ വാഹനമോടിക്കുമ്പോൾ, നിങ്ങൾ....",
     "options": [
-      "give priority to vehicles coming downhill",
-      "give priority to vehicles going uphill",
-      "give priority to overloaded vehicles",
-      "give priority to heavy vehicles"
+      "ഇറക്കം ഇറങ്ങിവരുന്ന വാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക",
+      "കയറ്റം കയറുന്ന വാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക",
+      "അമിതഭാരമുള്ള വാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക",
+      "ഭാരവാഹനങ്ങൾക്ക് മുൻഗണന നൽകുക"
     ],
     "sign": "/signs/sign_221.png",
     "answerIndex": 1
   },
   {
     "id": 222,
-    "q": "The driver of a tractor",
+    "q": "ഒരു ട്രാക്ടറിന്റെ ഡ്രൈവർ",
     "options": [
-      "should not carry any person other than the driver",
-      "more than two persons including the driver",
-      "more than three persons excluding the driver",
-      "None of the above is the correct answer"
+      "ഡ്രൈവറെ അല്ലാതെ മറ്റാരെയും കൊണ്ടുപോകരുത്",
+      "ഡ്രൈവർ ഉൾപ്പെടെ രണ്ട് പേരിൽ കൂടുതൽ",
+      "ഡ്രൈവറെ കൂടാതെ മൂന്ന് പേരിൽ കൂടുതൽ",
+      "മുകളിൽ നൽകിയ ഉത്തരങ്ങളൊന്നും ശരിയല്ല"
     ],
     "sign": "/signs/sign_222.png",
     "answerIndex": 0
   },
   {
     "id": 223,
-    "q": "In which situation can you overtake a vehicle from the left?",
+    "q": "ഏത് സാഹചര്യത്തിലാണ് നിങ്ങൾക്ക് ഒരു വാഹനത്തെ ഇടതുവശത്ത് നിന്ന് ഓവർടേക്ക് ചെയ്യാൻ കഴിയുന്നത്?",
     "options": [
-      "When the driver of the vehicle in front has indicated their intention to turn right and has moved to the centre of the road",
-      "If the vehicle to be overtaken is stationary and it is safe to pass that vehicle from the left",
-      "If the vehicle to be overtaken is driving on the right side of a multi-lane road and it is safe to overtake the vehicle in front through the left lane",
-      "All of the above"
+      "മുന്നിലുള്ള വാഹനത്തിന്റെ ഡ്രൈവർ വലത്തേക്ക് തിരിയാനുള്ള തന്റെ ഉദ്ദേശ്യം സൂചിപ്പിക്കുകയും റോഡിന്റെ മധ്യഭാഗത്തേക്ക് നീങ്ങുകയും ചെയ്യുമ്പോൾ",
+      "ഓവർടേക്ക് ചെയ്യേണ്ട വാഹനം നിശ്ചലമാണെങ്കിൽ, ആ വാഹനത്തെ ഇടതുവശത്ത് നിന്ന് കടന്നുപോകുന്നത് സുരക്ഷിതമാണെങ്കിൽ",
+      "ഓവർടേക്ക് ചെയ്യേണ്ട വാഹനം ഒരു മൾട്ടി-ലെയ്ൻ റോഡിന്റെ വലതുവശത്തുകൂടി ഓടിക്കുകയാണെങ്കിൽ, ഇടത് ലെയ്നിലൂടെ മുന്നിലുള്ള വാഹനത്തെ ഓവർടേക്ക് ചെയ്യുന്നത് സുരക്ഷിതമാണെങ്കിൽ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_223.png",
     "answerIndex": 3
   },
   {
     "id": 224,
-    "q": "In which of the following circumstances can a vehicle be seized by officials?",
+    "q": "താഴെ പറയുന്ന ഏത് സാഹചര്യത്തിലാണ് ഒരു വാഹനം ഉദ്യോഗസ്ഥർക്ക് പിടിച്ചെടുക്കാൻ കഴിയുന്നത്?",
     "options": [
-      "In a situation where the vehicle does not have a valid registration permit",
-      "The vehicle does not have valid insurance coverage",
-      "When the vehicle exceeds the speed limit",
-      "When the vehicle is carrying excess weight"
+      "വാഹനത്തിന് സാധുവായ രജിസ്ട്രേഷൻ പെർമിറ്റ് ഇല്ലാത്ത സാഹചര്യത്തിൽ",
+      "വാഹനത്തിന് സാധുവായ ഇൻഷുറൻസ് പരിരക്ഷ ഇല്ല",
+      "വാഹനം വേഗപരിധി ലംഘിക്കുമ്പോൾ",
+      "വാഹനം അമിതഭാരം കയറ്റുമ്പോൾ"
     ],
     "sign": "/signs/sign_224.png",
     "answerIndex": 0
   },
   {
     "id": 225,
-    "q": "You have a learner's license for a motorcycle, but…..",
+    "q": "നിങ്ങൾക്ക് ഒരു മോട്ടോർസൈക്കിളിനുള്ള ലേണേഴ്സ് ലൈസൻസ് ഉണ്ട്, പക്ഷേ.....",
     "options": [
-      "you can drive when there is less traffic",
-      "you should only drive when accompanied by an instructor who holds a driving license to ride a motorcycle",
-      "you should not carry any other person on the motorcycle except for the purpose of receiving instructions from an instructor who holds a valid driving license for a motorcycle",
-      "None of the above is the correct answer"
+      "ട്രാഫിക് കുറവുള്ളപ്പോൾ നിങ്ങൾക്ക് ഓടിക്കാം",
+      "ഒരു മോട്ടോർസൈക്കിൾ ഓടിക്കാൻ ഡ്രൈവിംഗ് ലൈസൻസുള്ള ഒരു ഇൻസ്ട്രക്ടറോടൊപ്പം മാത്രമേ നിങ്ങൾ ഓടിക്കാവൂ",
+      "ഒരു മോട്ടോർസൈക്കിളിനായി സാധുവായ ഡ്രൈവിംഗ് ലൈസൻസുള്ള ഒരു ഇൻസ്ട്രക്ടറിൽ നിന്ന് നിർദ്ദേശങ്ങൾ സ്വീകരിക്കുന്നതിനല്ലാതെ മറ്റാരെയും മോട്ടോർസൈക്കിളിൽ കൊണ്ടുപോകരുത്",
+      "മുകളിൽ നൽകിയ ഉത്തരങ്ങളൊന്നും ശരിയല്ല"
     ],
     "sign": "/signs/sign_225.png",
     "answerIndex": 2
   },
   {
     "id": 226,
-    "q": "All motor vehicles must be covered by",
+    "q": "എല്ലാ മോട്ടോർ വാഹനങ്ങളും എന്തുണ്ടായിരിക്കണം?",
     "options": [
-      "Life Insurance",
-      "Third Party Insurance",
-      "Comprehensive Insurance",
-      "Full Cover Insurance"
+      "ലൈഫ് ഇൻഷുറൻസ്",
+      "തേർഡ് പാർട്ടി ഇൻഷുറൻസ്",
+      "കോംപ്രിഹെൻസീവ് ഇൻഷുറൻസ്",
+      "ഫുൾ കവർ ഇൻഷുറൻസ്"
     ],
     "sign": "/signs/sign_226.png",
     "answerIndex": 1
   },
   {
     "id": 227,
-    "q": "The number of passengers allowed to be carried in a private vehicle is recorded in the..",
+    "q": "ഒരു സ്വകാര്യ വാഹനത്തിൽ കൊണ്ടുപോകാൻ അനുവദിച്ചിട്ടുള്ള യാത്രക്കാരുടെ എണ്ണം എവിടെയാണ് രേഖപ്പെടുത്തിയിരിക്കുന്നത്..",
     "options": [
-      "Registration Certificate",
-      "Tax Token",
-      "Permit",
-      "Insurance Certificate"
+      "രജിസ്ട്രേഷൻ സർട്ടിഫിക്കറ്റ്",
+      "ടാക്സ് ടോക്കൺ",
+      "പെർമിറ്റ്",
+      "ഇൻഷുറൻസ് സർട്ടിഫിക്കറ്റ്"
     ],
     "sign": "/signs/sign_227.png",
     "answerIndex": 0
   },
   {
     "id": 228,
-    "q": "When is overtaking prohibited?",
+    "q": "എപ്പോഴാണ് ഓവർടേക്കിംഗ് നിരോധിച്ചിരിക്കുന്നത്?",
     "options": [
-      "When the road is marked with a continuous centre line in white or yellow",
-      "On a narrow bridge",
-      "At junctions, intersections, and pedestrian crossings",
-      "All of the above"
+      "റോഡിൽ വെള്ളയിലോ മഞ്ഞയിലോ തുടർച്ചയായ മധ്യരേഖ അടയാളപ്പെടുത്തിയിരിക്കുമ്പോൾ",
+      "വീതി കുറഞ്ഞ പാലത്തിൽ",
+      "ജംഗ്ഷനുകൾ, ഇന്റർസെക്ഷനുകൾ, കാൽനട ക്രോസിംഗുകൾ എന്നിവിടങ്ങളിൽ",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_228.png",
     "answerIndex": 3
   },
   {
     "id": 229,
-    "q": "What does a stop line mean?",
+    "q": "ഒരു സ്റ്റോപ്പ് ലൈൻ എന്താണ് അർത്ഥമാക്കുന്നത്?",
     "options": [
-      "A line drawn along the edge of the road in white or yellow",
-      "A line 5 centimetres wide in white or yellow near a road junction or pedestrian crossing",
-      "An intermittent white line in the middle of the road",
-      "A line drawn in the middle of the road in yellow"
+      "റോഡിന്റെ അരികിലൂടെ വെള്ളയിലോ മഞ്ഞയിലോ വരച്ച ഒരു വര",
+      "ഒരു റോഡ് ജംഗ്ഷനോ കാൽനട ക്രോസിംഗിനോ സമീപം വെള്ളയിലോ മഞ്ഞയിലോ 5 സെന്റീമീറ്റർ വീതിയുള്ള ഒരു വര",
+      "റോഡിന്റെ മധ്യത്തിലുള്ള ഇടവിട്ട വെള്ള വര",
+      "റോഡിന്റെ മധ്യത്തിൽ മഞ്ഞ നിറത്തിൽ വരച്ച ഒരു വര"
     ],
     "sign": "/signs/sign_229.png",
     "answerIndex": 1
   },
   {
     "id": 230,
-    "q": "Before starting the vehicle's engine",
+    "q": "വാഹനത്തിന്റെ എഞ്ചിൻ സ്റ്റാർട്ട് ചെയ്യുന്നതിന് മുമ്പ്",
     "options": [
-      "check the coolant level and engine oil level",
-      "check the headlight",
-      "check the brake",
-      "All of the above"
+      "കൂളന്റ് ലെവലും എഞ്ചിൻ ഓയിൽ ലെവലും പരിശോധിക്കുക",
+      "ഹെഡ്‌ലൈറ്റ് പരിശോധിക്കുക",
+      "ബ്രേക്ക് പരിശോധിക്കുക",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം"
     ],
     "sign": "/signs/sign_230.png",
     "answerIndex": 0
   },
   {
     "id": 231,
-    "q": "Which of the following is the only vehicle allowed to be driven at a speed of more than \t\t60 kilometres per hour?",
+    "q": "താഴെ പറയുന്നവയിൽ മണിക്കൂറിൽ 60 കിലോമീറ്ററിൽ കൂടുതൽ വേഗതയിൽ ഓടിക്കാൻ അനുവദനീയമായ ഒരേയൊരു വാഹനം ഏതാണ്?",
     "options": [
-      "Motorcycle",
-      "Motor car",
-      "Stage carriage",
-      "Tipper lorries"
+      "മോട്ടോർസൈക്കിൾ",
+      "മോട്ടോർ കാർ",
+      "സ്റ്റേജ് ക്യാരേജ്",
+      "ടിപ്പർ ലോറികൾ"
     ],
     "sign": "/signs/sign_231.png",
     "answerIndex": 1
   },
   {
     "id": 232,
-    "q": "What is the maximum permissible distance between towing vehicles?",
+    "q": "കെട്ടിവലിക്കുന്ന വാഹനങ്ങൾ തമ്മിലുള്ള പരമാവധി അനുവദനീയമായ ദൂരം എത്രയാണ്?",
     "options": [
-      "Seven meters",
-      "Three meters"
+      "ഏഴ് മീറ്റർ",
+      "മൂന്ന് മീറ്റർ"
     ],
     "sign": "/signs/sign_232.png",
     "answerIndex": -1
   },
   {
     "id": 233,
-    "q": "What is the maximum permissible weight that can be carried in a goods vehicle?",
+    "q": "ഒരു ചരക്ക് വാഹനത്തിൽ കൊണ്ടുപോകാൻ കഴിയുന്ന പരമാവധി അനുവദനീയമായ ഭാരം എത്രയാണ്?",
     "options": [
-      "No limit",
-      "As permitted by the Registration Certificate/Permit",
-      "As permitted by the Insurance Certificate",
-      "No limit"
+      "പരിധിയില്ല",
+      "രജിസ്ട്രേഷൻ സർട്ടിഫിക്കറ്റ്/പെർമിറ്റ് അനുവദിക്കുന്ന പ്രകാരം",
+      "ഇൻഷുറൻസ് സർട്ടിഫിക്കറ്റ് അനുവദിക്കുന്ന പ്രകാരം",
+      "പരിധിയില്ല"
     ],
     "sign": "/signs/sign_233.png",
     "answerIndex": 1
   },
   {
     "id": 234,
-    "q": "According to Section 112 of the Motor Vehicles Act, 1988",
+    "q": "മോട്ടോർ വാഹന നിയമം, 1988-ലെ സെക്ഷൻ 112 പ്രകാരം",
     "options": [
-      "Speed limit should not be exceeded",
-      "Should not drive after consuming alcohol",
-      "Should not use the vehicle on the road without paying tax",
-      "The gross weight of the vehicle should not be exceeded"
+      "വേഗപരിധി കവിയരുത്",
+      "മദ്യം കഴിച്ച ശേഷം വാഹനമോടിക്കരുത്",
+      "നികുതി അടയ്ക്കാതെ റോഡിൽ വാഹനം ഉപയോഗിക്കരുത്",
+      "വാഹനത്തിന്റെ മൊത്തം ഭാരം കവിയരുത്"
     ],
     "sign": "/signs/sign_234.png",
     "answerIndex": 0
   },
   {
     "id": 235,
-    "q": "According to Section 113 of the Motor Vehicles Act, 1988, a driver should not drive a vehicle….",
+    "q": "മോട്ടോർ വാഹന നിയമം, 1988-ലെ സെക്ഷൻ 113 പ്രകാരം, ഒരു ഡ്രൈവർ വാഹനം ഓടിക്കരുത്....",
     "options": [
-      "after consuming alcohol.",
-      "exceeding the speed limit.",
-      "exceeding the gross vehicle weight.",
-      "none of the above."
+      "മദ്യം കഴിച്ച ശേഷം.",
+      "വേഗപരിധി കവിഞ്ഞ്.",
+      "വാഹനത്തിന്റെ മൊത്തം ഭാരം കവിഞ്ഞ്.",
+      "മുകളിൽ പറഞ്ഞവയൊന്നുമല്ല."
     ],
     "sign": "/signs/sign_235.png",
     "answerIndex": 2
   },
   {
     "id": 236,
-    "q": "What is the height limit of the load of a goods vehicle from the ground level?",
+    "q": "ഒരു ചരക്ക് വാഹനത്തിന്റെ ലോഡിന്റെ തറനിരപ്പിൽ നിന്നുള്ള ഉയര പരിധി എത്രയാണ്?",
     "options": [],
     "sign": "/signs/sign_236.png",
     "answerIndex": -1
   },
   {
     "id": 3,
-    "q": "8 meters",
+    "q": "8 മീറ്റർ",
     "options": [
-      "Three meters",
-      "No limit",
-      "Four meters"
+      "മൂന്ന് മീറ്റർ",
+      "പരിധിയില്ല",
+      "നാല് മീറ്റർ"
     ],
     "sign": "/signs/sign_3.png",
     "answerIndex": 2
   },
   {
     "id": 237,
-    "q": "According to Section 129 of the Motor Vehicles Act, 1988, a person riding a motorcycle must…..",
+    "q": "മോട്ടോർ വാഹന നിയമം, 1988-ലെ സെക്ഷൻ 129 പ്രകാരം, ഒരു മോട്ടോർസൈക്കിൾ ഓടിക്കുന്നയാൾ നിർബന്ധമായും.....",
     "options": [
-      "wear a jerkin.",
-      "wear a helmet.",
-      "wear shoes.",
-      "wear gloves."
+      "ഒരു ജെർകിൻ ധരിക്കണം.",
+      "ഒരു ഹെൽമെറ്റ് ധരിക്കണം.",
+      "ഷൂസ് ധരിക്കണം.",
+      "കയ്യുറകൾ ധരിക്കണം."
     ],
     "sign": "/signs/sign_237.png",
     "answerIndex": 1
   },
   {
     "id": 238,
-    "q": "Zig-zag driving is…………",
+    "q": "സിഗ്-സാഗ് ഡ്രൈവിംഗ്.........",
     "options": [
-      "dangerous only for two-wheelers.",
-      "always dangerous for all vehicles.",
-      "a threat to four-wheeled vehicles.",
-      "safe when the road is slippery."
+      "ഇരുചക്ര വാഹനങ്ങൾക്ക് മാത്രം അപകടകരമാണ്.",
+      "എല്ലാ വാഹനങ്ങൾക്കും എപ്പോഴും അപകടകരമാണ്.",
+      "നാലുചക്ര വാഹനങ്ങൾക്ക് ഒരു ഭീഷണിയാണ്.",
+      "റോഡ് വഴുവഴുപ്പുള്ളപ്പോൾ സുരക്ഷിതമാണ്."
     ],
     "sign": "/signs/sign_238.png",
     "answerIndex": 1
   },
   {
     "id": 239,
-    "q": "You are on a road with a long downward slope. What should you do to control the speed of your vehicle?",
+    "q": "നിങ്ങൾ നീളമുള്ള ഒരു ഇറക്കമുള്ള റോഡിലാണ്. നിങ്ങളുടെ വാഹനത്തിന്റെ വേഗത നിയന്ത്രിക്കാൻ നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Shift to a low gear",
-      "Stop the engine",
-      "Select neutral",
-      "Apply brakes continuously"
+      "കുറഞ്ഞ ഗിയറിലേക്ക് മാറുക",
+      "എഞ്ചിൻ നിർത്തുക",
+      "ന്യൂട്രൽ തിരഞ്ഞെടുക്കുക",
+      "തുടർച്ചയായി ബ്രേക്ക് പ്രയോഗിക്കുക"
     ],
     "sign": "/signs/sign_239.png",
     "answerIndex": 0
   },
   {
     "id": 240,
-    "q": "To supervise a person learning to drive, you must…",
+    "q": "ഡ്രൈവിംഗ് പഠിക്കുന്ന ഒരാൾക്ക് മേൽനോട്ടം വഹിക്കാൻ, നിങ്ങൾ...",
     "options": [
-      "be an authorised driving trainer.",
-      "hold a driving license.",
-      "hold a learner's license.",
-      "be an instructor. 990"
+      "ഒരു അംഗീകൃത ഡ്രൈവിംഗ് ട്രെയിനർ ആയിരിക്കണം.",
+      "ഒരു ഡ്രൈവിംഗ് ലൈസൻസ് കൈവശം വയ്ക്കണം.",
+      "ഒരു ലേണേഴ്സ് ലൈസൻസ് കൈവശം വയ്ക്കണം.",
+      "ഒരു ഇൻസ്ട്രക്ടർ ആയിരിക്കണം. 990"
     ],
     "sign": "/signs/sign_240.png",
     "answerIndex": 0
   },
   {
     "id": 241,
-    "q": "It is essential to wear a helmet when riding a two-wheeler because",
+    "q": "ഇരുചക്ര വാഹനം ഓടിക്കുമ്പോൾ ഹെൽമെറ്റ് ധരിക്കേണ്ടത് അത്യാവശ്യമാണ്, കാരണം",
     "options": [
-      "it is for your personal safety.",
-      "otherwise, you will be caught by the traffic police.",
-      "it is necessary for equality on the road.",
-      "it is safe for all road users."
+      "അത് നിങ്ങളുടെ വ്യക്തിപരമായ സുരക്ഷയ്ക്കാണ്.",
+      "അല്ലെങ്കിൽ, ട്രാഫിക് പോലീസ് നിങ്ങളെ പിടികൂടും.",
+      "റോഡിലെ തുല്യതയ്ക്ക് ഇത് ആവശ്യമാണ്.",
+      "ഇത് എല്ലാ റോഡ് ഉപയോക്താക്കൾക്കും സുരക്ഷിതമാണ്."
     ],
     "sign": "/signs/sign_241.png",
     "answerIndex": 0
   },
   {
     "id": 242,
-    "q": "You are overtaking a car at night. What should you be careful about?",
+    "q": "നിങ്ങൾ രാത്രിയിൽ ഒരു കാറിനെ ഓവർടേക്ക് ചെയ്യുകയാണ്. നിങ്ങൾ എന്തിനെക്കുറിച്ചാണ് ശ്രദ്ധിക്കേണ്ടത്?",
     "options": [
-      "You should not dazzle other road users",
-      "You should flash your headlamps before overtaking",
-      "Your rear fog lights are turned on",
-      "Dim your headlight"
+      "മറ്റ് റോഡ് ഉപയോക്താക്കളുടെ കണ്ണ് മഞ്ഞളിപ്പിക്കരുത്",
+      "ഓവർടേക്ക് ചെയ്യുന്നതിന് മുമ്പ് നിങ്ങളുടെ ഹെഡ്‌ലാമ്പുകൾ ഫ്ലാഷ് ചെയ്യണം",
+      "നിങ്ങളുടെ പിൻ ഫോഗ് ലൈറ്റുകൾ ഓണാണെന്ന് ഉറപ്പുവരുത്തുക",
+      "നിങ്ങളുടെ ഹെഡ്‌ലൈറ്റ് ഡിം ചെയ്യുക"
     ],
     "sign": "/signs/sign_242.png",
     "answerIndex": 1
   },
   {
     "id": 243,
-    "q": "You stop for pedestrians waiting to cross at a zebra crossing. They do not start to cross. What should you do?",
+    "q": "ഒരു സീബ്ര ക്രോസിംഗിൽ മുറിച്ചുകടക്കാൻ കാത്തുനിൽക്കുന്ന കാൽനടയാത്രക്കാർക്കായി നിങ്ങൾ നിർത്തുന്നു. അവർ മുറിച്ചുകടക്കാൻ തുടങ്ങുന്നില്ല. നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Sound your horn",
-      "Wait patiently",
-      "You start to drive",
-      "Ask if they are crossing or not"
+      "നിങ്ങളുടെ ഹോൺ മുഴക്കുക",
+      "ക്ഷമയോടെ കാത്തിരിക്കുക",
+      "നിങ്ങൾ ഓടിക്കാൻ തുടങ്ങുക",
+      "അവർ മുറിച്ചുകടക്കുകയാണോ അല്ലയോ എന്ന് ചോദിക്കുക"
     ],
     "sign": "/signs/sign_243.png",
     "answerIndex": 1
   },
   {
     "id": 244,
-    "q": "It is essential to dip your lights",
+    "q": "നിങ്ങളുടെ ലൈറ്റുകൾ ഡിം ചെയ്യേണ്ടത് അത്യാവശ്യമാണ്",
     "options": [
-      "near an oncoming vehicle.",
-      "when fog lamps are switched on in foggy weather.",
-      "when driving immediately behind another vehicle.",
-      "All of the above."
+      "എതിരെ വരുന്ന വാഹനത്തിന് സമീപം.",
+      "മൂടൽമഞ്ഞുള്ള കാലാവസ്ഥയിൽ ഫോഗ് ലാമ്പുകൾ സ്വിച്ച് ഓൺ ചെയ്യുമ്പോൾ.",
+      "മറ്റൊരു വാഹനത്തിന് തൊട്ടുപിന്നാലെ ഓടിക്കുമ്പോൾ.",
+      "മുകളിൽ പറഞ്ഞവയെല്ലാം."
     ],
     "sign": "/signs/sign_244.png",
     "answerIndex": 3
   },
   {
     "id": 245,
-    "q": "The driver of which vehicle should drive with the headlights on during the day?",
+    "q": "ഏത് വാഹനത്തിന്റെ ഡ്രൈവറാണ് പകൽ സമയത്ത് ഹെഡ്‌ലൈറ്റുകൾ ഓണാക്കി ഓടിക്കേണ്ടത്?",
     "options": [
-      "Motor car",
-      "Construction work vehicles",
-      "Hazardous vehicles",
-      "Motorcycle"
+      "മോട്ടോർ കാർ",
+      "നിർമ്മാണ പ്രവർത്തന വാഹനങ്ങൾ",
+      "അപകടകരമായ വാഹനങ്ങൾ",
+      "മോട്ടോർസൈക്കിൾ"
     ],
     "sign": "/signs/sign_245.png",
     "answerIndex": 3
   },
   {
     "id": 246,
-    "q": "While you are driving, a vehicle comes fast behind you flashing its headlights. What should you do?",
+    "q": "നിങ്ങൾ വാഹനമോടിക്കുമ്പോൾ, ഒരു വാഹനം നിങ്ങളുടെ പിന്നിൽ ഹെഡ്‌ലൈറ്റുകൾ മിന്നിച്ച് വേഗത്തിൽ വരുന്നു. നിങ്ങൾ എന്തുചെയ്യണം?",
     "options": [
-      "Speed up to maintain a gap behind you",
-      "Touch the brakes to show your brake lights",
-      "If it is safe, allow the vehicle to overtake",
-      "Stop your vehicle"
+      "നിങ്ങൾക്ക് പിന്നിൽ ഒരു വിടവ് നിലനിർത്താൻ വേഗത കൂട്ടുക",
+      "നിങ്ങളുടെ ബ്രേക്ക് ലൈറ്റുകൾ കാണിക്കാൻ ബ്രേക്കിൽ തൊടുക",
+      "സുരക്ഷിതമാണെങ്കിൽ, വാഹനത്തെ ഓവർടേക്ക് ചെയ്യാൻ അനുവദിക്കുക",
+      "നിങ്ങളുടെ വാഹനം നിർത്തുക"
     ],
     "sign": "/signs/sign_246.png",
     "answerIndex": 2
   },
   {
     "id": 247,
-    "q": "When should you use headlights during the day?",
+    "q": "പകൽ സമയത്ത് എപ്പോഴാണ് ഹെഡ്‌ലൈറ്റുകൾ ഉപയോഗിക്കേണ്ടത്?",
     "options": [
-      "In low visibility areas and on highways",
-      "On country roads",
-      "Through narrow streets",
-      "In an emergency"
+      "കാഴ്ച കുറഞ്ഞ പ്രദേശങ്ങളിലും ഹൈവേകളിലും",
+      "നാട്ടിൻപുറത്തെ റോഡുകളിൽ",
+      "ഇടുങ്ങിയ തെരുവുകളിലൂടെ",
+      "അടിയന്തര സാഹചര്യത്തിൽ"
     ],
     "sign": "/signs/sign_247.png",
     "answerIndex": 0
   },
   {
     "id": 248,
-    "q": "The basic rule of a two-lane road is",
+    "q": "ഒരു രണ്ട്-ലെയ്ൻ റോഡിന്റെ അടിസ്ഥാന നിയമം",
     "options": [
-      "stay in the left lane if not overtaking",
-      "maintain the lane with the least traffic",
-      "always stay in the right lane at high speed",
-      "drive in the centre lane"
+      "ഓവർടേക്ക് ചെയ്യുന്നില്ലെങ്കിൽ ഇടത് ലെയ്നിൽ തുടരുക",
+      "ഏറ്റവും കുറഞ്ഞ ട്രാഫിക്കുള്ള ലെയ്ൻ നിലനിർത്തുക",
+      "ഉയർന്ന വേഗതയിൽ എപ്പോഴും വലത് ലെയ്നിൽ തുടരുക",
+      "സെന്റർ ലെയ്നിൽ ഓടിക്കുക"
     ],
     "sign": "/signs/sign_248.png",
     "answerIndex": 0
   },
   {
     "id": 249,
-    "q": "Which of the following is a legal requirement for every vehicle?",
+    "q": "ഓരോ വാഹനത്തിനും നിയമപരമായ ആവശ്യം ഇനിപ്പറയുന്നവയിൽ ഏതാണ്?",
     "options": [
-      "First aid kit",
-      "Spare wheel",
-      "Audio system",
-      "Seat belt"
+      "പ്രഥമശുശ്രൂഷാ കിറ്റ്",
+      "സ്പെയർ വീൽ",
+      "ഓഡിയോ സിസ്റ്റം",
+      "സീറ്റ് ബെൽറ്റ്"
     ],
     "sign": "/signs/sign_249.png",
     "answerIndex": 0
   },
   {
     "id": 250,
-    "q": "What are the dangerous articles that can be carried in a public service vehicle?",
+    "q": "ഒരു പൊതു സേവന വാഹനത്തിൽ കൊണ്ടുപോകാൻ കഴിയുന്ന അപകടകരമായ വസ്തുക്കൾ ഏതാണ്?",
     "options": [
-      "Explosives",
-      "Fuel and lubricants for vehicles",
-      "Safely packed cartridges for small arms",
-      "Gas cylinder"
+      "സ്ഫോടകവസ്തുക്കൾ",
+      "വാഹനങ്ങൾക്കുള്ള ഇന്ധനവും ലൂബ്രിക്കന്റുകളും",
+      "ചെറിയ ആയുധങ്ങൾക്കായി സുരക്ഷിതമായി പായ്ക്ക് ചെയ്ത വെടിയുണ്ടകൾ",
+      "ഗ്യാസ് സിലിണ്ടർ"
     ],
     "sign": "/signs/sign_250.png",
     "answerIndex": 1
@@ -2762,8 +2762,7 @@ try:
             # Get the 'options' list from the JSON item.
             options_list = item.get('options', [])
             # Convert the Python list back into a JSON formatted string
-            csv_row['options'] = json.dumps(options_list)
-            
+            csv_row['options'] = json.dumps(options_list, ensure_ascii=False)            
             # --- Handle all other fields ---
             # Use .get() for all other fields to safely handle missing keys
             for header in headers:
