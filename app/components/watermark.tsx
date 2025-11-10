@@ -34,7 +34,7 @@ const Watermark: React.FC<WatermarkProps> = ({ schoolName }) => {
           width: "150%", // extend beyond viewport
           height: "150%", // fill edges after rotation
           top: "-25%",
-          left: "-25%",
+          left: "-60%",
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "center",

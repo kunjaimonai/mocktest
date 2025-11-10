@@ -40,7 +40,7 @@ function shuffleArray<T>(array: T[]): T[] {
 }
 
 function generateCaptcha(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
   return Array.from({ length: 6 })
     .map(() => chars.charAt(Math.floor(Math.random() * chars.length)))
     .join("");
@@ -305,7 +305,7 @@ if (!q) {
                       alt="Sign"
                       width={48}
                       height={48}
-                      className="inline-block ml-4 w-12 h-12 object-contain"
+                      className="inline-block ml-4 w-32 h-32 object-contain"
                       onError={(e) => (e.currentTarget.style.display = "none")}
                     />
                   )}
