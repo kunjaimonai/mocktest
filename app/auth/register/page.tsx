@@ -10,7 +10,7 @@ type School = {
   id: number;
   name: string;
   number: string;
-  paymentStatus: "pending" | "completed";
+  paymentstatus: "pending" | "completed";
   screenshot?: string;
   logo?: string;
 };
@@ -26,18 +26,17 @@ const Register = () => {
   const router = useRouter();
 
   const fetchSchoolData = async () => {
-      const { data, error } = await supabase.from("schools").select("*");
-      if (error) {
-        console.error("Error fetching school data:", error);
-      } else {
-        setSchools(data as School[]);
-      }
-    };
-  
-    useEffect(() => {
-      fetchSchoolData();
-    }, []);
+    const { data, error } = await supabase.from("schools").select("*");
+    if (error) {
+      console.error("Error fetching school data:", error);
+    } else {
+      setSchools(data as School[]);
+    }
+  };
 
+  useEffect(() => {
+    fetchSchoolData();
+  }, []);
 
   const generateUniqueId = (): number => {
     let id: number;
@@ -50,7 +49,7 @@ const Register = () => {
   };
 
   const handleSubmit = () => {
-    if (!name.trim() || !mobile.trim() ) {
+    if (!name.trim() || !mobile.trim()) {
       toast.error("All fields are required");
       return;
     }
@@ -62,32 +61,31 @@ const Register = () => {
     toast("Proceed with payment to complete registration", { icon: "💳" });
   };
 
- const handleFileUpload = async (
-  e: React.ChangeEvent<HTMLInputElement>,
-  type: "screenshot" | "logo"
-) => {
-  const file = e.target.files?.[0];
-  if (!file) return;
+  const handleFileUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "screenshot" | "logo"
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("type", type);
-  formData.append("id", name.replace(/\s+/g, "_") || "school");
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("type", type);
+    formData.append("id", name.replace(/\s+/g, "_") || "school");
 
-  const res = await fetch("/api/upload", {
-    method: "POST",
-    body: formData,
-  });
+    const res = await fetch("/api/upload", {
+      method: "POST",
+      body: formData,
+    });
 
-  const data = await res.json();
-  if (data.success) {
-    if (type === "screenshot") setScreenshot(data.url);
-    else setLogo(data.url);
-  } else {
-    toast.error("Failed to upload image");
-  }
-};
-
+    const data = await res.json();
+    if (data.success) {
+      if (type === "screenshot") setScreenshot(data.url);
+      else setLogo(data.url);
+    } else {
+      toast.error("Failed to upload image");
+    }
+  };
 
   const handlePaymentSubmit = async () => {
     if (!screenshot) {
@@ -102,7 +100,7 @@ const Register = () => {
       id: newId,
       name,
       number: mobile,
-      paymentStatus: "pending",
+      paymentstatus: "pending",
       screenshot,
       logo: logo || "",
     };
@@ -113,8 +111,15 @@ const Register = () => {
       const res = await fetch("/api/updateSchools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedSchools),
+        body: JSON.stringify(newSchool),
       });
+
+      const responseData = await res.json();
+      console.log("API Response:", responseData);
+
+      if (!res.ok) {
+        throw new Error(responseData.error || "Unknown server error");
+      }
 
       if (!res.ok) throw new Error("Failed to update database");
 

@@ -1,25 +1,23 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
-
 export async function POST(req: Request) {
   try {
-    const schools = await req.json();
+    const school = await req.json();
+    console.log("Received body:", school);
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("schools")
-      .upsert(schools, { onConflict: "id" });
+      .upsert([school], { onConflict: "id" })
+      .select();
 
     if (error) {
-      console.error("Error:", error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
+      console.error("Supabase Error:", error);
+      return NextResponse.json({ error: error.message, details: error }, { status: 500 });
     }
 
-    return NextResponse.json({ message: "Schools updated successfully" });
-  } catch (error) {
-    console.error("Error writing file:", error);
-    return NextResponse.json(
-      { error: "Failed to update file" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "OK", data }, { status: 200 });
+  } catch (error: any) {
+    console.error("Server error:", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
