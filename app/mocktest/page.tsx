@@ -510,17 +510,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
               <div className="flex justify-end gap-3">
                 <button
-                  className="px-4 py-2 border border-slate-300 rounded-md hover:bg-slate-50 text-slate-700"
-                  onClick={() => {
-                    if (captchaTimerRef.current)
-                      clearInterval(captchaTimerRef.current);
-                    setTestFailed(true); // ✅ Finish = Fail
-                    setShowCaptcha(false);
-                  }}
-                >
-                  Finish Test
-                </button>
-                <button
                   className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700"
                   onClick={verifyCaptchaAndContinue}
                 >
