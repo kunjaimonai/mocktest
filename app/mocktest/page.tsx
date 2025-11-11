@@ -50,6 +50,8 @@ interface MockTestPageProps {
 }
 
 const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
+  const [testStarted, setTestStarted] = useState(false);
+
   const [schoolData, setSchoolData] = useState<School | null>(school || null);
   const [language, setLanguage] = useState<"en" | "ml">("en");
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -90,6 +92,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
   // Load questions
   useEffect(() => {
+    if (!testStarted) return;
+
     const loadQuestions = async () => {
       const table =
         language === "ml" ? "malayalam_questions" : "english_questions";
@@ -98,7 +102,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
       if (!error && data) {
         const shuffled = shuffleArray(data);
-        const picked30 = shuffled.slice(0, 30); // ✅ Only 30 random
+        const picked30 = shuffled.slice(0, 30);
         setQuestions(picked30);
         setCurrentIdx(0);
         setScore(0);
@@ -108,7 +112,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     };
 
     loadQuestions();
-  }, [language]);
+  }, [language, testStarted]);
 
   // Timer for questions
   const startTimer = useCallback(() => {
@@ -188,12 +192,53 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         setTimeLeft(30);
       }
     } else {
-      // ✅ WRONG CAPTCHA → FAIL
       setShowCaptcha(false);
       setTestFailed(true);
       if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
     }
   };
+  if (!testStarted) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 to-indigo-50 p-6">
+        <h1 className="text-3xl font-bold mb-6 text-slate-800">
+          Select Your Language
+        </h1>
+
+        <div className="flex gap-4 mb-6">
+          <button
+            onClick={() => setLanguage("en")}
+            className={`px-6 py-3 rounded-xl text-lg font-semibold 
+            ${
+              language === "en"
+                ? "bg-sky-600 text-white"
+                : "bg-white border border-sky-300 text-slate-700"
+            }`}
+          >
+            English
+          </button>
+
+          <button
+            onClick={() => setLanguage("ml")}
+            className={`px-6 py-3 rounded-xl text-lg font-semibold 
+            ${
+              language === "ml"
+                ? "bg-sky-600 text-white"
+                : "bg-white border border-sky-300 text-slate-700"
+            }`}
+          >
+            മലയാളം
+          </button>
+        </div>
+
+        <button
+          onClick={() => setTestStarted(true)}
+          className="px-8 py-3 bg-green-600 text-white text-lg rounded-xl hover:bg-green-700 shadow"
+        >
+          Start Test
+        </button>
+      </div>
+    );
+  }
 
   if (!schoolData)
     return (
@@ -352,9 +397,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                       width={48}
                       height={48}
                       className="w-32 h-32 object-contain"
-                      onError={(e) =>
-                        (e.currentTarget.style.display = "none")
-                      }
+                      onError={(e) => (e.currentTarget.style.display = "none")}
                     />
                   )}
                 </div>
