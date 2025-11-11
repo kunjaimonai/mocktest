@@ -65,12 +65,15 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [answeredCount, setAnsweredCount] = useState<number>(0);
   const [finished, setFinished] = useState<boolean>(false);
   const [testFailed, setTestFailed] = useState<boolean>(false);
+
+  // ✅ NEW STATE
+  const [testPassed, setTestPassed] = useState<boolean>(false);
+
   const [captchaTimeLeft, setCaptchaTimeLeft] = useState<number>(15);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const captchaTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Load school data from local storage
   useEffect(() => {
     if (!schoolData && typeof window !== "undefined") {
       const storedId = localStorage.getItem("loggedInSchoolId");
@@ -90,7 +93,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   }, [schoolData]);
 
-  // Load questions
   useEffect(() => {
     if (!testStarted) return;
 
@@ -108,13 +110,13 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         setScore(0);
         setFinished(false);
         setAnsweredCount(0);
+        setTestPassed(false);
       }
     };
 
     loadQuestions();
   }, [language, testStarted]);
 
-  // Timer for questions
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     setTimeLeft(30);
@@ -122,7 +124,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     timerRef.current = setInterval(() => setTimeLeft((t) => t - 1), 1000);
   }, [showCaptcha, finished]);
 
-  // Captcha timer
   const startCaptchaTimer = useCallback(() => {
     if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
     setCaptchaTimeLeft(15);
@@ -132,7 +133,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         if (t <= 1) {
           clearInterval(captchaTimerRef.current!);
           setShowCaptcha(false);
-          setTestFailed(true); // ✅ FAIL test when captcha expires
+          setTestFailed(true); // captcha failure
           return 0;
         }
         return t - 1;
@@ -143,25 +144,45 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const handleNext = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
 
-    const q = questions[currentIdx] || null;
-    if (selected === q.answerIndex) setScore((s) => s + 1);
+    const q = questions[currentIdx];
+    let newScore = score;
+
+    // ✅ update score
+    if (selected === q.answerIndex) {
+      newScore = score + 1;
+      setScore(newScore);
+
+      // ✅ EARLY PASS
+      if (newScore >= 18) {
+        setTestPassed(true);
+        setFinished(true);
+        return;
+      }
+    }
+
     setSelected(null);
 
     const nextAnswered = answeredCount + 1;
     setAnsweredCount(nextAnswered);
 
+    // ✅ captcha every 6
     if (nextAnswered % 6 === 0 && nextAnswered < questions.length) {
       setShowCaptcha(true);
       setCaptcha(generateCaptcha());
       setCaptchaInput("");
-      setCaptchaTimeLeft(15);
       startCaptchaTimer();
       return;
     }
 
+    // ✅ next question
     const nextIdx = currentIdx + 1;
-    nextIdx >= questions.length ? setFinished(true) : setCurrentIdx(nextIdx);
-  }, [questions, currentIdx, selected, answeredCount, startCaptchaTimer]);
+    if (nextIdx >= questions.length) {
+      setFinished(true);
+      return;
+    }
+
+    setCurrentIdx(nextIdx);
+  }, [questions, currentIdx, selected, answeredCount, score, startCaptchaTimer]);
 
   useEffect(() => {
     startTimer();
@@ -197,6 +218,37 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
     }
   };
+
+  // ---------------------------------------
+  // 🟥 captcha failure screen
+  // ---------------------------------------
+  if (testFailed) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="h-screen w-full flex flex-col items-center justify-center p-6"
+      >
+        <div className="w-20 h-20 bg-gradient-to-br from-red-400 to-red-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+          ❌
+        </div>
+        <h2 className="text-2xl font-semibold mb-2 text-slate-800">
+          Test Failed!
+        </h2>
+        <p className="mb-6 text-slate-600">Incorrect or expired captcha.</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700"
+        >
+          Restart Test
+        </button>
+      </motion.div>
+    );
+  }
+
+  // ---------------------------------------
+  // 🟢 language selection screen
+  // ---------------------------------------
   if (!testStarted) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 to-indigo-50 p-6">
@@ -207,8 +259,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         <div className="flex gap-4 mb-6">
           <button
             onClick={() => setLanguage("en")}
-            className={`px-6 py-3 rounded-xl text-lg font-semibold 
-            ${
+            className={`px-6 py-3 rounded-xl text-lg font-semibold ${
               language === "en"
                 ? "bg-sky-600 text-white"
                 : "bg-white border border-sky-300 text-slate-700"
@@ -219,8 +270,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
           <button
             onClick={() => setLanguage("ml")}
-            className={`px-6 py-3 rounded-xl text-lg font-semibold 
-            ${
+            className={`px-6 py-3 rounded-xl text-lg font-semibold ${
               language === "ml"
                 ? "bg-sky-600 text-white"
                 : "bg-white border border-sky-300 text-slate-700"
@@ -240,6 +290,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
   }
 
+  // ---------------------------------------
+  // 🟡 no school data
+  // ---------------------------------------
   if (!schoolData)
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -258,43 +311,62 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
   }
 
-  // ✅ FAIL SCREEN
-  if (testFailed) {
+  // ---------------------------------------
+  // ✅ FINISH SCREEN (with pass/fail)
+  // ---------------------------------------
+  if (finished) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         className="h-screen w-full flex flex-col items-center justify-center p-6"
       >
-        <div className="w-20 h-20 bg-gradient-to-br from-red-400 to-red-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-          <svg
-            className="w-10 h-10 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </div>
-        <h2 className="text-2xl font-semibold mb-2 text-slate-800">
-          Test Failed!
-        </h2>
-        <p className="mb-6 text-slate-600">Incorrect or expired captcha.</p>
-        <button
-          onClick={() => window.location.reload()}
-          className="px-6 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700"
+        <div
+          className={`w-20 h-20 rounded-full mx-auto mb-4 flex items-center justify-center ${
+            testPassed
+              ? "bg-gradient-to-br from-green-400 to-green-600"
+              : "bg-gradient-to-br from-red-400 to-red-600"
+          }`}
         >
-          Restart Test
-        </button>
+          {testPassed ? "✅" : "❌"}
+        </div>
+
+        <h2
+          className={`text-2xl font-semibold mb-2 ${
+            testPassed ? "text-green-700" : "text-red-700"
+          }`}
+        >
+          {testPassed ? "Test Passed!" : "Test Failed!"}
+        </h2>
+
+        <p className="mb-6 text-slate-600">
+          Your score:{" "}
+          <span className="font-mono text-2xl text-sky-600 font-bold">
+            {score} / {questions.length}
+          </span>
+        </p>
+
+        <div className="flex gap-3">
+          <button
+            onClick={handleLogout}
+            className="px-6 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50"
+          >
+            Logout
+          </button>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700"
+          >
+            Restart
+          </button>
+        </div>
       </motion.div>
     );
   }
 
+  // ---------------------------------------
+  // ✅ MAIN TEST SCREEN
+  // ---------------------------------------
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 flex flex-col items-center justify-center p-6 relative overflow-hidden">
       <Watermark schoolName={schoolData.name} />
@@ -305,7 +377,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
       >
-        {/* Header */}
+        {/* header */}
         <div className="mb-6 pb-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-4">
             {schoolData.logo && (
@@ -359,152 +431,103 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           </div>
         </div>
 
-        {/* Question Counter */}
+        {/* counter */}
         <div className="text-sm text-slate-600 mb-3">
           Q {currentIdx + 1} / {questions.length}
         </div>
 
-        {/* MAIN TEST SCREEN */}
-        {!finished ? (
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={q.id}
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.4 }}
-            >
-              <div className="flex items-center justify-between mb-4 text-sm text-slate-600">
-                <div>
-                  Time left:{" "}
-                  <span className="font-mono font-semibold text-slate-800">
-                    {timeLeft}s
-                  </span>
-                </div>
-                <div>
-                  Score:{" "}
-                  <span className="font-semibold text-sky-600">{score}</span>
-                </div>
-              </div>
-
-              <div className="p-4 border rounded-xl mb-4 bg-gradient-to-r from-white to-slate-50">
-                <div className="text-lg md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
-                  <span>{q.q}</span>
-                  {q.sign && (
-                    <Image
-                      src={q.sign}
-                      alt="Sign"
-                      width={48}
-                      height={48}
-                      className="w-32 h-32 object-contain"
-                      onError={(e) => (e.currentTarget.style.display = "none")}
-                    />
-                  )}
-                </div>
-
-                <div className="grid gap-3 text-slate-800">
-                  {q.options.map((opt, i) => {
-                    const isSelected = selected === i;
-                    const showResult = selected !== null;
-                    const correct = q.answerIndex === i;
-
-                    let cls =
-                      "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
-
-                    if (!showResult)
-                      cls +=
-                        "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
-
-                    if (showResult && correct)
-                      cls += "bg-green-500 text-white border-green-400";
-
-                    if (showResult && isSelected && !correct)
-                      cls += "bg-red-500 text-white border-red-400";
-
-                    return (
-                      <motion.div
-                        whileHover={{ scale: showResult ? 1 : 1.02 }}
-                        whileTap={{ scale: showResult ? 1 : 0.98 }}
-                        key={i}
-                        className={cls}
-                        onClick={() => handleSelect(i)}
-                      >
-                        <div className="flex items-center">
-                          <div
-                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm md:text-lg ${
-                              showResult && correct
-                                ? "border-white"
-                                : "border-slate-400"
-                            }`}
-                          >
-                            {String.fromCharCode(65 + i)}
-                          </div>
-                          <div>{opt}</div>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  onClick={handleNext}
-                  disabled={selected === null}
-                  className="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 disabled:opacity-50"
-                >
-                  Submit Answer
-                </button>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        ) : (
-          // ✅ FINISHED TEST SCREEN
+        <AnimatePresence mode="wait">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-10"
+            key={q.id}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -40 }}
+            transition={{ duration: 0.4 }}
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <svg
-                className="w-10 h-10 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+            <div className="flex items-center justify-between mb-4 text-sm text-slate-600">
+              <div>
+                Time left:{" "}
+                <span className="font-mono font-semibold text-slate-800">
+                  {timeLeft}s
+                </span>
+              </div>
+              <div>
+                Score:{" "}
+                <span className="font-semibold text-sky-600">{score}</span>
+              </div>
             </div>
-            <h2 className="text-2xl font-semibold mb-2 text-slate-800">
-              Test Completed!
-            </h2>
-            <p className="mb-6 text-slate-600">
-              Your score:{" "}
-              <span className="font-mono text-2xl text-sky-600 font-bold">
-                {score} / {questions.length}
-              </span>
-            </p>
-            <div className="flex gap-3 justify-center">
+
+            <div className="p-4 border rounded-xl mb-4 bg-gradient-to-r from-white to-slate-50">
+              <div className="text-lg md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
+                <span>{q.q}</span>
+                {q.sign && (
+                  <Image
+                    src={q.sign}
+                    alt="Sign"
+                    width={48}
+                    height={48}
+                    className="w-32 h-32 object-contain"
+                    onError={(e) => (e.currentTarget.style.display = "none")}
+                  />
+                )}
+              </div>
+
+              <div className="grid gap-3 text-slate-800">
+                {q.options.map((opt, i) => {
+                  const isSelected = selected === i;
+                  const showResult = selected !== null;
+                  const correct = q.answerIndex === i;
+
+                  let cls =
+                    "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
+
+                  if (!showResult)
+                    cls +=
+                      "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
+
+                  if (showResult && correct)
+                    cls += "bg-green-500 text-white border-green-400";
+
+                  if (showResult && isSelected && !correct)
+                    cls += "bg-red-500 text-white border-red-400";
+
+                  return (
+                    <motion.div
+                      whileHover={{ scale: showResult ? 1 : 1.02 }}
+                      whileTap={{ scale: showResult ? 1 : 0.98 }}
+                      key={i}
+                      className={cls}
+                      onClick={() => handleSelect(i)}
+                    >
+                      <div className="flex items-center">
+                        <div
+                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm md:text-lg ${
+                            showResult && correct
+                              ? "border-white"
+                              : "border-slate-400"
+                          }`}
+                        >
+                          {String.fromCharCode(65 + i)}
+                        </div>
+                        <div>{opt}</div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="flex justify-end">
               <button
-                onClick={handleLogout}
-                className="px-6 py-2 border border-slate-300 rounded-lg text-slate-700 hover:bg-slate-50"
+                onClick={handleNext}
+                disabled={selected === null}
+                className="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 disabled:opacity-50"
               >
-                Logout
-              </button>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-6 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700"
-              >
-                Restart
+                Submit Answer
               </button>
             </div>
           </motion.div>
-        )}
+        </AnimatePresence>
 
         {/* ✅ CAPTCHA POPUP */}
         {showCaptcha && (
