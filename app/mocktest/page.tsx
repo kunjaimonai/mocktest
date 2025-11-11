@@ -147,12 +147,10 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     const q = questions[currentIdx];
     let newScore = score;
 
-    // ✅ update score
     if (selected === q.answerIndex) {
       newScore = score + 1;
       setScore(newScore);
 
-      // ✅ EARLY PASS
       if (newScore >= 18) {
         setTestPassed(true);
         setFinished(true);
@@ -165,7 +163,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     const nextAnswered = answeredCount + 1;
     setAnsweredCount(nextAnswered);
 
-    // ✅ captcha every 6
     if (nextAnswered % 6 === 0 && nextAnswered < questions.length) {
       setShowCaptcha(true);
       setCaptcha(generateCaptcha());
@@ -182,8 +179,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
 
     setCurrentIdx(nextIdx);
+    setTimeLeft(30); // Reset timer immediately for next question
   }, [questions, currentIdx, selected, answeredCount, score, startCaptchaTimer]);
-
+  
   useEffect(() => {
     startTimer();
     return () => {
