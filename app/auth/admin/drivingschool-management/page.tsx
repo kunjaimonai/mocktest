@@ -205,6 +205,7 @@ export default function AdminPage() {
                       </div>
                       <div>
                         <CardTitle className="text-lg text-black">
+                          {school.id}
                           {school.name}
                         </CardTitle>
                         <CardDescription className="flex items-center gap-1">
