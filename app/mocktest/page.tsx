@@ -225,11 +225,11 @@ if (!q) {
               <img
                 src={schoolData.logo}
                 alt={`${schoolData.name} Logo`}
-                className="w-14 h-14 rounded-lg border border-slate-200 object-cover shadow-sm"
+                className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
             )}
             <div>
-              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
+              <h1 className="text-xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
                 {schoolData.name}
               </h1>
               <p className="text-sm text-slate-600 mt-1">ph:{schoolData.number}</p>
