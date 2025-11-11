@@ -5,7 +5,6 @@ import Watermark from "../components/watermark";
 import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
-
 function handleLogout() {
   localStorage.removeItem("loggedInSchoolId");
   localStorage.removeItem("loggedInSchoolName");
@@ -48,7 +47,6 @@ function generateCaptcha(): string {
 
 interface MockTestPageProps {
   school?: School;
-  onLogout?: () => void;
 }
 
 const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
@@ -64,54 +62,55 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [captchaInput, setCaptchaInput] = useState<string>("");
   const [answeredCount, setAnsweredCount] = useState<number>(0);
   const [finished, setFinished] = useState<boolean>(false);
+  const [testFailed, setTestFailed] = useState<boolean>(false);
   const [captchaTimeLeft, setCaptchaTimeLeft] = useState<number>(15);
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const captchaTimerRef = useRef<NodeJS.Timeout | null>(null);
-  
 
- useEffect(() => {
-  if (!schoolData && typeof window !== "undefined") {
-    const storedId = localStorage.getItem("loggedInSchoolId");
-    if (storedId) {
-      const fetchSchool = async () => {
-        const { data, error } = await supabase
-          .from("schools")
-          .select("*")
-          .eq("id", parseInt(storedId))
-          .single();
-
-        if (!error && data) {
-          setSchoolData(data);
-        }
-      };
-
-      fetchSchool();
+  // Load school data from local storage
+  useEffect(() => {
+    if (!schoolData && typeof window !== "undefined") {
+      const storedId = localStorage.getItem("loggedInSchoolId");
+      if (storedId) {
+        const fetchSchool = async () => {
+          const { data, error } = await supabase
+            .from("schools")
+            .select("*")
+            .eq("id", parseInt(storedId))
+            .single();
+          if (!error && data) {
+            setSchoolData(data);
+          }
+        };
+        fetchSchool();
+      }
     }
-  }
-}, [schoolData]);
+  }, [schoolData]);
 
+  // Load questions
+  useEffect(() => {
+    const loadQuestions = async () => {
+      const table =
+        language === "ml" ? "malayalam_questions" : "english_questions";
 
- useEffect(() => {
-  const loadQuestions = async () => {
-    const table = language === "ml" ? "malayalam_questions" : "english_questions";
+      const { data, error } = await supabase.from(table).select("*");
 
-    const { data, error } = await supabase
-      .from(table)
-      .select("*");
+      if (!error && data) {
+        const shuffled = shuffleArray(data);
+        const picked30 = shuffled.slice(0, 30); // ✅ Only 30 random
+        setQuestions(picked30);
+        setCurrentIdx(0);
+        setScore(0);
+        setFinished(false);
+        setAnsweredCount(0);
+      }
+    };
 
-    if (!error && data) {
-      // data is already correct shape
-      setQuestions(shuffleArray(data));
-      setCurrentIdx(0);
-      setScore(0);
-      setFinished(false);
-      setAnsweredCount(0);
-    }
-  };
+    loadQuestions();
+  }, [language]);
 
-  loadQuestions();
-}, [language]);
-
+  // Timer for questions
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     setTimeLeft(30);
@@ -119,15 +118,17 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     timerRef.current = setInterval(() => setTimeLeft((t) => t - 1), 1000);
   }, [showCaptcha, finished]);
 
+  // Captcha timer
   const startCaptchaTimer = useCallback(() => {
     if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
     setCaptchaTimeLeft(15);
+
     captchaTimerRef.current = setInterval(() => {
       setCaptchaTimeLeft((t) => {
         if (t <= 1) {
           clearInterval(captchaTimerRef.current!);
           setShowCaptcha(false);
-          setFinished(true);
+          setTestFailed(true); // ✅ FAIL test when captcha expires
           return 0;
         }
         return t - 1;
@@ -137,14 +138,15 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
   const handleNext = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
+
     const q = questions[currentIdx] || null;
     if (selected === q.answerIndex) setScore((s) => s + 1);
     setSelected(null);
 
-    const nextAnsweredCount = answeredCount + 1;
-    setAnsweredCount(nextAnsweredCount);
+    const nextAnswered = answeredCount + 1;
+    setAnsweredCount(nextAnswered);
 
-    if (nextAnsweredCount % 6 === 0 && nextAnsweredCount < questions.length) {
+    if (nextAnswered % 6 === 0 && nextAnswered < questions.length) {
       setShowCaptcha(true);
       setCaptcha(generateCaptcha());
       setCaptchaInput("");
@@ -154,8 +156,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
 
     const nextIdx = currentIdx + 1;
-    if (nextIdx >= questions.length) setFinished(true);
-    else setCurrentIdx(nextIdx);
+    nextIdx >= questions.length ? setFinished(true) : setCurrentIdx(nextIdx);
   }, [questions, currentIdx, selected, answeredCount, startCaptchaTimer]);
 
   useEffect(() => {
@@ -169,6 +170,31 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     if (timeLeft <= 0 && !showCaptcha && !finished) handleNext();
   }, [timeLeft, showCaptcha, finished, handleNext]);
 
+  const handleSelect = (i: number) => {
+    if (selected !== null || showCaptcha) return;
+    setSelected(i);
+  };
+
+  const verifyCaptchaAndContinue = () => {
+    if (captchaInput.trim() === captcha) {
+      setShowCaptcha(false);
+      if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
+
+      const nextIdx = currentIdx + 1;
+      if (nextIdx >= questions.length) {
+        setFinished(true);
+      } else {
+        setCurrentIdx(nextIdx);
+        setTimeLeft(30);
+      }
+    } else {
+      // ✅ WRONG CAPTCHA → FAIL
+      setShowCaptcha(false);
+      setTestFailed(true);
+      if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
+    }
+  };
+
   if (!schoolData)
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -178,36 +204,51 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       </div>
     );
 
-  const handleSelect = (index: number) => {
-    if (selected !== null || showCaptcha) return;
-    setSelected(index);
-  };
+  const q = questions[currentIdx] || null;
+  if (!q) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg text-slate-700">Loading questions...</div>
+      </div>
+    );
+  }
 
-  const verifyCaptchaAndContinue = () => {
-    if (captchaInput.trim() === captcha) {
-      setShowCaptcha(false);
-      const nextIdx = currentIdx + 1;
-      if (nextIdx >= questions.length) setFinished(true);
-      else {
-        setCurrentIdx(nextIdx);
-        setTimeLeft(30);
-      }
-    } else {
-      alert("Captcha incorrect. Try again.");
-      setCaptcha(generateCaptcha());
-      setCaptchaInput("");
-    }
-    if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
-  };
-
-const q = questions[currentIdx] || null;
-if (!q) {
-  return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-lg text-slate-700">Loading questions...</div>
-    </div>
-  );
-}
+  // ✅ FAIL SCREEN
+  if (testFailed) {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="h-screen w-full flex flex-col items-center justify-center p-6"
+      >
+        <div className="w-20 h-20 bg-gradient-to-br from-red-400 to-red-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+          <svg
+            className="w-10 h-10 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </div>
+        <h2 className="text-2xl font-semibold mb-2 text-slate-800">
+          Test Failed!
+        </h2>
+        <p className="mb-6 text-slate-600">Incorrect or expired captcha.</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="px-6 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700"
+        >
+          Restart Test
+        </button>
+      </motion.div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 flex flex-col items-center justify-center p-6 relative overflow-hidden">
@@ -219,6 +260,7 @@ if (!q) {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
       >
+        {/* Header */}
         <div className="mb-6 pb-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-4">
             {schoolData.logo && (
@@ -232,34 +274,36 @@ if (!q) {
               <h1 className="text-xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
                 {schoolData.name}
               </h1>
-              <p className="text-sm text-slate-600 mt-1">ph:{schoolData.number}</p>
-              <p className="text-sm text-slate-600 mt-1">Road Safety Mock Test</p>
+              <p className="text-sm text-slate-600 mt-1">
+                ph:{schoolData.number}
+              </p>
+              <p className="text-sm text-slate-600 mt-1">
+                Road Safety Mock Test
+              </p>
             </div>
           </div>
 
           <div className="flex gap-3 items-center">
-            <div className="flex gap-2">
-              <button
-                onClick={() => setLanguage("en")}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                  language === "en"
-                    ? "bg-sky-600 text-white"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                English
-              </button>
-              <button
-                onClick={() => setLanguage("ml")}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                  language === "ml"
-                    ? "bg-sky-600 text-white"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                }`}
-              >
-                മലയാളം
-              </button>
-            </div>
+            <button
+              onClick={() => setLanguage("en")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                language === "en"
+                  ? "bg-sky-600 text-white"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+              }`}
+            >
+              English
+            </button>
+            <button
+              onClick={() => setLanguage("ml")}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
+                language === "ml"
+                  ? "bg-sky-600 text-white"
+                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+              }`}
+            >
+              മലയാളം
+            </button>
 
             <button
               onClick={handleLogout}
@@ -270,14 +314,16 @@ if (!q) {
           </div>
         </div>
 
+        {/* Question Counter */}
         <div className="text-sm text-slate-600 mb-3">
           Q {currentIdx + 1} / {questions.length}
         </div>
 
+        {/* MAIN TEST SCREEN */}
         {!finished ? (
           <AnimatePresence mode="wait">
             <motion.div
-              key={q?.id}
+              key={q.id}
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
@@ -297,16 +343,18 @@ if (!q) {
               </div>
 
               <div className="p-4 border rounded-xl mb-4 bg-gradient-to-r from-white to-slate-50">
-                <div className="text-lg md:text-xl font-medium mb-3 text-slate-900">
-                  {q && q.q}
+                <div className="text-lg md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
+                  <span>{q.q}</span>
                   {q.sign && (
                     <Image
                       src={q.sign}
                       alt="Sign"
                       width={48}
                       height={48}
-                      className="inline-block ml-4 w-32 h-32 object-contain"
-                      onError={(e) => (e.currentTarget.style.display = "none")}
+                      className="w-32 h-32 object-contain"
+                      onError={(e) =>
+                        (e.currentTarget.style.display = "none")
+                      }
                     />
                   )}
                 </div>
@@ -316,14 +364,18 @@ if (!q) {
                     const isSelected = selected === i;
                     const showResult = selected !== null;
                     const correct = q.answerIndex === i;
+
                     let cls =
                       "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
+
                     if (!showResult)
                       cls +=
                         "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
+
                     if (showResult && correct)
                       cls += "bg-green-500 text-white border-green-400";
-                    else if (showResult && isSelected && !correct)
+
+                    if (showResult && isSelected && !correct)
                       cls += "bg-red-500 text-white border-red-400";
 
                     return (
@@ -364,6 +416,7 @@ if (!q) {
             </motion.div>
           </AnimatePresence>
         ) : (
+          // ✅ FINISHED TEST SCREEN
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -410,6 +463,7 @@ if (!q) {
           </motion.div>
         )}
 
+        {/* ✅ CAPTCHA POPUP */}
         {showCaptcha && (
           <motion.div
             className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50"
@@ -443,6 +497,7 @@ if (!q) {
                   Refresh
                 </button>
               </div>
+
               <input
                 value={captchaInput}
                 onChange={(e) => setCaptchaInput(e.target.value)}
@@ -452,13 +507,14 @@ if (!q) {
                 placeholder="Enter code"
                 className="w-full p-3 border border-slate-300 rounded-md mb-4 focus:ring-2 focus:ring-sky-500 text-slate-800"
               />
+
               <div className="flex justify-end gap-3">
                 <button
                   className="px-4 py-2 border border-slate-300 rounded-md hover:bg-slate-50 text-slate-700"
                   onClick={() => {
                     if (captchaTimerRef.current)
                       clearInterval(captchaTimerRef.current);
-                    setFinished(true);
+                    setTestFailed(true); // ✅ Finish = Fail
                     setShowCaptcha(false);
                   }}
                 >

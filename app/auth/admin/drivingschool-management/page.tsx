@@ -284,7 +284,7 @@ export default function AdminPage() {
                           <School className="w-5 h-5 text-green-600" />
                         </div>
                         <div>
-                          <p className="font-semibold text-lg">{s.id}</p>
+                            <p className="font-semibold text-lg">{s.id}</p>
                           <p className="font-semibold text-lg">{s.name}</p>
                           <p className="text-sm text-slate-600 flex items-center gap-1">
                             <Phone className="w-3 h-3" />
