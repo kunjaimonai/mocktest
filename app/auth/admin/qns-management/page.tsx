@@ -167,11 +167,31 @@ useEffect(() => {
     setEditingQuestion(null);
   };
 
-  const handleDeleteQuestion = (id: number) => {
-    if (!confirm("Are you sure you want to delete this question?")) return;
-    const updated = currentQuestions.filter((q) => q.id !== id);
-    updateQuestionsFile(updated, currentLang);
-  };
+const handleDeleteQuestion = async (id: number) => {
+  if (!confirm("Are you sure you want to delete this question?")) return;
+
+  const tableName = currentLang === "en" ? "english_questions" : "malayalam_questions";
+
+  const { error } = await supabase
+    .from(tableName)
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    console.error(error);
+    alert("Failed to delete question: " + error.message);
+    return;
+  }
+
+  if (currentLang === "en") {
+    setQuestionsEN((prev) => prev.filter((q) => q.id !== id));
+  } else {
+    setQuestionsML((prev) => prev.filter((q) => q.id !== id));
+  }
+
+  alert("Question deleted!");
+};
+
 
   const openEditDialog = (question: Question) => {
     setEditingQuestion(question);
