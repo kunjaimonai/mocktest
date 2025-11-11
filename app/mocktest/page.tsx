@@ -229,7 +229,7 @@ if (!q) {
               />
             )}
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
+              <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
                 {schoolData.name}
               </h1>
               <p className="text-sm text-slate-600 mt-1">ph:{schoolData.number}</p>
