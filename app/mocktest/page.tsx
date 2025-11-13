@@ -393,7 +393,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       <Watermark schoolName={schoolData.name} />
 
       <motion.div
-        className="w-full max-w-7xl sm:w-3xl lg:w-5xl md:w-6xl bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 relative z-10"
+        className="w-full max-w-9xl sm:w-3xl lg:w-5xl md:w-8xl bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 relative z-10"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.4 }}
@@ -481,7 +481,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             </div>
 
             <div className="p-4 border rounded-xl mb-4 bg-gradient-to-r from-white to-slate-50">
-              <div className="text-lg md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
+              <div className="text-sm md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
                 <span>{q.q}</span>
                 {q.sign && (
                   <Image
