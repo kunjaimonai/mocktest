@@ -58,22 +58,27 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [selected, setSelected] = useState<number | null>(null);
+
   const [timeLeft, setTimeLeft] = useState<number>(30);
+
   const [showCaptcha, setShowCaptcha] = useState<boolean>(false);
   const [captcha, setCaptcha] = useState<string>(generateCaptcha());
   const [captchaInput, setCaptchaInput] = useState<string>("");
+
   const [answeredCount, setAnsweredCount] = useState<number>(0);
   const [finished, setFinished] = useState<boolean>(false);
   const [testFailed, setTestFailed] = useState<boolean>(false);
 
-  // ✅ NEW STATE
   const [testPassed, setTestPassed] = useState<boolean>(false);
 
-  const [captchaTimeLeft, setCaptchaTimeLeft] = useState<number>(15);
+  // OPTION A unified 45 sec
+  const [isCaptchaPhase, setIsCaptchaPhase] = useState<boolean>(false);
+  const [captchaTotalTimeLeft, setCaptchaTotalTimeLeft] = useState<number>(45);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const captchaTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Load school
   useEffect(() => {
     if (!schoolData && typeof window !== "undefined") {
       const storedId = localStorage.getItem("loggedInSchoolId");
@@ -117,23 +122,29 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     loadQuestions();
   }, [language, testStarted]);
 
+  // normal question timer
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
-    setTimeLeft(30);
-    if (showCaptcha || finished) return;
-    timerRef.current = setInterval(() => setTimeLeft((t) => t - 1), 1000);
-  }, [showCaptcha, finished]);
 
+    if (showCaptcha || isCaptchaPhase) return;
+
+    timerRef.current = setInterval(() => {
+      setTimeLeft((t) => t - 1);
+    }, 1000);
+  }, [showCaptcha, isCaptchaPhase]);
+
+  // unified captcha+question timer (45s)
   const startCaptchaTimer = useCallback(() => {
     if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
-    setCaptchaTimeLeft(15);
+
+    setCaptchaTotalTimeLeft(45);
 
     captchaTimerRef.current = setInterval(() => {
-      setCaptchaTimeLeft((t) => {
+      setCaptchaTotalTimeLeft((t) => {
         if (t <= 1) {
           clearInterval(captchaTimerRef.current!);
           setShowCaptcha(false);
-          setTestFailed(true); // captcha failure
+          setTestFailed(true);
           return 0;
         }
         return t - 1;
@@ -163,7 +174,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     const nextAnswered = answeredCount + 1;
     setAnsweredCount(nextAnswered);
 
+    // Check for every 6th question → captcha phase
     if (nextAnswered % 6 === 0 && nextAnswered < questions.length) {
+      setIsCaptchaPhase(true);
       setShowCaptcha(true);
       setCaptcha(generateCaptcha());
       setCaptchaInput("");
@@ -171,7 +184,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       return;
     }
 
-    // ✅ next question
+    // normal next question
     const nextIdx = currentIdx + 1;
     if (nextIdx >= questions.length) {
       setFinished(true);
@@ -179,37 +192,60 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
 
     setCurrentIdx(nextIdx);
-    setTimeLeft(30); // Reset timer immediately for next question
-  }, [questions, currentIdx, selected, answeredCount, score, startCaptchaTimer]);
-  
+    setTimeLeft(30);
+  }, [
+    questions,
+    currentIdx,
+    selected,
+    answeredCount,
+    score,
+    startCaptchaTimer,
+  ]);
+
+  // question timer effect
   useEffect(() => {
     startTimer();
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [currentIdx, showCaptcha, startTimer]);
+  }, [currentIdx, showCaptcha, isCaptchaPhase, startTimer]);
 
+  // main countdown logic
   useEffect(() => {
-    if (timeLeft <= 0 && !showCaptcha && !finished) handleNext();
-  }, [timeLeft, showCaptcha, finished, handleNext]);
+    // normal question timer
+    if (timeLeft <= 0 && !isCaptchaPhase && !showCaptcha && !finished) {
+      handleNext();
+    }
+
+    // unified 45s timeout
+    if (captchaTotalTimeLeft <= 0 && isCaptchaPhase) {
+      setTestFailed(true);
+    }
+  }, [
+    timeLeft,
+    captchaTotalTimeLeft,
+    isCaptchaPhase,
+    showCaptcha,
+    finished,
+    handleNext,
+  ]);
 
   const handleSelect = (i: number) => {
     if (selected !== null || showCaptcha) return;
     setSelected(i);
   };
 
+  // captcha success → return to same question
   const verifyCaptchaAndContinue = () => {
     if (captchaInput.trim() === captcha) {
       setShowCaptcha(false);
       if (captchaTimerRef.current) clearInterval(captchaTimerRef.current);
 
-      const nextIdx = currentIdx + 1;
-      if (nextIdx >= questions.length) {
-        setFinished(true);
-      } else {
-        setCurrentIdx(nextIdx);
-        setTimeLeft(30);
-      }
+      setIsCaptchaPhase(false);
+
+      // resume question timer with remaining time
+      startTimer();
     } else {
       setShowCaptcha(false);
       setTestFailed(true);
@@ -217,9 +253,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   };
 
-  // ---------------------------------------
-  // 🟥 captcha failure screen
-  // ---------------------------------------
+  // ---------- UI STATES -------------
+
   if (testFailed) {
     return (
       <motion.div
@@ -233,7 +268,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         <h2 className="text-2xl font-semibold mb-2 text-slate-800">
           Test Failed!
         </h2>
-        <p className="mb-6 text-slate-600">Incorrect or expired captcha.</p>
+        <p className="mb-6 text-slate-600">Time expired or wrong captcha.</p>
         <button
           onClick={() => window.location.reload()}
           className="px-6 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700"
@@ -244,9 +279,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
   }
 
-  // ---------------------------------------
-  // 🟢 language selection screen
-  // ---------------------------------------
   if (!testStarted) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 to-indigo-50 p-6">
@@ -288,9 +320,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
   }
 
-  // ---------------------------------------
-  // 🟡 no school data
-  // ---------------------------------------
   if (!schoolData)
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -309,9 +338,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
   }
 
-  // ---------------------------------------
-  // ✅ FINISH SCREEN (with pass/fail)
-  // ---------------------------------------
   if (finished) {
     return (
       <motion.div
@@ -362,9 +388,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
   }
 
-  // ---------------------------------------
-  // ✅ MAIN TEST SCREEN
-  // ---------------------------------------
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-50 flex flex-col items-center justify-center p-6 relative overflow-hidden">
       <Watermark schoolName={schoolData.name} />
@@ -446,7 +469,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               <div>
                 Time left:{" "}
                 <span className="font-mono font-semibold text-slate-800">
-                  {timeLeft}s
+                  {isCaptchaPhase
+                    ? `${captchaTotalTimeLeft}s`
+                    : `${timeLeft}s`}
                 </span>
               </div>
               <div>
@@ -527,7 +552,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           </motion.div>
         </AnimatePresence>
 
-        {/* ✅ CAPTCHA POPUP */}
+        {/* CAPTCHA POPUP */}
         {showCaptcha && (
           <motion.div
             className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50"
@@ -547,7 +572,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 Enter the 6-character code to continue.
               </p>
               <p className="text-sm text-rose-600 font-semibold mb-3">
-                Time left: {captchaTimeLeft}s
+                Time left: {captchaTotalTimeLeft}s
               </p>
 
               <div className="flex items-center gap-3 mb-4">
@@ -585,7 +610,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         )}
 
         <footer className="mt-6 text-xs text-slate-500 text-center">
-          30s per question • Captcha after every 6 questions
+          30s per question • Captcha every 6 questions • 45s combined timer
         </footer>
       </motion.div>
     </div>
