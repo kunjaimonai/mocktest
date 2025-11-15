@@ -160,16 +160,23 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   }, [currentIdx, startTimer]);
 
   // If timer reaches zero -> test failed
-  useEffect(() => {
-    if (timeLeft <= 0 && !finished) {
-      // If time expired on a question (captcha or normal) -> test failed
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      setTestFailed(true);
+useEffect(() => {
+  if (timeLeft <= 0 && !finished) {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
     }
-  }, [timeLeft, finished]);
+
+    // If CAPTCHA question → fail test
+    if (isCaptchaPoint(currentIdx)) {
+      setTestFailed(true);
+      return;
+    }
+
+    // Otherwise (normal question) → auto-move to next question
+    handleNext();
+  }
+}, [timeLeft, finished]);
 
   // selection
   const handleSelect = (i: number) => {
