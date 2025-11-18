@@ -39,7 +39,6 @@ import {
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
-
 type Question = {
   id: number;
   q: string;
@@ -48,13 +47,13 @@ type Question = {
   answerIndex: number;
 };
 
-
 export default function AdminQuestionsPage() {
   const router = useRouter();
   const [questionsEN, setQuestionsEN] = useState<Question[]>([]);
   const [questionsML, setQuestionsML] = useState<Question[]>([]);
+  const [questionsTA, setQuestionsTA] = useState<Question[]>([]); // Add Tamil state
+  const [currentLang, setCurrentLang] = useState<"en" | "ml" | "ta">("en"); // Update language state
   const [loading, setLoading] = useState(true);
-  const [currentLang, setCurrentLang] = useState<"en" | "ml">("en");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -70,57 +69,77 @@ export default function AdminQuestionsPage() {
     answerIndex: 0,
   });
 
-useEffect(() => {
-  const isAdmin = localStorage.getItem("adminLoggedIn");
-  if (!isAdmin) {
-    router.replace("/auth/admin/login");
-    return;
-  }
+  useEffect(() => {
+    const isAdmin = localStorage.getItem("adminLoggedIn");
+    if (!isAdmin) {
+      router.replace("/auth/admin/login");
+      return;
+    }
 
-  const fetchQuestions = async () => {
-    const { data: enData } = await supabase
-      .from("english_questions")
-      .select("*")
-      .order("id", { ascending: true });
+    const fetchQuestions = async () => {
+      const { data: enData } = await supabase
+        .from("english_questions")
+        .select("*")
+        .order("id", { ascending: true });
 
-    const { data: mlData } = await supabase
-      .from("malayalam_questions")
-      .select("*")
-      .order("id", { ascending: true });
+      const { data: mlData } = await supabase
+        .from("malayalam_questions")
+        .select("*")
+        .order("id", { ascending: true });
 
-    if (enData) setQuestionsEN(enData);
-    if (mlData) setQuestionsML(mlData);
+      const { data: taData } = await supabase
+        .from("tamil_questions")
+        .select("*")
+        .order("id", { ascending: true });
 
-    setLoading(false);
+      if (enData) setQuestionsEN(enData);
+      if (mlData) setQuestionsML(mlData);
+      if (taData) setQuestionsTA(taData); // Set Tamil questions
+
+      setLoading(false);
+    };
+
+    fetchQuestions();
+  }, [router]);
+
+  const currentQuestions =
+    currentLang === "en"
+      ? questionsEN
+      : currentLang === "ml"
+      ? questionsML
+      : questionsTA;
+
+  const updateQuestionsFile = async (
+    updatedQuestions: Question[],
+    lang: "en" | "ml" | "ta" // Add Tamil as an option
+  ) => {
+    const tableName =
+      lang === "en"
+        ? "english_questions"
+        : lang === "ml"
+        ? "malayalam_questions"
+        : "tamil_questions"; // Handle Tamil questions
+
+    const { error } = await supabase
+      .from(tableName)
+      .upsert(updatedQuestions, { onConflict: "id" });
+
+    if (error) {
+      console.error(error);
+      alert("Error saving questions: " + error.message);
+      return;
+    }
+
+    if (lang === "en") setQuestionsEN(updatedQuestions);
+    else if (lang === "ml") setQuestionsML(updatedQuestions);
+    else setQuestionsTA(updatedQuestions); // Set Tamil questions
+
+    alert(
+      `${
+        lang === "en" ? "English" : lang === "ml" ? "Malayalam" : "Tamil"
+      } questions updated!`
+    );
   };
-
-  fetchQuestions();
-}, [router]);
-
-  const currentQuestions = currentLang === "en" ? questionsEN : questionsML;
-
- const updateQuestionsFile = async (
-  updatedQuestions: Question[],
-  lang: "en" | "ml"
-) => {
-  const tableName = lang === "en" ? "english_questions" : "malayalam_questions";
-
-  const { error } = await supabase
-    .from(tableName)
-    .upsert(updatedQuestions, { onConflict: "id" });
-
-  if (error) {
-    console.error(error);
-    alert("Error saving questions: " + error.message);
-    return;
-  }
-
-  if (lang === "en") setQuestionsEN(updatedQuestions);
-  else setQuestionsML(updatedQuestions);
-
-  alert(`${lang === "en" ? "English" : "Malayalam"} questions updated!`);
-};
-
 
   const handleAddQuestion = () => {
     const newQuestion: Question = {
@@ -162,36 +181,40 @@ useEffect(() => {
         : q
     );
 
-    updateQuestionsFile(updated, currentLang);
+    updateQuestionsFile(updated, currentLang); // Pass the currentLang for Tamil support
     resetForm();
     setEditingQuestion(null);
   };
 
-const handleDeleteQuestion = async (id: number) => {
-  if (!confirm("Are you sure you want to delete this question?")) return;
+  const handleDeleteQuestion = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this question?")) return;
 
-  const tableName = currentLang === "en" ? "english_questions" : "malayalam_questions";
+    const tableName =
+      currentLang === "en"
+        ? "english_questions"
+        : currentLang === "ml"
+        ? "malayalam_questions"
+        : "tamil_questions"; // Add Tamil support
 
-  const { error } = await supabase
-    .from(tableName)
-    .delete()
-    .eq("id", id);
+    const { error } = await supabase.from(tableName).delete().eq("id", id); // Delete question by its ID
 
-  if (error) {
-    console.error(error);
-    alert("Failed to delete question: " + error.message);
-    return;
-  }
+    if (error) {
+      console.error(error);
+      alert("Failed to delete question: " + error.message);
+      return;
+    }
 
-  if (currentLang === "en") {
-    setQuestionsEN((prev) => prev.filter((q) => q.id !== id));
-  } else {
-    setQuestionsML((prev) => prev.filter((q) => q.id !== id));
-  }
+    // Update the state after deletion
+    if (currentLang === "en") {
+      setQuestionsEN((prev) => prev.filter((q) => q.id !== id));
+    } else if (currentLang === "ml") {
+      setQuestionsML((prev) => prev.filter((q) => q.id !== id));
+    } else {
+      setQuestionsTA((prev) => prev.filter((q) => q.id !== id)); // Remove from Tamil state
+    }
 
-  alert("Question deleted!");
-};
-
+    alert("Question deleted!");
+  };
 
   const openEditDialog = (question: Question) => {
     setEditingQuestion(question);
@@ -235,10 +258,9 @@ const handleDeleteQuestion = async (id: number) => {
       const data = await response.json();
 
       if (data.success) {
-  setFormData((prev) => ({ ...prev, sign: data.url }));
-  setImagePreview(data.url);
-}
- else {
+        setFormData((prev) => ({ ...prev, sign: data.url }));
+        setImagePreview(data.url);
+      } else {
         alert("Failed to upload image: " + data.error);
       }
     } catch (error) {
@@ -280,7 +302,9 @@ const handleDeleteQuestion = async (id: number) => {
             <div className="flex items-center gap-4">
               <Select
                 value={currentLang}
-                onValueChange={(val) => setCurrentLang(val as "en" | "ml")}
+                onValueChange={(val) =>
+                  setCurrentLang(val as "en" | "ml" | "ta")
+                }
               >
                 <SelectTrigger className="w-40">
                   <Languages className="w-4 h-4 mr-2" />
@@ -289,6 +313,7 @@ const handleDeleteQuestion = async (id: number) => {
                 <SelectContent>
                   <SelectItem value="en">English</SelectItem>
                   <SelectItem value="ml">Malayalam</SelectItem>
+                  <SelectItem value="ta">Tamil</SelectItem>
                 </SelectContent>
               </Select>
 

@@ -26,7 +26,7 @@ type SchoolType = {
   id: number;
   name: string;
   number: string;
-  paymentStatus: string;
+  paymentstatus: string;
   logo: string | null;
   screenshot: string | null;
 };
@@ -109,8 +109,8 @@ export default function AdminDashboard() {
     );
   }
 
-  const pendingSchools = schools.filter((s) => s.paymentStatus === "pending").length;
-  const approvedSchools = schools.filter((s) => s.paymentStatus === "completed").length;
+  const pendingSchools = schools.filter((s) => s.paymentstatus === "pending").length;
+  const approvedSchools = schools.filter((s) => s.paymentstatus === "completed").length;
   const totalQuestions = questionsEN.length + questionsML.length;
 
   return (
