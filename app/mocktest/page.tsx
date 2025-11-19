@@ -53,7 +53,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [testStarted, setTestStarted] = useState(false);
 
   const [schoolData, setSchoolData] = useState<School | null>(school || null);
-  const [language, setLanguage] = useState<"en" | "ml">("en");
+  const [language, setLanguage] = useState<"en" | "ml" | "ta">("en");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
@@ -102,7 +102,12 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
     const loadQuestions = async () => {
       const table =
-        language === "ml" ? "malayalam_questions" : "english_questions";
+  language === "ml"
+    ? "malayalam_questions"
+    : language === "ta"
+    ? "tamil_questions"
+    : "english_questions";
+
       const { data, error } = await supabase.from(table).select("*");
 
       if (!error && data) {
@@ -160,23 +165,23 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   }, [currentIdx, startTimer]);
 
   // If timer reaches zero -> test failed
-useEffect(() => {
-  if (timeLeft <= 0 && !finished) {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
-    }
+  useEffect(() => {
+    if (timeLeft <= 0 && !finished) {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
 
-    // If CAPTCHA question → fail test
-    if (isCaptchaPoint(currentIdx)) {
-      setTestFailed(true);
-      return;
-    }
+      // If CAPTCHA question → fail test
+      if (isCaptchaPoint(currentIdx)) {
+        setTestFailed(true);
+        return;
+      }
 
-    // Otherwise (normal question) → auto-move to next question
-    handleNext();
-  }
-}, [timeLeft, finished]);
+      // Otherwise (normal question) → auto-move to next question
+      handleNext();
+    }
+  }, [timeLeft, finished]);
 
   // selection
   const handleSelect = (i: number) => {
@@ -302,6 +307,16 @@ useEffect(() => {
           >
             മലയാളം
           </button>
+          <button
+            onClick={() => setLanguage("ta")}
+            className={`px-6 py-3 rounded-xl text-lg font-semibold ${
+              language === "ta"
+                ? "bg-sky-600 text-white"
+                : "bg-white border border-sky-300 text-slate-700"
+            }`}
+          >
+            தமிழ்
+          </button>
         </div>
 
         <button
@@ -419,27 +434,6 @@ useEffect(() => {
           </div>
 
           <div className="flex gap-3 items-center">
-            <button
-              onClick={() => setLanguage("en")}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                language === "en"
-                  ? "bg-sky-600 text-white"
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-              }`}
-            >
-              English
-            </button>
-            <button
-              onClick={() => setLanguage("ml")}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium ${
-                language === "ml"
-                  ? "bg-sky-600 text-white"
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-              }`}
-            >
-              മലയാളം
-            </button>
-
             <button
               onClick={handleLogout}
               className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700"
