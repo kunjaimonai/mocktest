@@ -45,6 +45,25 @@ function generateCaptcha(): string {
     .join("");
 }
 
+// --------------------------------------------------------
+//  IMAGE PREFETCH FUNCTION (FULL PRELOAD)
+// --------------------------------------------------------
+async function preloadImagesAsync(questions: Question[]) {
+  const promises = questions.map((q) => {
+    if (!q.sign) return Promise.resolve();
+
+    return new Promise<void>((resolve) => {
+      const img = new window.Image();
+      img.src = q.sign ?? "";
+      img.onload = () => resolve();
+      img.onerror = () => resolve(); // continue even if fail
+    });
+  });
+
+  await Promise.all(promises);
+}
+// --------------------------------------------------------
+
 interface MockTestPageProps {
   school?: School;
 }
@@ -59,10 +78,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [score, setScore] = useState<number>(0);
   const [selected, setSelected] = useState<number | null>(null);
 
-  // unified timeLeft: 30 for normal, 45 for captcha questions
   const [timeLeft, setTimeLeft] = useState<number>(30);
 
-  // captcha states
   const [captcha, setCaptcha] = useState<string>(generateCaptcha());
   const [captchaInput, setCaptchaInput] = useState<string>("");
   const [captchaVerified, setCaptchaVerified] = useState<boolean>(false);
@@ -71,9 +88,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [testFailed, setTestFailed] = useState<boolean>(false);
   const [testPassed, setTestPassed] = useState<boolean>(false);
 
+  const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false); // NEW
+
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // identify if current question is one that needs captcha inline
+  // identify captcha questions
   const isCaptchaPoint = (idx: number) => (idx + 1) % 6 === 0;
 
   // Load school if not passed as prop
@@ -96,23 +115,32 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   }, [schoolData]);
 
-  // Load questions when test starts or language changes
+  // --------------------------------------------------------
+  // LOAD 30 QUESTIONS + PRELOAD ALL IMAGES BEFORE START
+  // --------------------------------------------------------
   useEffect(() => {
     if (!testStarted) return;
 
     const loadQuestions = async () => {
+      setLoadingQuestions(true);
+
       const table =
-  language === "ml"
-    ? "malayalam_questions"
-    : language === "ta"
-    ? "tamil_questions"
-    : "english_questions";
+        language === "ml"
+          ? "malayalam_questions"
+          : language === "ta"
+          ? "tamil_questions"
+          : "english_questions";
 
       const { data, error } = await supabase.from(table).select("*");
 
       if (!error && data) {
         const shuffled = shuffleArray(data);
         const picked30 = shuffled.slice(0, 30);
+
+        // WAIT UNTIL ALL IMAGES ARE LOADED
+        await preloadImagesAsync(picked30);
+
+        // Only after images cached:
         setQuestions(picked30);
         setCurrentIdx(0);
         setScore(0);
@@ -122,15 +150,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         setCaptcha(generateCaptcha());
         setCaptchaInput("");
         setCaptchaVerified(false);
-        // initial time based on first question
         setTimeLeft(isCaptchaPoint(0) ? 45 : 30);
       }
+
+      setLoadingQuestions(false);
     };
 
     loadQuestions();
   }, [language, testStarted]);
+  // --------------------------------------------------------
 
-  // Start the timer; the timer keeps counting even while captcha UI is visible
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
 
@@ -139,21 +168,19 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }, 1000);
   }, []);
 
-  // Start timer when question changes (restarts with correct duration)
   useEffect(() => {
-    // ensure any previous interval cleared
     if (timerRef.current) clearInterval(timerRef.current);
 
-    // set initial timeLeft for this question (45 for captcha questions, 30 otherwise)
-    const initial = isCaptchaPoint(currentIdx) ? 45 : 30;
-    setTimeLeft(initial);
+    if (questions.length > 0) {
+      const initial = isCaptchaPoint(currentIdx) ? 45 : 30;
+      setTimeLeft(initial);
 
-    // reset captcha state for the new question
-    setCaptcha(generateCaptcha());
-    setCaptchaInput("");
-    setCaptchaVerified(false);
+      setCaptcha(generateCaptcha());
+      setCaptchaInput("");
+      setCaptchaVerified(false);
 
-    startTimer();
+      startTimer();
+    }
 
     return () => {
       if (timerRef.current) {
@@ -161,10 +188,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         timerRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIdx, startTimer]);
+  }, [currentIdx, questions, startTimer]);
 
-  // If timer reaches zero -> test failed
   useEffect(() => {
     if (timeLeft <= 0 && !finished) {
       if (timerRef.current) {
@@ -172,30 +197,24 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         timerRef.current = null;
       }
 
-      // If CAPTCHA question → fail test
       if (isCaptchaPoint(currentIdx)) {
         setTestFailed(true);
         return;
       }
 
-      // Otherwise (normal question) → auto-move to next question
       handleNext();
     }
   }, [timeLeft, finished]);
 
-  // selection
   const handleSelect = (i: number) => {
-    // allow selecting even if captcha visible
     if (selected !== null) return;
     setSelected(i);
   };
 
-  // verify captcha inline (doesn't advance the question)
   const verifyCaptchaInline = () => {
     if (captchaInput.trim() === captcha) {
       setCaptchaVerified(true);
     } else {
-      // wrong captcha -> immediate fail
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
@@ -204,14 +223,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   };
 
-  // Submit / Next question handler
   const handleNext = useCallback(() => {
-    // If this question is a captcha-point and captcha not verified, do nothing (button disabled anyway)
-    if (isCaptchaPoint(currentIdx) && !captchaVerified) {
-      return;
-    }
+    if (isCaptchaPoint(currentIdx) && !captchaVerified) return;
 
-    // stop timer for evaluation
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -231,7 +245,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       }
     }
 
-    // reset selection for next question
     setSelected(null);
     setCaptchaVerified(false);
 
@@ -242,17 +255,25 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
 
     setCurrentIdx(nextIdx);
-    // the useEffect on currentIdx will set timeLeft and captcha for next question
   }, [currentIdx, questions, selected, score, captchaVerified]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, []);
 
-  // ---------- UI STATES -------------
+  // --------------------------------------------------------
+  // UI STATES
+  // --------------------------------------------------------
+
+  if (loadingQuestions) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-lg text-slate-700">
+        Loading questions & caching images...
+      </div>
+    );
+  }
 
   if (testFailed) {
     return (
@@ -285,7 +306,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           Select Your Language
         </h1>
 
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-col gap-4 mb-6">
           <button
             onClick={() => setLanguage("en")}
             className={`px-6 py-3 rounded-xl text-lg font-semibold ${
@@ -341,8 +362,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const q = questions[currentIdx] || null;
   if (!q) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg text-slate-700">Loading questions...</div>
+      <div className="flex items-center justify-center min-h-screen text-lg text-slate-700">
+        Loading questions...
       </div>
     );
   }
@@ -397,7 +418,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
   }
 
-  // is this question a captcha-question?
   const thisIsCaptchaQ = isCaptchaPoint(currentIdx);
 
   return (
@@ -433,17 +453,14 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             </div>
           </div>
 
-          <div className="flex gap-3 items-center">
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700"
-            >
-              Logout
-            </button>
-          </div>
+          <button
+            onClick={handleLogout}
+            className="px-4 py-2 text-sm border border-slate-300 rounded-lg hover:bg-slate-50 text-slate-700"
+          >
+            Logout
+          </button>
         </div>
 
-        {/* counter */}
         <div className="text-sm text-slate-600 mb-3">
           Q {currentIdx + 1} / {questions.length}
         </div>
@@ -472,16 +489,15 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             <div className="p-4 border rounded-xl mb-4 bg-gradient-to-r from-white to-slate-50">
               <div className="text-sm md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
                 <span>{q.q}</span>
-                {q.sign && (
+                {q.sign ? (
                   <Image
                     src={q.sign}
                     alt="Sign"
                     width={48}
                     height={48}
                     className="w-32 h-32 object-contain"
-                    onError={(e) => (e.currentTarget.style.display = "none")}
                   />
-                )}
+                ) : null}
               </div>
 
               <div className="grid gap-3 text-slate-800">
@@ -529,7 +545,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               </div>
             </div>
 
-            {/* Inline CAPTCHA for Q6, Q12, Q18, Q24, Q30 */}
+            {/* captcha */}
             {thisIsCaptchaQ && (
               <div className="p-4 mb-4 border rounded-lg bg-white">
                 <div className="flex items-center justify-between mb-2">
@@ -537,10 +553,10 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                     Security Check
                   </div>
                   <div className="text-sm text-rose-600 font-semibold">
-                    {/* show that the captcha-question has bigger timer (45s) but we display unified timeLeft */}
                     {timeLeft}s
                   </div>
                 </div>
+
                 <div className="flex items-center gap-3 mb-3">
                   <div className="font-mono tracking-widest text-xl px-4 py-3 border-2 border-slate-300 rounded-md bg-gradient-to-r from-slate-100 to-slate-200 text-slate-800 font-bold select-none">
                     {captcha}
@@ -555,6 +571,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                     Refresh
                   </button>
                 </div>
+
                 <input
                   value={captchaInput}
                   onChange={(e) => setCaptchaInput(e.target.value)}
@@ -562,13 +579,13 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                   placeholder="Enter code"
                   className="w-full p-3 border border-slate-300 rounded-md mb-3 focus:ring-2 focus:ring-sky-500 text-slate-800"
                 />
+
                 <div className="flex justify-between items-center mt-2">
                   {captchaVerified && (
                     <span className="text-green-600 font-medium">
                       ✔ CAPTCHA is Correct
                     </span>
                   )}
-
                   <button
                     onClick={verifyCaptchaInline}
                     className="px-4 py-2 bg-sky-600 text-white rounded-md hover:bg-sky-700"

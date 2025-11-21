@@ -49,7 +49,7 @@ export default function LoginPage() {
     }
 
     localStorage.setItem("loggedInSchoolId", String(school.id));
-    router.push("/mocktest");
+    router.push("/flow");
   };
 
   return (
