@@ -51,13 +51,15 @@ export default function AdminQuestionsPage() {
   const router = useRouter();
   const [questionsEN, setQuestionsEN] = useState<Question[]>([]);
   const [questionsML, setQuestionsML] = useState<Question[]>([]);
-  const [questionsTA, setQuestionsTA] = useState<Question[]>([]); // Add Tamil state
-  const [currentLang, setCurrentLang] = useState<"en" | "ml" | "ta">("en"); // Update language state
+  const [questionsTA, setQuestionsTA] = useState<Question[]>([]);
+  const [currentLang, setCurrentLang] = useState<"en" | "ml" | "ta">("en");
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const [searchQuery, setSearchQuery] = useState(""); // 🔍 Added search
 
   const [formData, setFormData] = useState({
     q: "",
@@ -94,7 +96,7 @@ export default function AdminQuestionsPage() {
 
       if (enData) setQuestionsEN(enData);
       if (mlData) setQuestionsML(mlData);
-      if (taData) setQuestionsTA(taData); // Set Tamil questions
+      if (taData) setQuestionsTA(taData);
 
       setLoading(false);
     };
@@ -109,16 +111,25 @@ export default function AdminQuestionsPage() {
       ? questionsML
       : questionsTA;
 
+  // 🔎 SEARCH FILTER
+  const filteredQuestions = currentQuestions.filter((q) => {
+    const text = searchQuery.toLowerCase();
+    return (
+      q.q.toLowerCase().includes(text) ||
+      q.options.some((opt) => opt.toLowerCase().includes(text))
+    );
+  });
+
   const updateQuestionsFile = async (
     updatedQuestions: Question[],
-    lang: "en" | "ml" | "ta" // Add Tamil as an option
+    lang: "en" | "ml" | "ta"
   ) => {
     const tableName =
       lang === "en"
         ? "english_questions"
         : lang === "ml"
         ? "malayalam_questions"
-        : "tamil_questions"; // Handle Tamil questions
+        : "tamil_questions";
 
     const { error } = await supabase
       .from(tableName)
@@ -132,7 +143,7 @@ export default function AdminQuestionsPage() {
 
     if (lang === "en") setQuestionsEN(updatedQuestions);
     else if (lang === "ml") setQuestionsML(updatedQuestions);
-    else setQuestionsTA(updatedQuestions); // Set Tamil questions
+    else setQuestionsTA(updatedQuestions);
 
     alert(
       `${
@@ -181,7 +192,7 @@ export default function AdminQuestionsPage() {
         : q
     );
 
-    updateQuestionsFile(updated, currentLang); // Pass the currentLang for Tamil support
+    updateQuestionsFile(updated, currentLang);
     resetForm();
     setEditingQuestion(null);
   };
@@ -194,9 +205,9 @@ export default function AdminQuestionsPage() {
         ? "english_questions"
         : currentLang === "ml"
         ? "malayalam_questions"
-        : "tamil_questions"; // Add Tamil support
+        : "tamil_questions";
 
-    const { error } = await supabase.from(tableName).delete().eq("id", id); // Delete question by its ID
+    const { error } = await supabase.from(tableName).delete().eq("id", id);
 
     if (error) {
       console.error(error);
@@ -204,13 +215,12 @@ export default function AdminQuestionsPage() {
       return;
     }
 
-    // Update the state after deletion
     if (currentLang === "en") {
       setQuestionsEN((prev) => prev.filter((q) => q.id !== id));
     } else if (currentLang === "ml") {
       setQuestionsML((prev) => prev.filter((q) => q.id !== id));
     } else {
-      setQuestionsTA((prev) => prev.filter((q) => q.id !== id)); // Remove from Tamil state
+      setQuestionsTA((prev) => prev.filter((q) => q.id !== id));
     }
 
     alert("Question deleted!");
@@ -333,7 +343,11 @@ export default function AdminQuestionsPage() {
                     <DialogTitle>Add New Question</DialogTitle>
                     <DialogDescription>
                       Add a new question in{" "}
-                      {currentLang === "en" ? "English" : "Malayalam"}
+                      {currentLang === "en"
+                        ? "English"
+                        : currentLang === "ml"
+                        ? "Malayalam"
+                        : "Tamil"}
                     </DialogDescription>
                   </DialogHeader>
                   <QuestionForm
@@ -366,13 +380,57 @@ export default function AdminQuestionsPage() {
               </div>
               <p className="text-xs text-slate-600 mt-1">Malayalam Questions</p>
             </div>
+            <div className="text-center">
+              <div className="text-indigo-600 font-semibold text-2xl">
+                {questionsTA.length}
+              </div>
+              <p className="text-xs text-slate-600 mt-1">Tamil Questions</p>
+            </div>
           </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 mt-6 bg-white">
+        <div className="relative">
+          {/* Search Icon */}
+          <svg
+            className="w-5 h-5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"
+            />
+          </svg>
+
+          {/* Search Input */}
+          <Input
+            type="text"
+            placeholder="Search questions, options, or keywords..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-10 py-3 rounded-full border-2 border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm transition"
+          />
+
+          {/* Clear Button */}
+          {searchQuery.length > 0 && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+            >
+              ✕
+            </button>
+          )}
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {currentQuestions.map((question) => (
+          {filteredQuestions.map((question) => (
             <Card
               key={question.id}
               className="shadow-lg border-2 border-slate-200 hover:shadow-xl transition-shadow duration-200"
@@ -460,12 +518,12 @@ export default function AdminQuestionsPage() {
           ))}
         </div>
 
-        {currentQuestions.length === 0 && (
+        {filteredQuestions.length === 0 && (
           <Card className="border-2 border-dashed border-slate-300 bg-slate-50">
             <CardContent className="py-12 text-center">
               <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-3" />
               <p className="text-slate-600 text-lg">
-                No questions yet. Add your first question!
+                No matching questions found.
               </p>
             </CardContent>
           </Card>
