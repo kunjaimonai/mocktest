@@ -222,7 +222,8 @@ const Register = () => {
             className="text-center"
           >
             <h2 className="text-2xl font-semibold text-slate-800 mb-4">
-              Pay to Complete Registration
+              Pay to Complete Registration - &#8377;1500
+
             </h2>
             <p className="text-slate-600 mb-4">
               Scan the QR code below and upload your payment screenshot.
