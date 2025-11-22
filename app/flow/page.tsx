@@ -21,8 +21,7 @@ export default function PreTestFlow() {
   const [captchaInput, setCaptchaInput] = useState("");
 
   const [dob, setDob] = useState("");
-  const [otp, setOtp] = useState("");
-  const [generatedOtp, setGeneratedOtp] = useState(generateSixDigit());
+
 
   const [pin, setPin] = useState("");
   const [generatedPin] = useState(generateSixDigit());
@@ -46,43 +45,29 @@ export default function PreTestFlow() {
   // -------------------------------
   // STEP 2 — DOB + OTP
   // -------------------------------
-  const resendOtp = () => {
-    const newOtp = generateSixDigit();
-    setGeneratedOtp(newOtp);
-    alert("New OTP: " + newOtp);
-  };
 
   const handleStep2 = () => {
     if (!/^\d{2}-\d{2}-\d{4}$/.test(dob)) {
       alert("DOB must be DD-MM-YYYY");
       return;
     }
-    if (otp !== generatedOtp) {
-      alert("Incorrect OTP");
-      return;
-    }
-    setStep(3);
-  };
-
-  // -------------------------------
-  // STEP 3 — PIN + CHECKBOXES
-  // -------------------------------
-  const handleStep3 = () => {
-    if (pin !== generatedPin) {
+if (pin !== generatedPin) {
       alert("Incorrect PIN");
       return;
     }
-    if (!agree1 || !agree2) {
+    setStep(3);   
+     if (!agree1 || !agree2) {
       alert("Please check both checkboxes");
       return;
     }
-    setStep(4);
   };
+
+
 
   // -------------------------------
   // STEP 4 — SHOW MOCK TEST
   // -------------------------------
-  if (step === 4) {
+  if (step === 3) {
     return <MockTestPage />;
   }
 
@@ -152,7 +137,7 @@ export default function PreTestFlow() {
         {step === 2 && (
           <>
             <h2 className="text-lg font-semibold mb-4 text-slate-800">
-              Step 2: Enter DOB & OTP
+              Step 2: Enter DOB & PIN
             </h2>
 
             <div className="mb-4 text-left">
@@ -165,45 +150,8 @@ export default function PreTestFlow() {
               />
             </div>
 
-            {/* OTP Display */}
-            <div className="mb-4 text-left">
-              <label className="text-sm font-medium flex justify-between mb-1">
-                Enter OTP
-              </label>
 
-              <div className="flex justify-center mb-3">
-                <div className="px-6 py-3 rounded-xl bg-blue-100 border-2 border-blue-500 text-blue-700 font-bold text-2xl tracking-widest shadow">
-                  {generatedOtp}
-                </div>
-              </div>
 
-              <input
-                className="w-full p-3 border rounded-lg"
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-              />
-
-              <button
-                onClick={resendOtp}
-                className="mt-3 w-full border rounded-lg py-2 hover:bg-slate-50"
-              >
-                Resend OTP
-              </button>
-            </div>
-
-            <button
-              onClick={handleStep2}
-              className="w-full py-3 mt-4 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700"
-            >
-              Proceed
-            </button>
-          </>
-        )}
-
-        {/* ------------------- STEP 3 ------------------- */}
-        {step === 3 && (
-          <>
             <h2 className="text-lg font-semibold mb-4 text-slate-800">
               Step 3: PIN Verification & Agreement
             </h2>
@@ -248,7 +196,7 @@ export default function PreTestFlow() {
             </label>
 
             <button
-              onClick={handleStep3}
+              onClick={handleStep2}
               className="w-full py-3 mt-2 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700"
             >
               Continue
