@@ -17,40 +17,34 @@ export default function LoginPage() {
   const [institutionCode, setInstitutionCode] = useState("");
   const [error, setError] = useState("");
 
-  const fetchSchoolData = async () => {
-    const { data, error } = await supabase.from("schools").select("*");
-    if (error) {
-      console.error("Error fetching school data:", error);
-    } else {
-      setSchools(data as School[]);
-    }
-  };
+const handleLogin = async () => {
+  setError("");
 
-  useEffect(() => {
-    fetchSchoolData();
-  }, []);
+  if (!institutionCode.trim()) {
+    setError("Please enter your institution code");
+    return;
+  }
 
-  const handleLogin = () => {
-    if (!institutionCode.trim()) {
-      setError("Please enter your institution code");
-      return;
-    }
+  const { data: school, error: fetchError } = await supabase
+    .from("schools")
+    .select("*")
+    .eq("id", institutionCode.trim())
+    .single();
 
-    const school = schools.find((s) => String(s.id) === institutionCode.trim());
+  if (fetchError || !school) {
+    setError("Invalid institution code");
+    return;
+  }
 
-    if (!school) {
-      setError("Invalid institution code");
-      return;
-    }
+  if (school.paymentstatus !== "completed") {
+    setError("Payment not approved yet. Please contact admin.");
+    return;
+  }
 
-    if (school.paymentstatus !== "completed") {
-      setError("Payment not approved yet. Please contact admin.");
-      return;
-    }
+  localStorage.setItem("loggedInSchoolId", String(school.id));
+  router.push("/flow");
+};
 
-    localStorage.setItem("loggedInSchoolId", String(school.id));
-    router.push("/flow");
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 flex flex-col items-center justify-center p-6">
