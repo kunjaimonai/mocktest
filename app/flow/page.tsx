@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import MockTestPage from "../mocktest/page";
+import { useRouter } from 'next/navigation';
 
 function generateCaptcha() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -15,6 +15,7 @@ function generateSixDigit() {
 
 export default function PreTestFlow() {
   const [step, setStep] = useState(1);
+  const router = useRouter(); // Initialize the router
 
   const [appNumber, setAppNumber] = useState("");
   const [captcha, setCaptcha] = useState(generateCaptcha());
@@ -32,6 +33,7 @@ export default function PreTestFlow() {
   // -------------------------------
   // STEP 1 — APP + CAPTCHA
   // -------------------------------
+  
   const handleStep1 = () => {
     if (captchaInput !== captcha) {
       alert("Incorrect captcha");
@@ -68,7 +70,8 @@ if (pin !== generatedPin) {
   // STEP 4 — SHOW MOCK TEST
   // -------------------------------
   if (step === 3) {
-    return <MockTestPage />;
+        router.push("/mocktest");  // Navigate to the MockTestPage
+
   }
 
   // ------------------------------------------------------------------------
