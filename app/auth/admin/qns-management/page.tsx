@@ -52,7 +52,8 @@ export default function AdminQuestionsPage() {
   const [questionsEN, setQuestionsEN] = useState<Question[]>([]);
   const [questionsML, setQuestionsML] = useState<Question[]>([]);
   const [questionsTA, setQuestionsTA] = useState<Question[]>([]);
-  const [currentLang, setCurrentLang] = useState<"en" | "ml" | "ta">("en");
+  const [questionsBG, setQuestionsBG] = useState<Question[]>([]);
+  const [currentLang, setCurrentLang] = useState<"en" | "ml" | "ta" | "bg">("en");
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
@@ -93,10 +94,16 @@ export default function AdminQuestionsPage() {
         .from("tamil_questions")
         .select("*")
         .order("id", { ascending: true });
+      
+        const { data: bgData } = await supabase
+        .from("badge_questions")
+        .select("*")
+        .order("id", { ascending: true });
 
       if (enData) setQuestionsEN(enData);
       if (mlData) setQuestionsML(mlData);
       if (taData) setQuestionsTA(taData);
+      if (bgData) setQuestionsBG(bgData);
 
       setLoading(false);
     };
@@ -109,7 +116,9 @@ export default function AdminQuestionsPage() {
       ? questionsEN
       : currentLang === "ml"
       ? questionsML
-      : questionsTA;
+      : currentLang === "ta"
+      ? questionsTA
+      : questionsBG;
 
   // 🔎 SEARCH FILTER
   const filteredQuestions = currentQuestions.filter((q) => {
@@ -122,14 +131,16 @@ export default function AdminQuestionsPage() {
 
   const updateQuestionsFile = async (
     updatedQuestions: Question[],
-    lang: "en" | "ml" | "ta"
+    lang: "en" | "ml" | "ta" | "bg"
   ) => {
     const tableName =
       lang === "en"
         ? "english_questions"
         : lang === "ml"
         ? "malayalam_questions"
-        : "tamil_questions";
+        : lang === "ta"
+        ? "tamil_questions"
+        : "badge_questions";
 
     const { error } = await supabase
       .from(tableName)
@@ -143,11 +154,12 @@ export default function AdminQuestionsPage() {
 
     if (lang === "en") setQuestionsEN(updatedQuestions);
     else if (lang === "ml") setQuestionsML(updatedQuestions);
-    else setQuestionsTA(updatedQuestions);
+    else if (lang === "ta") setQuestionsTA(updatedQuestions);
+    else setQuestionsBG(updatedQuestions);
 
     alert(
       `${
-        lang === "en" ? "English" : lang === "ml" ? "Malayalam" : "Tamil"
+        lang === "en" ? "English" : lang === "ml" ? "Malayalam" : lang === "ta" ? "Tamil" : "Badge"
       } questions updated!`
     );
   };
@@ -205,7 +217,9 @@ export default function AdminQuestionsPage() {
         ? "english_questions"
         : currentLang === "ml"
         ? "malayalam_questions"
-        : "tamil_questions";
+        :currentLang === "ta"
+        ?"tamil_questions"
+        :"badge_questions";
 
     const { error } = await supabase.from(tableName).delete().eq("id", id);
 
@@ -219,8 +233,10 @@ export default function AdminQuestionsPage() {
       setQuestionsEN((prev) => prev.filter((q) => q.id !== id));
     } else if (currentLang === "ml") {
       setQuestionsML((prev) => prev.filter((q) => q.id !== id));
-    } else {
+    } else if (currentLang === "ta"){
       setQuestionsTA((prev) => prev.filter((q) => q.id !== id));
+    }else{
+      setQuestionsBG((prev) => prev.filter((q) => q.id !== id));
     }
 
     alert("Question deleted!");
@@ -313,7 +329,7 @@ export default function AdminQuestionsPage() {
               <Select
                 value={currentLang}
                 onValueChange={(val) =>
-                  setCurrentLang(val as "en" | "ml" | "ta")
+                  setCurrentLang(val as "en" | "ml" | "ta" | "bg")
                 }
               >
                 <SelectTrigger className="w-40">
@@ -324,6 +340,7 @@ export default function AdminQuestionsPage() {
                   <SelectItem value="en">English</SelectItem>
                   <SelectItem value="ml">Malayalam</SelectItem>
                   <SelectItem value="ta">Tamil</SelectItem>
+                  <SelectItem value="bg">Badge</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -347,7 +364,9 @@ export default function AdminQuestionsPage() {
                         ? "English"
                         : currentLang === "ml"
                         ? "Malayalam"
-                        : "Tamil"}
+                        : currentLang === "ta"
+                        ?"Tamil"
+                        :"Badge"}
                     </DialogDescription>
                   </DialogHeader>
                   <QuestionForm
@@ -385,6 +404,12 @@ export default function AdminQuestionsPage() {
                 {questionsTA.length}
               </div>
               <p className="text-xs text-slate-600 mt-1">Tamil Questions</p>
+            </div>
+            <div className="text-center">
+              <div className="text-indigo-600 font-semibold text-2xl">
+                {questionsBG.length}
+              </div>
+              <p className="text-xs text-slate-600 mt-1">Badge Questions</p>
             </div>
           </div>
         </div>

@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const questions = await request.json();
 
     const { error } = await supabase
-      .from("tamil_questions")
+      .from("badge_questions")
       .upsert(questions, { onConflict: "id" });
 
     if (error) {
@@ -16,12 +16,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      message: "Tamil questions updated successfully"
+      message: "Badge questions updated successfully"
     });
   } catch (error) {
-    console.error("Error updating Tamil questions:", error);
+    console.error("Error updating Badge questions:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to update Tamil questions" },
+      { success: false, error: "Failed to update Badge questions" },
       { status: 500 }
     );
   }
