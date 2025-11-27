@@ -27,6 +27,7 @@ type School = {
   paymentStatus: string;
   logo: string;
   screenshot: string;
+  has_badge: boolean;
 };
 
 function shuffleArray<T>(array: T[]): T[] {
@@ -60,7 +61,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [testStarted, setTestStarted] = useState(false);
 
   const [schoolData, setSchoolData] = useState<School | null>(school || null);
-  const [language, setLanguage] = useState<"en" | "ml" | "ta">("en");
+  const [language, setLanguage] = useState<"en" | "ml" | "ta" | "bg">("en");
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIdx, setCurrentIdx] = useState<number>(0);
@@ -75,7 +76,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  
 
   // Load school if not passed
   useEffect(() => {
@@ -103,11 +103,13 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       setLoadingQuestions(true);
 
       const table =
-        language === "ml"
+        language === "en"
+          ? "english_questions"
+          : language === "ml"
           ? "malayalam_questions"
           : language === "ta"
           ? "tamil_questions"
-          : "english_questions";
+          : "badge_questions";
 
       const { data, error } = await supabase.from(table).select("*");
 
@@ -187,7 +189,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         return;
       }
     }
-    
 
     setSelected(null);
 
@@ -255,6 +256,18 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           >
             தமிழ்
           </button>
+          {schoolData?.has_badge && (
+            <button
+              onClick={() => setLanguage("bg")}
+              className={`px-6 py-3 rounded-xl text-lg font-semibold ${
+                language === "bg"
+                  ? "bg-sky-600 text-white"
+                  : "bg-white border border-sky-300 text-slate-700"
+              }`}
+            >
+              Badge
+            </button>
+          )}
         </div>
 
         <button
@@ -358,7 +371,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               <h1 className="text-xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
                 {schoolData.name}
               </h1>
-              <p className="text-sm text-slate-600 mt-1">ph:{schoolData.number}</p>
+              <p className="text-sm text-slate-600 mt-1">
+                ph:{schoolData.number}
+              </p>
               <p className="text-sm text-slate-600 mt-1">
                 Road Safety Mock Test
               </p>
@@ -413,47 +428,51 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               </div>
 
               <div className="grid gap-3 text-slate-800">
-                {q.options.map((opt, i) => {
-                  const isSelected = selected === i;
-                  const showResult = selected !== null;
-                  const correct = q.answerIndex === i;
+                <div className="grid gap-3 text-slate-800">
+                  {q.options
+                    .filter((opt) => opt && opt.trim() !== "")
+                    .map((opt, i) => {
+                      const isSelected = selected === i;
+                      const showResult = selected !== null;
+                      const correct = q.answerIndex === i;
 
-                  let cls =
-                    "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
+                      let cls =
+                        "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
 
-                  if (!showResult)
-                    cls +=
-                      "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
+                      if (!showResult)
+                        cls +=
+                          "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
 
-                  if (showResult && correct)
-                    cls += "bg-green-500 text-white border-green-400";
+                      if (showResult && correct)
+                        cls += "bg-green-500 text-white border-green-400";
 
-                  if (showResult && isSelected && !correct)
-                    cls += "bg-red-500 text-white border-red-400";
+                      if (showResult && isSelected && !correct)
+                        cls += "bg-red-500 text-white border-red-400";
 
-                  return (
-                    <motion.div
-                      whileHover={{ scale: showResult ? 1 : 1.02 }}
-                      whileTap={{ scale: showResult ? 1 : 0.98 }}
-                      key={i}
-                      className={cls}
-                      onClick={() => handleSelect(i)}
-                    >
-                      <div className="flex items-center">
-                        <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm md:text-lg ${
-                            showResult && correct
-                              ? "border-white"
-                              : "border-slate-400"
-                          }`}
+                      return (
+                        <motion.div
+                          whileHover={{ scale: showResult ? 1 : 1.02 }}
+                          whileTap={{ scale: showResult ? 1 : 0.98 }}
+                          key={i}
+                          className={cls}
+                          onClick={() => handleSelect(i)}
                         >
-                          {String.fromCharCode(65 + i)}
-                        </div>
-                        <div>{opt}</div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                          <div className="flex items-center">
+                            <div
+                              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm md:text-lg ${
+                                showResult && correct
+                                  ? "border-white"
+                                  : "border-slate-400"
+                              }`}
+                            >
+                              {String.fromCharCode(65 + i)}
+                            </div>
+                            <div>{opt}</div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                </div>
               </div>
             </div>
 
