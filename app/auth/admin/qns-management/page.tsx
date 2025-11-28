@@ -38,6 +38,8 @@ import {
   FileImage,
   Search,
   ArrowUp,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { ReactTransliterate } from "react-transliterate";
@@ -50,6 +52,8 @@ type Question = {
   sign: string;
   answerIndex: number;
 };
+
+const ITEMS_PER_PAGE = 12;
 
 export default function AdminQuestionsPage() {
   const router = useRouter();
@@ -67,6 +71,7 @@ export default function AdminQuestionsPage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [formData, setFormData] = useState({
     q: "",
@@ -151,6 +156,17 @@ export default function AdminQuestionsPage() {
       q.options.some((opt) => opt.toLowerCase().includes(text))
     );
   });
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedQuestions = filteredQuestions.slice(startIndex, endIndex);
+
+  // Reset to page 1 when changing language or search
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [currentLang, searchQuery]);
 
   const updateQuestionsFile = async (
     updatedQuestions: Question[],
@@ -409,6 +425,7 @@ export default function AdminQuestionsPage() {
                     handleImageUpload={handleImageUpload}
                     uploadingImage={uploadingImage}
                     imagePreview={imagePreview}
+                    currentLang={currentLang}
                   />
                 </DialogContent>
               </Dialog>
@@ -492,7 +509,7 @@ export default function AdminQuestionsPage() {
       {/* Questions Grid */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredQuestions.map((question) => (
+          {paginatedQuestions.map((question) => (
             <Card
               key={question.id}
               className="shadow-lg border-2 border-slate-200 hover:shadow-xl transition-shadow duration-200"
@@ -532,6 +549,7 @@ export default function AdminQuestionsPage() {
                           handleImageUpload={handleImageUpload}
                           uploadingImage={uploadingImage}
                           imagePreview={imagePreview}
+                          currentLang={currentLang}
                         />
                       </DialogContent>
                     </Dialog>
@@ -590,6 +608,82 @@ export default function AdminQuestionsPage() {
             </CardContent>
           </Card>
         )}
+
+        {/* Pagination Controls */}
+        {filteredQuestions.length > 0 && (
+          <div className="mt-8 flex items-center justify-between bg-white rounded-lg shadow-sm p-4">
+            <div className="text-sm text-slate-600">
+              Showing {startIndex + 1} to {Math.min(endIndex, filteredQuestions.length)} of{" "}
+              {filteredQuestions.length} questions
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="disabled:opacity-50"
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Previous
+              </Button>
+
+              <div className="flex items-center gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage =
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1);
+
+                  const showEllipsis =
+                    (page === 2 && currentPage > 3) ||
+                    (page === totalPages - 1 && currentPage < totalPages - 2);
+
+                  if (!showPage && !showEllipsis) return null;
+
+                  if (showEllipsis) {
+                    return (
+                      <span key={page} className="px-2 text-slate-400">
+                        ...
+                      </span>
+                    );
+                  }
+
+                  return (
+                    <Button
+                      key={page}
+                      variant={currentPage === page ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setCurrentPage(page)}
+                      className={
+                        currentPage === page
+                          ? "bg-sky-600 hover:bg-sky-700"
+                          : ""
+                      }
+                    >
+                      {page}
+                    </Button>
+                  );
+                })}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+                }
+                disabled={currentPage === totalPages}
+                className="disabled:opacity-50"
+              >
+                Next
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Scroll to Top Button */}
@@ -624,6 +718,7 @@ function QuestionForm({
   handleImageUpload,
   uploadingImage,
   imagePreview,
+  currentLang,
   isEdit = false,
 }: {
   formData: any;
@@ -633,20 +728,43 @@ function QuestionForm({
   handleImageUpload: (file: File) => Promise<void>;
   uploadingImage: boolean;
   imagePreview: string | null;
+  currentLang: "en" | "ml" | "ta" | "bg";
   isEdit?: boolean;
 }) {
+  const isTransliterate = currentLang === "ml" || currentLang === "ta";
+
   return (
     <div className="space-y-4">
       <div>
         <Label htmlFor="question">Question</Label>
-        <Textarea
-          id="question"
-          value={formData.q}
-          onChange={(e) => setFormData({ ...formData, q: e.target.value })}
-          placeholder="Enter the question"
-          rows={3}
-          className="mt-1"
-        />
+        {isTransliterate ? (
+          <ReactTransliterate
+            lang={currentLang}
+            value={formData.q}
+            onChangeText={(text: string) =>
+              setFormData({ ...formData, q: text })
+            }
+            renderComponent={(props) => (
+              <textarea
+                {...props}
+                placeholder="Enter the question"
+                rows={3}
+                className="w-full mt-1 px-3 py-2 border-2 border-slate-300 rounded-md
+                 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
+                 shadow-sm transition resize-none"
+              />
+            )}
+          />
+        ) : (
+          <Textarea
+            id="question"
+            value={formData.q}
+            onChange={(e) => setFormData({ ...formData, q: e.target.value })}
+            placeholder="Enter the question"
+            rows={3}
+            className="mt-1"
+          />
+        )}
       </div>
 
       <div>
@@ -682,14 +800,34 @@ function QuestionForm({
       <div className="space-y-3">
         <Label>Options</Label>
         {[1, 2, 3, 4].map((num) => (
-          <Input
-            key={num}
-            value={formData[`option${num}`]}
-            onChange={(e) =>
-              setFormData({ ...formData, [`option${num}`]: e.target.value })
-            }
-            placeholder={`Option ${num}`}
-          />
+          <div key={num}>
+            {isTransliterate ? (
+              <ReactTransliterate
+                lang={currentLang}
+                value={formData[`option${num}`]}
+                onChangeText={(text: string) =>
+                  setFormData({ ...formData, [`option${num}`]: text })
+                }
+                renderComponent={(props) => (
+                  <input
+                    {...props}
+                    placeholder={`Option ${num}`}
+                    className="w-full px-3 py-2 border-2 border-slate-300 rounded-md
+                     focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
+                     shadow-sm transition"
+                  />
+                )}
+              />
+            ) : (
+              <Input
+                value={formData[`option${num}`]}
+                onChange={(e) =>
+                  setFormData({ ...formData, [`option${num}`]: e.target.value })
+                }
+                placeholder={`Option ${num}`}
+              />
+            )}
+          </div>
         ))}
       </div>
 
