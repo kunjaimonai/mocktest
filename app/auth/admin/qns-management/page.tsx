@@ -35,9 +35,13 @@ import {
   Save,
   X,
   Languages,
-  ImageIcon,
+  FileImage,
+  Search,
+  ArrowUp,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
+import { ReactTransliterate } from "react-transliterate";
+import "react-transliterate/dist/index.css";
 
 type Question = {
   id: number;
@@ -53,14 +57,16 @@ export default function AdminQuestionsPage() {
   const [questionsML, setQuestionsML] = useState<Question[]>([]);
   const [questionsTA, setQuestionsTA] = useState<Question[]>([]);
   const [questionsBG, setQuestionsBG] = useState<Question[]>([]);
-  const [currentLang, setCurrentLang] = useState<"en" | "ml" | "ta" | "bg">("en");
+  const [currentLang, setCurrentLang] = useState<"en" | "ml" | "ta" | "bg">(
+    "en"
+  );
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  const [searchQuery, setSearchQuery] = useState(""); // 🔍 Added search
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   const [formData, setFormData] = useState({
     q: "",
@@ -71,6 +77,23 @@ export default function AdminQuestionsPage() {
     sign: "",
     answerIndex: 0,
   });
+
+  // Scroll to top handler
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 400);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const isAdmin = localStorage.getItem("adminLoggedIn");
@@ -94,8 +117,8 @@ export default function AdminQuestionsPage() {
         .from("tamil_questions")
         .select("*")
         .order("id", { ascending: true });
-      
-        const { data: bgData } = await supabase
+
+      const { data: bgData } = await supabase
         .from("badge_questions")
         .select("*")
         .order("id", { ascending: true });
@@ -120,7 +143,7 @@ export default function AdminQuestionsPage() {
       ? questionsTA
       : questionsBG;
 
-  // 🔎 SEARCH FILTER
+  // Search filter
   const filteredQuestions = currentQuestions.filter((q) => {
     const text = searchQuery.toLowerCase();
     return (
@@ -159,7 +182,13 @@ export default function AdminQuestionsPage() {
 
     alert(
       `${
-        lang === "en" ? "English" : lang === "ml" ? "Malayalam" : lang === "ta" ? "Tamil" : "Badge"
+        lang === "en"
+          ? "English"
+          : lang === "ml"
+          ? "Malayalam"
+          : lang === "ta"
+          ? "Tamil"
+          : "Badge"
       } questions updated!`
     );
   };
@@ -217,9 +246,9 @@ export default function AdminQuestionsPage() {
         ? "english_questions"
         : currentLang === "ml"
         ? "malayalam_questions"
-        :currentLang === "ta"
-        ?"tamil_questions"
-        :"badge_questions";
+        : currentLang === "ta"
+        ? "tamil_questions"
+        : "badge_questions";
 
     const { error } = await supabase.from(tableName).delete().eq("id", id);
 
@@ -233,9 +262,9 @@ export default function AdminQuestionsPage() {
       setQuestionsEN((prev) => prev.filter((q) => q.id !== id));
     } else if (currentLang === "ml") {
       setQuestionsML((prev) => prev.filter((q) => q.id !== id));
-    } else if (currentLang === "ta"){
+    } else if (currentLang === "ta") {
       setQuestionsTA((prev) => prev.filter((q) => q.id !== id));
-    }else{
+    } else {
       setQuestionsBG((prev) => prev.filter((q) => q.id !== id));
     }
 
@@ -365,8 +394,8 @@ export default function AdminQuestionsPage() {
                         : currentLang === "ml"
                         ? "Malayalam"
                         : currentLang === "ta"
-                        ?"Tamil"
-                        :"Badge"}
+                        ? "Tamil"
+                        : "Badge"}
                     </DialogDescription>
                   </DialogHeader>
                   <QuestionForm
@@ -415,37 +444,44 @@ export default function AdminQuestionsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 mt-6 bg-white">
+      {/* Search Bar */}
+      <div className="max-w-7xl mx-auto px-6 mt-6 bg-white rounded-lg shadow-sm p-4">
         <div className="relative">
-          {/* Search Icon */}
-          <svg
-            className="w-5 h-5 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10" />
+          
+          {currentLang === "ml" || currentLang === "ta" ? (
+            <ReactTransliterate
+              lang={currentLang}
+              value={searchQuery}
+              onChangeText={(text: string) => setSearchQuery(text)}
+              renderComponent={(props) => (
+                <input
+                  {...props}
+                  placeholder="Search questions, options, or keywords..."
+                  className="w-full pl-12 pr-10 py-3 rounded-full border-2 border-slate-300
+                   focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
+                   shadow-sm transition"
+                />
+              )}
             />
-          </svg>
+          ) : (
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search questions, options, or keywords..."
+              className="w-full pl-12 pr-10 py-3 rounded-full border-2 border-slate-300
+               focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
+               shadow-sm transition"
+            />
+          )}
 
-          {/* Search Input */}
-          <Input
-            type="text"
-            placeholder="Search questions, options, or keywords..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-10 py-3 rounded-full border-2 border-slate-300 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 shadow-sm transition"
-          />
-
-          {/* Clear Button */}
           {searchQuery.length > 0 && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 
+               hover:bg-slate-100 rounded-full w-6 h-6 flex items-center justify-center transition"
+              aria-label="Clear search"
             >
               ✕
             </button>
@@ -453,6 +489,7 @@ export default function AdminQuestionsPage() {
         </div>
       </div>
 
+      {/* Questions Grid */}
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {filteredQuestions.map((question) => (
@@ -546,7 +583,7 @@ export default function AdminQuestionsPage() {
         {filteredQuestions.length === 0 && (
           <Card className="border-2 border-dashed border-slate-300 bg-slate-50">
             <CardContent className="py-12 text-center">
-              <ImageIcon className="w-12 h-12 text-slate-400 mx-auto mb-3" />
+              <FileImage className="w-12 h-12 text-slate-400 mx-auto mb-3" />
               <p className="text-slate-600 text-lg">
                 No matching questions found.
               </p>
@@ -554,6 +591,24 @@ export default function AdminQuestionsPage() {
           </Card>
         )}
       </div>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-8 right-8 bg-sky-600 hover:bg-sky-700 text-white 
+           rounded-full p-4 shadow-lg hover:shadow-xl transition-all duration-300 
+           transform hover:scale-110 z-50 group"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="w-6 h-6" />
+          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 
+           bg-slate-800 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap 
+           opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            Back to top
+          </span>
+        </button>
+      )}
     </div>
   );
 }

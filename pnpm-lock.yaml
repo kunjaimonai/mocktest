@@ -47,6 +47,9 @@ importers:
       react-hot-toast:
         specifier: ^2.6.0
         version: 2.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react-transliterate:
+        specifier: ^1.1.9
+        version: 1.1.9(react@19.2.0)
       supabase:
         specifier: ^2.54.11
         version: 2.54.11
@@ -2176,6 +2179,12 @@ packages:
       '@types/react':
         optional: true
 
+  react-transliterate@1.1.9:
+    resolution: {integrity: sha512-5z98xmo9fEWk++6A4o6FjoLVj6bpec8sFdQvjri9BSxqXq/r/5pwNNVWUZUzrY1DWAE++zAiJWhNuyuGxgrplw==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      react: ^16.0.0
+
   react@19.2.0:
     resolution: {integrity: sha512-tmbWg6W31tQLeB5cdIBOicJDJRR2KzXsV7uSK9iNfLWQ5bIZfxuPEHp7M8wiHyHnn0DD1i7w3Zmin0FtkrwoCQ==}
     engines: {node: '>=0.10.0'}
@@ -2364,6 +2373,9 @@ packages:
   tar@7.5.1:
     resolution: {integrity: sha512-nlGpxf+hv0v7GkWBK2V9spgactGOp0qvfWRxUMjqHyzrt3SgwE48DIv/FhqPHJYLHpgW1opq3nERbz5Anq7n1g==}
     engines: {node: '>=18'}
+
+  textarea-caret@3.1.0:
+    resolution: {integrity: sha512-cXAvzO9pP5CGa6NKx0WYHl+8CHKZs8byMkt3PCJBCmq2a34YA9pO1NrQET5pzeqnBjBdToF5No4rrmkDUgQC2Q==}
 
   tinyglobby@0.2.15:
     resolution: {integrity: sha512-j2Zq4NyQYG5XMST4cbs02Ak8iJUdxRM0XI5QyxXuZOzKOINmWurp3smXu3y5wDcJrptwpSjgXHzIQxR0omXljQ==}
@@ -4689,6 +4701,11 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.2
 
+  react-transliterate@1.1.9(react@19.2.0):
+    dependencies:
+      react: 19.2.0
+      textarea-caret: 3.1.0
+
   react@19.2.0: {}
 
   read-cmd-shim@6.0.0: {}
@@ -4948,6 +4965,8 @@ snapshots:
       minipass: 7.1.2
       minizlib: 3.1.0
       yallist: 5.0.0
+
+  textarea-caret@3.1.0: {}
 
   tinyglobby@0.2.15:
     dependencies:
