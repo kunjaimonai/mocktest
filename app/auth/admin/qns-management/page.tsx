@@ -466,9 +466,9 @@ export default function AdminQuestionsPage() {
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10" />
           
-          {currentLang === "ml" || currentLang === "ta" ? (
+          {currentLang === "ml" || currentLang === "bg"? (
             <ReactTransliterate
-              lang={currentLang}
+              lang="ml"
               value={searchQuery}
               onChangeText={(text: string) => setSearchQuery(text)}
               renderComponent={(props) => (
