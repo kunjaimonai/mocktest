@@ -227,64 +227,91 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
   if (!testStarted) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 to-indigo-50 p-6">
-        <h1 className="text-3xl font-bold mb-6 text-slate-800">
-          Select Your Language
-        </h1>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 p-6">
+        <div className="max-w-md w-full space-y-8">
+          {/* Header */}
+          <div className="text-center space-y-2">
+            <h1 className="text-4xl font-bold text-slate-800 mb-2">
+              Select Your Language
+            </h1>
+            <p className="text-slate-600">Choose your preferred language to begin</p>
+          </div>
 
-        <div className="flex flex-col gap-4 mb-6">
-          <button
-            onClick={() => setLanguage("en")}
-            className={`px-6 py-3 rounded-xl text-lg font-semibold ${
-              language === "en"
-                ? "bg-sky-600 text-white"
-                : "bg-white border border-sky-300 text-slate-700"
-            }`}
-          >
-            English
-          </button>
+          {/* Learners Section */}
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-sky-100 space-y-4">
+            <h2 className="text-2xl font-bold text-sky-700 text-center mb-4">
+              LEARNERS MOCKTEST
+            </h2>
 
-          <button
-            onClick={() => setLanguage("ml")}
-            className={`px-6 py-3 rounded-xl text-lg font-semibold ${
-              language === "ml"
-                ? "bg-sky-600 text-white"
-                : "bg-white border border-sky-300 text-slate-700"
-            }`}
-          >
-            മലയാളം
-          </button>
+            <div className="space-y-3">
+              <button
+                onClick={() => setLanguage("en")}
+                className={`w-full px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-200 ${
+                  language === "en"
+                    ? "bg-sky-600 text-white shadow-md scale-105"
+                    : "bg-slate-50 border-2 border-sky-200 text-slate-700 hover:border-sky-400 hover:bg-sky-50"
+                }`}
+              >
+                English
+              </button>
 
-          <button
-            onClick={() => setLanguage("ta")}
-            className={`px-6 py-3 rounded-xl text-lg font-semibold ${
-              language === "ta"
-                ? "bg-sky-600 text-white"
-                : "bg-white border border-sky-300 text-slate-700"
-            }`}
-          >
-            தமிழ்
-          </button>
+              <button
+                onClick={() => setLanguage("ml")}
+                className={`w-full px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-200 ${
+                  language === "ml"
+                    ? "bg-sky-600 text-white shadow-md scale-105"
+                    : "bg-slate-50 border-2 border-sky-200 text-slate-700 hover:border-sky-400 hover:bg-sky-50"
+                }`}
+              >
+                മലയാളം
+              </button>
+
+              <button
+                onClick={() => setLanguage("ta")}
+                className={`w-full px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-200 ${
+                  language === "ta"
+                    ? "bg-sky-600 text-white shadow-md scale-105"
+                    : "bg-slate-50 border-2 border-sky-200 text-slate-700 hover:border-sky-400 hover:bg-sky-50"
+                }`}
+              >
+                தமிழ்
+              </button>
+            </div>
+          </div>
+
+          {/* Badge Section */}
           {schoolData?.has_badge && (
-            <button
-              onClick={() => setLanguage("bg")}
-              className={`px-6 py-3 rounded-xl text-lg font-semibold ${
-                language === "bg"
-                  ? "bg-sky-600 text-white"
-                  : "bg-white border border-sky-300 text-slate-700"
-              }`}
-            >
-              Badge
-            </button>
+            <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 shadow-lg border border-amber-200 space-y-4">
+              <h2 className="text-2xl font-bold text-amber-700 text-center mb-4">
+                BADGE MOCKTEST
+              </h2>
+              
+              <button
+                onClick={() => setLanguage("bg")}
+                className={`w-full px-6 py-4 rounded-xl text-lg font-semibold transition-all duration-200 ${
+                  language === "bg"
+                    ? "bg-amber-600 text-white shadow-md scale-105"
+                    : "bg-white border-2 border-amber-300 text-slate-700 hover:border-amber-500 hover:bg-amber-50"
+                }`}
+              >
+                Badge
+              </button>
+            </div>
           )}
-        </div>
 
-        <button
-          onClick={() => setTestStarted(true)}
-          className="px-8 py-3 bg-green-600 text-white text-lg rounded-xl hover:bg-green-700 shadow"
-        >
-          Start Test
-        </button>
+          {/* Start Button */}
+          <button
+            onClick={() => setTestStarted(true)}
+            disabled={!language}
+            className={`w-full px-8 py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-200 ${
+              language
+                ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 hover:shadow-xl hover:scale-105"
+                : "bg-slate-300 text-slate-500 cursor-not-allowed"
+            }`}
+          >
+            {language ? "Start Test →" : "Select Language First"}
+          </button>
+        </div>
       </div>
     );
   }
