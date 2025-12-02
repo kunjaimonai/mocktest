@@ -426,6 +426,14 @@ export default function AdminPage() {
                           Edit
                         </Button>
 
+                        <Button
+                          variant="destructive"
+                          className="w-full"
+                          onClick={() => rejectPayment(s.id)}
+                        >
+                          Delete
+                        </Button>
+
                         <div className="px-3 py-1.5 bg-green-100 rounded-full text-center">
                           <span className="text-green-700 font-semibold text-sm flex items-center gap-1 justify-center">
                             <CheckCircle2 className="w-4 h-4" /> Approved
