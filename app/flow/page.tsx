@@ -1,12 +1,11 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 
 function generateCaptcha() {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
   return Array.from({ length: 6 })
-    .map(() => chars[Math.floor(Math.random() * chars.length)])
-    .join("");
+    .map(() => chars[Math.floor(Math.random() * chars.length)]).join("");
 }
 
 function generateSixDigit() {
@@ -23,7 +22,6 @@ export default function PreTestFlow() {
 
   const [dob, setDob] = useState("");
 
-
   const [pin, setPin] = useState("");
   const [generatedPin] = useState(generateSixDigit());
 
@@ -33,7 +31,6 @@ export default function PreTestFlow() {
   // -------------------------------
   // STEP 1 — APP + CAPTCHA
   // -------------------------------
-  
   const handleStep1 = () => {
     if (captchaInput !== captcha) {
       alert("Incorrect captcha");
@@ -47,32 +44,30 @@ export default function PreTestFlow() {
   // -------------------------------
   // STEP 2 — DOB + OTP
   // -------------------------------
-
   const handleStep2 = () => {
     if (!/^\d{2}-\d{2}-\d{4}$/.test(dob)) {
       alert("DOB must be DD-MM-YYYY");
       return;
     }
-if (pin !== generatedPin) {
+    if (pin !== generatedPin) {
       alert("Incorrect PIN");
       return;
     }
-    setStep(3);   
-     if (!agree1 || !agree2) {
+    if (!agree1 || !agree2) {
       alert("Please check both checkboxes");
       return;
     }
+    setStep(3);
   };
 
-
-
   // -------------------------------
-  // STEP 4 — SHOW MOCK TEST
+  // STEP 3 — Navigate to Mock Test
   // -------------------------------
-  if (step === 3) {
-        router.push("/mocktest");  // Navigate to the MockTestPage
-
-  }
+  useEffect(() => {
+    if (step === 3) {
+      router.push("/mocktest");  // Navigate to the MockTestPage
+    }
+  }, [step, router]);  // This will only run when `step` changes to 3
 
   // ------------------------------------------------------------------------
   // UI
@@ -152,8 +147,6 @@ if (pin !== generatedPin) {
                 onChange={(e) => setDob(e.target.value)}
               />
             </div>
-
-
 
             <h2 className="text-lg font-semibold mb-4 text-slate-800">
               Step 3: PIN Verification & Agreement

@@ -95,7 +95,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   }, [schoolData]);
 
-  // Load 30 questions
+  // Load  questions
   useEffect(() => {
     if (!testStarted) return;
 
@@ -115,11 +115,12 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
       if (!error && data) {
         const shuffled = shuffleArray(data);
-        const picked30 = shuffled.slice(0, 30);
+        const pickedQuestions =
+          language === "bg" ? shuffled.slice(0, 20) : shuffled.slice(0, 30);
 
-        await preloadImagesAsync(picked30);
+        await preloadImagesAsync(pickedQuestions);
 
-        setQuestions(picked30);
+        setQuestions(pickedQuestions);
         setCurrentIdx(0);
         setScore(0);
         setSelected(null);
@@ -183,7 +184,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     if (selected === q.answerIndex) {
       newScore = score + 1;
       setScore(newScore);
+
+      // Update pass score check to 12 out of 20 for "bg" language
+      if (language === "bg" && newScore >= 12) {
+        setTestPassed(true);
+        setFinished(true);
+        return;
+      }
+
       if (newScore >= 18) {
+        // For other languages (30 questions)
         setTestPassed(true);
         setFinished(true);
         return;
@@ -199,8 +209,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
 
     setCurrentIdx(nextIdx);
-  }, [currentIdx, questions, selected, score]);
-
+  }, [currentIdx, questions, selected, score, language]);
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
