@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-
 import {
   Card,
   CardContent,
@@ -12,15 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-import {
-  CheckCircle2,
-  XCircle,
-  Clock,
-  School,
-  Phone,
-} from "lucide-react";
-
+import { CheckCircle2, XCircle, Clock, School, Phone } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 type SchoolType = {
@@ -49,6 +40,15 @@ export default function AdminPage() {
   const [editData, setEditData] = useState<SchoolType | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
+  // search state
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const sanitizeFilename = (name: string) =>
+    name
+      .replace(/\s+/g, "-") // replace spaces with dashes
+      .replace(/[^a-zA-Z0-9.\-_]/g, "") // remove invalid chars
+      .toLowerCase();
+
   const openEditModal = (data: SchoolType) => {
     setOldData({ ...data });
     setEditData({ ...data });
@@ -67,9 +67,11 @@ export default function AdminPage() {
 
   // upload file to supabase storage
   const uploadFile = async (file: File, folder: string, newPath: string) => {
-    const { error } = await supabase.storage.from(folder).upload(newPath, file, {
-      upsert: true,
-    });
+    const { error } = await supabase.storage
+      .from(folder)
+      .upload(newPath, file, {
+        upsert: true,
+      });
 
     if (error) {
       alert("Upload error: " + error.message);
@@ -100,7 +102,9 @@ export default function AdminPage() {
         await deleteFile(`logo/${oldName}`, "logo");
       }
 
-      const newPath = `logo/${editData.id}-${Date.now()}-${logoFile.name}`;
+      const safeName = sanitizeFilename(logoFile.name);
+      const newPath = `logo/${editData.id}-${Date.now()}-${safeName}`;
+
       logoUrl = await uploadFile(logoFile, "logo", newPath);
     }
 
@@ -111,7 +115,9 @@ export default function AdminPage() {
         await deleteFile(`screenshot/${oldName}`, "screenshot");
       }
 
-      const newPath = `screenshot/${editData.id}-${Date.now()}-${screenshotFile.name}`;
+      const safeName = sanitizeFilename(screenshotFile.name);
+      const newPath = `screenshot/${editData.id}-${Date.now()}-${safeName}`;
+
       screenshotUrl = await uploadFile(screenshotFile, "screenshot", newPath);
     }
 
@@ -145,6 +151,11 @@ export default function AdminPage() {
     closeEditModal();
   };
 
+  // SEARCH FUNCTION
+  const filteredSchools = schools.filter((school) =>
+    school.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   // FETCH SCHOOLS
   useEffect(() => {
     const admin = localStorage.getItem("adminLoggedIn");
@@ -176,12 +187,13 @@ export default function AdminPage() {
 
   // APPROVE PAYMENT
   const approvePayment = async (id: number) => {
-    await supabase.from("schools").update({ paymentstatus: "completed" }).eq("id", id);
+    await supabase
+      .from("schools")
+      .update({ paymentstatus: "completed" })
+      .eq("id", id);
 
     setSchools((prev) =>
-      prev.map((s) =>
-        s.id === id ? { ...s, paymentstatus: "completed" } : s
-      )
+      prev.map((s) => (s.id === id ? { ...s, paymentstatus: "completed" } : s))
     );
   };
 
@@ -215,11 +227,13 @@ export default function AdminPage() {
     );
   }
 
-  const pending = schools.filter((s) => s.paymentstatus === "pending");
-  const approved = schools.filter((s) => s.paymentstatus === "completed");
+  const pending = filteredSchools.filter((s) => s.paymentstatus === "pending");
+  const approved = filteredSchools.filter(
+    (s) => s.paymentstatus === "completed"
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-      
       {/* HEADER */}
       <div className="bg-white shadow-sm border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 py-6 flex justify-between">
@@ -260,8 +274,18 @@ export default function AdminPage() {
         </div>
       </div>
 
-      {/* CONTENT */}
+      {/* SEARCH */}
       <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="flex items-center gap-4 mb-8">
+          {/* SEARCH INPUT */}
+          <input
+            type="text"
+            placeholder="Search for a school..."
+            className="border p-2 rounded w-full max-w-md"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
 
         {/* ------------------- PENDING SCHOOLS ----------------------- */}
         <div className="mb-12">
@@ -269,7 +293,9 @@ export default function AdminPage() {
             <div className="p-2 bg-amber-100 rounded-lg">
               <Clock className="w-5 h-5 text-amber-600" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800">Pending Verifications</h2>
+            <h2 className="text-2xl font-bold text-slate-800">
+              Pending Verifications
+            </h2>
             <span className="px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-sm font-medium">
               {pending.length}
             </span>
@@ -279,22 +305,30 @@ export default function AdminPage() {
             <Card className="border-2 border-dashed border-slate-300 bg-slate-50">
               <CardContent className="py-12 text-center">
                 <CheckCircle2 className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-                <p className="text-slate-600 text-lg">No pending verification requests.</p>
+                <p className="text-slate-600 text-lg">
+                  No pending verification requests.
+                </p>
               </CardContent>
             </Card>
           ) : (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {pending.map((school) => (
-                <Card key={school.id} className="shadow-lg border-2 border-slate-200">
+                <Card
+                  key={school.id}
+                  className="shadow-lg border-2 border-slate-200"
+                >
                   <CardHeader className="bg-slate-50 border-b">
                     <div className="flex items-start gap-3">
                       <div className="p-2 bg-sky-100 rounded-lg">
                         <School className="w-5 h-5 text-sky-600" />
                       </div>
                       <div>
-                        <CardTitle className="text-lg text-black">{school.name}</CardTitle>
+                        <CardTitle className="text-lg text-black">
+                          {school.name}
+                        </CardTitle>
                         <CardDescription className="flex items-center gap-1">
-                          <Phone className="w-3 h-3 text-slate-400" /> {school.number}
+                          <Phone className="w-3 h-3 text-slate-400" />{" "}
+                          {school.number}
                         </CardDescription>
                       </div>
                     </div>
@@ -311,13 +345,17 @@ export default function AdminPage() {
                       />
                     ) : (
                       <div className="mb-4 p-4 bg-slate-100 border rounded-lg text-center">
-                        <p className="text-sm text-slate-500">No screenshot uploaded</p>
+                        <p className="text-sm text-slate-500">
+                          No screenshot uploaded
+                        </p>
                       </div>
                     )}
 
                     <div className="flex gap-2">
-                      <Button className="flex-1 bg-green-600 hover:bg-green-700"
-                        onClick={() => approvePayment(school.id)}>
+                      <Button
+                        className="flex-1 bg-green-600 hover:bg-green-700"
+                        onClick={() => approvePayment(school.id)}
+                      >
                         <CheckCircle2 className="w-4 h-4 mr-2" /> Approve
                       </Button>
 
@@ -342,7 +380,9 @@ export default function AdminPage() {
             <div className="p-2 bg-green-100 rounded-lg">
               <CheckCircle2 className="w-5 h-5 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold text-slate-800">Approved Schools</h2>
+            <h2 className="text-2xl font-bold text-slate-800">
+              Approved Schools
+            </h2>
             <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-medium">
               {approved.length}
             </span>
@@ -357,7 +397,10 @@ export default function AdminPage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2">
               {approved.map((s) => (
-                <Card key={s.id} className="border-l-4 border-l-green-500 shadow-sm">
+                <Card
+                  key={s.id}
+                  className="border-l-4 border-l-green-500 shadow-sm"
+                >
                   <CardContent className="p-5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -395,15 +438,17 @@ export default function AdminPage() {
           )}
         </div>
       </div>
+
       {/* --------------------- EDIT MODAL --------------------------- */}
       {isEditOpen && editData && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg w-[420px] shadow-xl">
-
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+          <div
+            className="bg-white rounded-lg w-full max-w-lg shadow-xl 
+                    max-h-[90vh] overflow-y-auto p-6"
+          >
             <h2 className="text-xl font-semibold mb-4">Edit School</h2>
 
             <div className="flex flex-col gap-4">
-
               {/* NAME */}
               <div>
                 <label className="font-medium text-sm">School Name</label>
@@ -430,11 +475,9 @@ export default function AdminPage() {
                 />
               </div>
 
-              {/* LOGO SECTION */}
+              {/* LOGO */}
               <div>
                 <label className="font-medium text-sm">Logo</label>
-
-                {/* show existing */}
                 {editData.logo && (
                   <div className="mt-2">
                     <Image
@@ -447,7 +490,6 @@ export default function AdminPage() {
                   </div>
                 )}
 
-                {/* file picker */}
                 <input
                   type="file"
                   accept="image/*"
@@ -464,9 +506,11 @@ export default function AdminPage() {
                 )}
               </div>
 
-              {/* SCREENSHOT SECTION */}
+              {/* SCREENSHOT */}
               <div>
-                <label className="font-medium text-sm">Payment Screenshot</label>
+                <label className="font-medium text-sm">
+                  Payment Screenshot
+                </label>
 
                 {editData.screenshot && (
                   <div className="mt-2">
@@ -496,7 +540,7 @@ export default function AdminPage() {
                 )}
               </div>
 
-              {/* BADGE TOGGLE */}
+              {/* BADGE */}
               <label className="flex items-center gap-2 mt-2">
                 <input
                   type="checkbox"
@@ -512,8 +556,8 @@ export default function AdminPage() {
               </label>
             </div>
 
-            {/* ACTIONS */}
-            <div className="flex justify-end gap-2 mt-6">
+            {/* BUTTONS */}
+            <div className="flex justify-end gap-2 mt-6 sticky bottom-0 bg-white pt-3">
               <Button variant="outline" onClick={closeEditModal}>
                 Cancel
               </Button>
@@ -525,7 +569,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-
     </div>
   );
 }
