@@ -48,7 +48,8 @@ import "react-transliterate/dist/index.css";
 type Question = {
   id: number;
   q: string;
-  options: string[];
+  options: string[]; // option values (text or image URL)
+  optionTypes?: boolean[]; // true => image, false => text
   sign: string;
   answerIndex: number;
 };
@@ -73,15 +74,51 @@ export default function AdminQuestionsPage() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [formData, setFormData] = useState({
+  const initialForm = {
     q: "",
     option1: "",
+    option1IsImage: false,
     option2: "",
+    option2IsImage: false,
     option3: "",
+    option3IsImage: false,
     option4: "",
+    option4IsImage: false,
     sign: "",
     answerIndex: 0,
-  });
+  };
+
+  const [formData, setFormData] = useState({ ...initialForm });
+
+  const uploadOptionImage = async (file: File, optionKey: string) => {
+    setUploadingImage(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+
+      const response = await fetch("/api/upload-sign", {
+        method: "POST",
+        body: fd,
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setFormData((prev) => ({
+          ...prev,
+          [optionKey]: data.url,
+          [`${optionKey}IsImage`]: true,
+        }));
+      } else {
+        alert("Image upload failed: " + data.error);
+      }
+    } catch (err) {
+      console.error("uploadOptionImage error:", err);
+      alert("Upload error");
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   // Scroll to top handler
   useEffect(() => {
@@ -148,17 +185,18 @@ export default function AdminQuestionsPage() {
       ? questionsTA
       : questionsBG;
 
-  // Search filter
+  // Search filter (lowercase compare; handle possible undefined)
   const filteredQuestions = currentQuestions.filter((q) => {
     const text = searchQuery.toLowerCase();
-    return (
-      q.q.toLowerCase().includes(text) ||
-      q.options.some((opt) => opt.toLowerCase().includes(text))
+    const matchesQ = q.q?.toLowerCase().includes(text);
+    const matchesOption = q.options?.some((opt) =>
+      String(opt || "").toLowerCase().includes(text)
     );
+    return matchesQ || matchesOption;
   });
 
   // Pagination calculations
-  const totalPages = Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedQuestions = filteredQuestions.slice(startIndex, endIndex);
@@ -219,6 +257,12 @@ export default function AdminQuestionsPage() {
         formData.option3,
         formData.option4,
       ],
+      optionTypes: [
+        !!formData.option1IsImage,
+        !!formData.option2IsImage,
+        !!formData.option3IsImage,
+        !!formData.option4IsImage,
+      ],
       sign: formData.sign,
       answerIndex: formData.answerIndex,
     };
@@ -242,6 +286,12 @@ export default function AdminQuestionsPage() {
               formData.option2,
               formData.option3,
               formData.option4,
+            ],
+            optionTypes: [
+              !!formData.option1IsImage,
+              !!formData.option2IsImage,
+              !!formData.option3IsImage,
+              !!formData.option4IsImage,
             ],
             sign: formData.sign,
             answerIndex: formData.answerIndex,
@@ -289,28 +339,30 @@ export default function AdminQuestionsPage() {
 
   const openEditDialog = (question: Question) => {
     setEditingQuestion(question);
+
+    // If question has optionTypes saved, use them; otherwise infer from URL presence
+    const types = question.optionTypes ?? question.options.map((o) => String(o || "").startsWith("http"));
+
     setFormData({
       q: question.q,
       option1: question.options[0] || "",
+      option1IsImage: !!types[0],
       option2: question.options[1] || "",
+      option2IsImage: !!types[1],
       option3: question.options[2] || "",
+      option3IsImage: !!types[2],
       option4: question.options[3] || "",
-      sign: question.sign,
-      answerIndex: question.answerIndex,
+      option4IsImage: !!types[3],
+      sign: question.sign || "",
+      answerIndex: question.answerIndex ?? 0,
     });
+
     setImagePreview(question.sign || null);
+    setIsAddDialogOpen(true);
   };
 
   const resetForm = () => {
-    setFormData({
-      q: "",
-      option1: "",
-      option2: "",
-      option3: "",
-      option4: "",
-      sign: "",
-      answerIndex: 0,
-    });
+    setFormData({ ...initialForm });
     setImagePreview(null);
     setEditingQuestion(null);
   };
@@ -394,7 +446,10 @@ export default function AdminQuestionsPage() {
                 <DialogTrigger asChild>
                   <Button
                     className="bg-sky-600 hover:bg-sky-700"
-                    onClick={resetForm}
+                    onClick={() => {
+                      resetForm();
+                      setIsAddDialogOpen(true);
+                    }}
                   >
                     <Plus className="w-4 h-4 mr-2" />
                     Add Question
@@ -402,7 +457,7 @@ export default function AdminQuestionsPage() {
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>Add New Question</DialogTitle>
+                    <DialogTitle>{editingQuestion ? "Edit" : "Add New"} Question</DialogTitle>
                     <DialogDescription>
                       Add a new question in{" "}
                       {currentLang === "en"
@@ -417,7 +472,7 @@ export default function AdminQuestionsPage() {
                   <QuestionForm
                     formData={formData}
                     setFormData={setFormData}
-                    onSubmit={handleAddQuestion}
+                    onSubmit={editingQuestion ? handleEditQuestion : handleAddQuestion}
                     onCancel={() => {
                       setIsAddDialogOpen(false);
                       resetForm();
@@ -426,6 +481,9 @@ export default function AdminQuestionsPage() {
                     uploadingImage={uploadingImage}
                     imagePreview={imagePreview}
                     currentLang={currentLang}
+                    isEdit={!!editingQuestion}
+                    uploadOptionImage={uploadOptionImage}
+
                   />
                 </DialogContent>
               </Dialog>
@@ -465,8 +523,8 @@ export default function AdminQuestionsPage() {
       <div className="max-w-7xl mx-auto px-6 mt-6 bg-white rounded-lg shadow-sm p-4">
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10" />
-          
-          {currentLang === "ml" || currentLang === "bg"? (
+
+          {currentLang === "ml" || currentLang === "bg" ? (
             <ReactTransliterate
               lang="ml"
               value={searchQuery}
@@ -550,6 +608,8 @@ export default function AdminQuestionsPage() {
                           uploadingImage={uploadingImage}
                           imagePreview={imagePreview}
                           currentLang={currentLang}
+                          uploadOptionImage={uploadOptionImage}
+
                         />
                       </DialogContent>
                     </Dialog>
@@ -570,7 +630,7 @@ export default function AdminQuestionsPage() {
               <CardContent className="pt-4">
                 {question.sign && (
                   <div className="mb-4">
-                    <Image
+                    <img
                       src={question.sign}
                       alt="Traffic Sign"
                       width={200}
@@ -580,18 +640,41 @@ export default function AdminQuestionsPage() {
                   </div>
                 )}
                 <div className="space-y-2">
-                  {question.options.map((option, idx) => (
-                    <div
-                      key={idx}
-                      className={`p-2 rounded-lg text-sm ${
-                        idx === question.answerIndex
-                          ? "bg-green-100 border-2 border-green-500 font-semibold text-green-800"
-                          : "bg-slate-100 border border-slate-300 text-slate-700"
-                      }`}
-                    >
-                      {String.fromCharCode(65 + idx)}. {option}
-                    </div>
-                  ))}
+                  {question.options.map((option, idx) => {
+                    const isImage =
+                      (question.optionTypes && question.optionTypes[idx]) ||
+                      String(option || "").startsWith("http");
+                    return (
+                      <div
+                        key={idx}
+                        className={`p-2 rounded-lg text-sm ${
+                          idx === question.answerIndex
+                            ? "bg-green-100 border-2 border-green-500 font-semibold text-green-800"
+                            : "bg-slate-100 border border-slate-300 text-slate-700"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="min-w-[20px] font-medium">
+                            {String.fromCharCode(65 + idx)}.
+                          </div>
+                          <div className="flex-1">
+                            {isImage ? (
+                              <div className="w-40 h-28 relative">
+                                <img
+                                  src={String(option)}
+                                  alt={`Option ${idx + 1}`}
+                                  
+                                  className="object-contain rounded-md border bg-white fill"
+                                />
+                              </div>
+                            ) : (
+                              <div>{option}</div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </CardContent>
             </Card>
@@ -602,9 +685,7 @@ export default function AdminQuestionsPage() {
           <Card className="border-2 border-dashed border-slate-300 bg-slate-50">
             <CardContent className="py-12 text-center">
               <FileImage className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-              <p className="text-slate-600 text-lg">
-                No matching questions found.
-              </p>
+              <p className="text-slate-600 text-lg">No matching questions found.</p>
             </CardContent>
           </Card>
         )}
@@ -613,7 +694,8 @@ export default function AdminQuestionsPage() {
         {filteredQuestions.length > 0 && (
           <div className="mt-8 flex items-center justify-between bg-white rounded-lg shadow-sm p-4">
             <div className="text-sm text-slate-600">
-              Showing {startIndex + 1} to {Math.min(endIndex, filteredQuestions.length)} of{" "}
+              Showing {startIndex + 1} to{" "}
+              {Math.min(endIndex, filteredQuestions.length)} of{" "}
               {filteredQuestions.length} questions
             </div>
 
@@ -630,43 +712,43 @@ export default function AdminQuestionsPage() {
               </Button>
 
               <div className="flex items-center gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-                  // Show first page, last page, current page, and pages around current
-                  const showPage =
-                    page === 1 ||
-                    page === totalPages ||
-                    (page >= currentPage - 1 && page <= currentPage + 1);
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => {
+                    // Show first page, last page, current page, and pages around current
+                    const showPage =
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1);
 
-                  const showEllipsis =
-                    (page === 2 && currentPage > 3) ||
-                    (page === totalPages - 1 && currentPage < totalPages - 2);
+                    const showEllipsis =
+                      (page === 2 && currentPage > 3) ||
+                      (page === totalPages - 1 && currentPage < totalPages - 2);
 
-                  if (!showPage && !showEllipsis) return null;
+                    if (!showPage && !showEllipsis) return null;
 
-                  if (showEllipsis) {
+                    if (showEllipsis) {
+                      return (
+                        <span key={page} className="px-2 text-slate-400">
+                          ...
+                        </span>
+                      );
+                    }
+
                     return (
-                      <span key={page} className="px-2 text-slate-400">
-                        ...
-                      </span>
+                      <Button
+                        key={page}
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(page)}
+                        className={
+                          currentPage === page ? "bg-sky-600 hover:bg-sky-700" : ""
+                        }
+                      >
+                        {page}
+                      </Button>
                     );
                   }
-
-                  return (
-                    <Button
-                      key={page}
-                      variant={currentPage === page ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setCurrentPage(page)}
-                      className={
-                        currentPage === page
-                          ? "bg-sky-600 hover:bg-sky-700"
-                          : ""
-                      }
-                    >
-                      {page}
-                    </Button>
-                  );
-                })}
+                )}
               </div>
 
               <Button
@@ -696,9 +778,11 @@ export default function AdminQuestionsPage() {
           aria-label="Scroll to top"
         >
           <ArrowUp className="w-6 h-6" />
-          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 
+          <span
+            className="absolute right-full mr-3 top-1/2 -translate-y-1/2 
            bg-slate-800 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap 
-           opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+           opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+          >
             Back to top
           </span>
         </button>
@@ -719,6 +803,7 @@ function QuestionForm({
   uploadingImage,
   imagePreview,
   currentLang,
+  uploadOptionImage,
   isEdit = false,
 }: {
   formData: any;
@@ -726,11 +811,13 @@ function QuestionForm({
   onSubmit: () => void;
   onCancel: () => void;
   handleImageUpload: (file: File) => Promise<void>;
+  uploadOptionImage: (file: File, key: string) => Promise<void>; // ← ADD THIS
   uploadingImage: boolean;
   imagePreview: string | null;
   currentLang: "en" | "ml" | "ta" | "bg";
   isEdit?: boolean;
-}) {
+})
+ {
   const isTransliterate = currentLang === "ml" || currentLang === "ta";
 
   return (
@@ -786,12 +873,7 @@ function QuestionForm({
           )}
           {imagePreview && (
             <div className="relative w-32 h-32 border-2 border-slate-200 rounded-lg overflow-hidden">
-              <Image
-                src={imagePreview}
-                alt="Preview"
-                fill
-                className="object-contain"
-              />
+              <img src={imagePreview} alt="Preview"  className="object-contain fill" />
             </div>
           )}
         </div>
@@ -819,13 +901,89 @@ function QuestionForm({
                 )}
               />
             ) : (
-              <Input
-                value={formData[`option${num}`]}
-                onChange={(e) =>
-                  setFormData({ ...formData, [`option${num}`]: e.target.value })
-                }
-                placeholder={`Option ${num}`}
-              />
+              <div className="border p-3 rounded-md bg-slate-50">
+                <div className="flex justify-between items-center mb-2">
+                  <Label>Option {num}</Label>
+
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-slate-600">Image?</span>
+                    <input
+                      type="checkbox"
+                      checked={formData[`option${num}IsImage`]}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          [`option${num}IsImage`]: e.target.checked,
+                          // if switching off image, keep existing URL but allow edit; if switching on and no url, clear field
+                          ...(e.target.checked ? {} : {}),
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+
+                {/* If image option */}
+                {formData[`option${num}IsImage`] ? (
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) uploadOptionImage(file, `option${num}`);
+                      }}
+                      className="cursor-pointer"
+                    />
+
+                    {formData[`option${num}`] && (
+                      <div className="mt-2">
+                        <img
+                          src={formData[`option${num}`]}
+                          alt="Option Image"
+                          width={120}
+                          height={120}
+                          className="border rounded-md bg-white object-contain"
+                        />
+                        <div className="mt-2 flex gap-2">
+                          <Input
+                            value={formData[`option${num}`]}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                [`option${num}`]: e.target.value,
+                              })
+                            }
+                            placeholder="Image URL (or upload)"
+                          />
+                          <Button
+                            variant="outline"
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                [`option${num}`]: "",
+                                [`option${num}IsImage`]: false,
+                              })
+                            }
+                          >
+                            Clear
+                          </Button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <Input
+                    value={formData[`option${num}`]}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        [`option${num}`]: e.target.value,
+                      })
+                    }
+                    placeholder={`Option ${num}`}
+                  />
+                )}
+              </div>
             )}
           </div>
         ))}
@@ -852,10 +1010,7 @@ function QuestionForm({
       </div>
 
       <div className="flex gap-2 pt-4">
-        <Button
-          onClick={onSubmit}
-          className="flex-1 bg-sky-600 hover:bg-sky-700"
-        >
+        <Button onClick={onSubmit} className="flex-1 bg-sky-600 hover:bg-sky-700">
           <Save className="w-4 h-4 mr-2" />
           {isEdit ? "Update" : "Add"} Question
         </Button>
