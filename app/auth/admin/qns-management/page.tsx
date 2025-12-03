@@ -879,115 +879,124 @@ function QuestionForm({
         </div>
       </div>
 
-      <div className="space-y-3">
-        <Label>Options</Label>
-        {[1, 2, 3, 4].map((num) => (
-          <div key={num}>
-            {isTransliterate ? (
+     <div className="space-y-3">
+  <Label>Options</Label>
+
+  {[1, 2, 3, 4].map((num) => {
+    const isImage = formData[`option${num}IsImage`];
+
+    return (
+      <div key={num} className="border p-3 rounded-md bg-slate-50">
+
+        {/* Header with Toggle */}
+        <div className="flex justify-between items-center mb-2">
+          <Label>Option {num}</Label>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-slate-600">Image?</span>
+            <input
+              type="checkbox"
+              checked={isImage}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  [`option${num}IsImage`]: e.target.checked,
+                })
+              }
+            />
+          </div>
+        </div>
+
+        {/* If IMAGE OPTION */}
+        {isImage ? (
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) uploadOptionImage(file, `option${num}`);
+              }}
+              className="cursor-pointer"
+            />
+
+            {formData[`option${num}`] && (
+              <div className="mt-2">
+                <img
+                  src={formData[`option${num}`]}
+                  alt="Option"
+                  width={120}
+                  height={120}
+                  className="border rounded-md bg-white object-contain"
+                />
+
+                <Input
+                  value={formData[`option${num}`]}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      [`option${num}`]: e.target.value,
+                    })
+                  }
+                  className="mt-2"
+                />
+
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    setFormData({
+                      ...formData,
+                      [`option${num}`]: "",
+                      [`option${num}IsImage`]: false,
+                    })
+                  }
+                  className="mt-2"
+                >
+                  Clear
+                </Button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            {/* TEXT OPTION (supports transliteration) */}
+            {currentLang === "ml" || currentLang === "ta" ? (
               <ReactTransliterate
                 lang={currentLang}
                 value={formData[`option${num}`]}
-                onChangeText={(text: string) =>
-                  setFormData({ ...formData, [`option${num}`]: text })
+                onChangeText={(text) =>
+                  setFormData({
+                    ...formData,
+                    [`option${num}`]: text,
+                  })
                 }
                 renderComponent={(props) => (
                   <input
                     {...props}
                     placeholder={`Option ${num}`}
-                    className="w-full px-3 py-2 border-2 border-slate-300 rounded-md
-                     focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
-                     shadow-sm transition"
+                    className="w-full px-3 py-2 border-2 border-slate-300 rounded-md"
                   />
                 )}
               />
             ) : (
-              <div className="border p-3 rounded-md bg-slate-50">
-                <div className="flex justify-between items-center mb-2">
-                  <Label>Option {num}</Label>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-slate-600">Image?</span>
-                    <input
-                      type="checkbox"
-                      checked={formData[`option${num}IsImage`]}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          [`option${num}IsImage`]: e.target.checked,
-                          // if switching off image, keep existing URL but allow edit; if switching on and no url, clear field
-                          ...(e.target.checked ? {} : {}),
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-
-                {/* If image option */}
-                {formData[`option${num}IsImage`] ? (
-                  <div>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) uploadOptionImage(file, `option${num}`);
-                      }}
-                      className="cursor-pointer"
-                    />
-
-                    {formData[`option${num}`] && (
-                      <div className="mt-2">
-                        <img
-                          src={formData[`option${num}`]}
-                          alt="Option Image"
-                          width={120}
-                          height={120}
-                          className="border rounded-md bg-white object-contain"
-                        />
-                        <div className="mt-2 flex gap-2">
-                          <Input
-                            value={formData[`option${num}`]}
-                            onChange={(e) =>
-                              setFormData({
-                                ...formData,
-                                [`option${num}`]: e.target.value,
-                              })
-                            }
-                            placeholder="Image URL (or upload)"
-                          />
-                          <Button
-                            variant="outline"
-                            onClick={() =>
-                              setFormData({
-                                ...formData,
-                                [`option${num}`]: "",
-                                [`option${num}IsImage`]: false,
-                              })
-                            }
-                          >
-                            Clear
-                          </Button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <Input
-                    value={formData[`option${num}`]}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        [`option${num}`]: e.target.value,
-                      })
-                    }
-                    placeholder={`Option ${num}`}
-                  />
-                )}
-              </div>
+              <Input
+                value={formData[`option${num}`]}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    [`option${num}`]: e.target.value,
+                  })
+                }
+                placeholder={`Option ${num}`}
+              />
             )}
-          </div>
-        ))}
+          </>
+        )}
       </div>
+    );
+  })}
+</div>
+
 
       <div>
         <Label htmlFor="answer">Correct Answer</Label>
