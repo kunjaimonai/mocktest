@@ -406,9 +406,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               />
             )}
             <div>
-              <h1 className="text-xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-sky-600 to-indigo-600">
+              <h1
+                className={`text-xl md:text-3xl font-bold bg-clip-text text-transparent ${
+                  schoolData.id === 9741
+                    ? "bg-gradient-to-r from-red-500 to-red-700"
+                    : "bg-gradient-to-r from-sky-600 to-indigo-600"
+                }`}
+              >
                 {schoolData.name}
               </h1>
+
               <p className="text-sm text-slate-600 mt-1">
                 ph:{schoolData.number}
               </p>
@@ -465,70 +472,71 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 ) : null}
               </div>
 
-<div className="grid gap-3 text-slate-800">
-  {q.options
-    .filter((opt) => opt && opt.trim() !== "")
-    .map((opt, i) => {
-      const isSelected = selected === i;
-      const showResult = selected !== null;
-      const correct = q.answerIndex === i;
+              <div className="grid gap-3 text-slate-800">
+                {q.options
+                  .filter((opt) => opt && opt.trim() !== "")
+                  .map((opt, i) => {
+                    const isSelected = selected === i;
+                    const showResult = selected !== null;
+                    const correct = q.answerIndex === i;
 
-      const isImage =
-        opt.startsWith("http://") ||
-        opt.startsWith("https://");
+                    const isImage =
+                      opt.startsWith("http://") || opt.startsWith("https://");
 
-      let cls =
-        "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
+                    let cls =
+                      "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
 
-      if (!showResult)
-        cls +=
-          "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
+                    if (!showResult)
+                      cls +=
+                        "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
 
-      if (showResult && correct)
-        cls += "bg-green-500 text-white border-green-400";
+                    if (showResult && correct)
+                      cls += "bg-green-500 text-white border-green-400";
 
-      if (showResult && isSelected && !correct)
-        cls += "bg-red-500 text-white border-red-400";
+                    if (showResult && isSelected && !correct)
+                      cls += "bg-red-500 text-white border-red-400";
 
-      return (
-        <motion.div
-          whileHover={{ scale: showResult ? 1 : 1.02 }}
-          whileTap={{ scale: showResult ? 1 : 0.98 }}
-          key={i}
-          className={cls}
-          onClick={() => handleSelect(i)}
-        >
-          <div className="flex items-center gap-3">
-            {/* Letter bubble */}
-            <div
-              className={`w-6 h-6 rounded-full border-2 flex items-center justify-center font-semibold text-sm md:text-lg ${
-                showResult && correct ? "border-white" : "border-slate-400"
-              }`}
-            >
-              {String.fromCharCode(65 + i)}
+                    return (
+                      <motion.div
+                        whileHover={{ scale: showResult ? 1 : 1.02 }}
+                        whileTap={{ scale: showResult ? 1 : 0.98 }}
+                        key={i}
+                        className={cls}
+                        onClick={() => handleSelect(i)}
+                      >
+                        <div className="flex items-center gap-3">
+                          {/* Letter bubble */}
+                          <div
+                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center font-semibold text-sm md:text-lg ${
+                              showResult && correct
+                                ? "border-white"
+                                : "border-slate-400"
+                            }`}
+                          >
+                            {String.fromCharCode(65 + i)}
+                          </div>
+
+                          {/* Content: image or text */}
+                          <div className="flex-1">
+                            {isImage ? (
+                              <div className="relative w-40 h-28">
+                                <Image
+                                  src={opt}
+                                  alt={`Option ${i + 1}`}
+                                  fill
+                                  className="object-contain rounded-lg border bg-white"
+                                />
+                              </div>
+                            ) : (
+                              <span className="text-sm md:text-lg">{opt}</span>
+                            )}
+                          </div>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+              </div>
             </div>
-
-            {/* Content: image or text */}
-            <div className="flex-1">
-              {isImage ? (
-                <div className="relative w-40 h-28">
-                  <Image
-                    src={opt}
-                    alt={`Option ${i + 1}`}
-                    fill
-                    className="object-contain rounded-lg border bg-white"
-                  />
-                </div>
-              ) : (
-                <span className="text-sm md:text-lg">{opt}</span>
-              )}
-            </div>
-          </div>
-        </motion.div>
-      );
-    })}
-</div>
-</div>
 
             <div className="flex justify-end">
               <button

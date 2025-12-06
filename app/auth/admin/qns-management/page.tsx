@@ -42,8 +42,6 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
-import { ReactTransliterate } from "react-transliterate";
-import "react-transliterate/dist/index.css";
 
 type Question = {
   id: number;
@@ -190,13 +188,18 @@ export default function AdminQuestionsPage() {
     const text = searchQuery.toLowerCase();
     const matchesQ = q.q?.toLowerCase().includes(text);
     const matchesOption = q.options?.some((opt) =>
-      String(opt || "").toLowerCase().includes(text)
+      String(opt || "")
+        .toLowerCase()
+        .includes(text)
     );
     return matchesQ || matchesOption;
   });
 
   // Pagination calculations
-  const totalPages = Math.max(1, Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredQuestions.length / ITEMS_PER_PAGE)
+  );
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
   const paginatedQuestions = filteredQuestions.slice(startIndex, endIndex);
@@ -341,7 +344,9 @@ export default function AdminQuestionsPage() {
     setEditingQuestion(question);
 
     // If question has optionTypes saved, use them; otherwise infer from URL presence
-    const types = question.optionTypes ?? question.options.map((o) => String(o || "").startsWith("http"));
+    const types =
+      question.optionTypes ??
+      question.options.map((o) => String(o || "").startsWith("http"));
 
     setFormData({
       q: question.q,
@@ -457,7 +462,9 @@ export default function AdminQuestionsPage() {
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>{editingQuestion ? "Edit" : "Add New"} Question</DialogTitle>
+                    <DialogTitle>
+                      {editingQuestion ? "Edit" : "Add New"} Question
+                    </DialogTitle>
                     <DialogDescription>
                       Add a new question in{" "}
                       {currentLang === "en"
@@ -472,7 +479,9 @@ export default function AdminQuestionsPage() {
                   <QuestionForm
                     formData={formData}
                     setFormData={setFormData}
-                    onSubmit={editingQuestion ? handleEditQuestion : handleAddQuestion}
+                    onSubmit={
+                      editingQuestion ? handleEditQuestion : handleAddQuestion
+                    }
                     onCancel={() => {
                       setIsAddDialogOpen(false);
                       resetForm();
@@ -483,7 +492,6 @@ export default function AdminQuestionsPage() {
                     currentLang={currentLang}
                     isEdit={!!editingQuestion}
                     uploadOptionImage={uploadOptionImage}
-
                   />
                 </DialogContent>
               </Dialog>
@@ -524,32 +532,15 @@ export default function AdminQuestionsPage() {
         <div className="relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none z-10" />
 
-          {currentLang === "ml" || currentLang === "bg" ? (
-            <ReactTransliterate
-              lang="ml"
-              value={searchQuery}
-              onChangeText={(text: string) => setSearchQuery(text)}
-              renderComponent={(props) => (
-                <input
-                  {...props}
-                  placeholder="Search questions, options, or keywords..."
-                  className="w-full pl-12 pr-10 py-3 rounded-full border-2 border-slate-300
-                   focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
-                   shadow-sm transition"
-                />
-              )}
-            />
-          ) : (
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search questions, options, or keywords..."
-              className="w-full pl-12 pr-10 py-3 rounded-full border-2 border-slate-300
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search questions, options, or keywords..."
+            className="w-full pl-12 pr-10 py-3 rounded-full border-2 border-slate-300
                focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
                shadow-sm transition"
-            />
-          )}
+          />
 
           {searchQuery.length > 0 && (
             <button
@@ -609,7 +600,6 @@ export default function AdminQuestionsPage() {
                           imagePreview={imagePreview}
                           currentLang={currentLang}
                           uploadOptionImage={uploadOptionImage}
-
                         />
                       </DialogContent>
                     </Dialog>
@@ -635,6 +625,7 @@ export default function AdminQuestionsPage() {
                       alt="Traffic Sign"
                       width={200}
                       height={200}
+                      loading="lazy"
                       className="rounded-lg border-2 border-slate-200 w-full object-contain bg-white"
                     />
                   </div>
@@ -663,7 +654,7 @@ export default function AdminQuestionsPage() {
                                 <img
                                   src={String(option)}
                                   alt={`Option ${idx + 1}`}
-                                  
+                                  loading="lazy"
                                   className="object-contain rounded-md border bg-white fill"
                                 />
                               </div>
@@ -685,7 +676,9 @@ export default function AdminQuestionsPage() {
           <Card className="border-2 border-dashed border-slate-300 bg-slate-50">
             <CardContent className="py-12 text-center">
               <FileImage className="w-12 h-12 text-slate-400 mx-auto mb-3" />
-              <p className="text-slate-600 text-lg">No matching questions found.</p>
+              <p className="text-slate-600 text-lg">
+                No matching questions found.
+              </p>
             </CardContent>
           </Card>
         )}
@@ -741,7 +734,9 @@ export default function AdminQuestionsPage() {
                         size="sm"
                         onClick={() => setCurrentPage(page)}
                         className={
-                          currentPage === page ? "bg-sky-600 hover:bg-sky-700" : ""
+                          currentPage === page
+                            ? "bg-sky-600 hover:bg-sky-700"
+                            : ""
                         }
                       >
                         {page}
@@ -816,42 +811,20 @@ function QuestionForm({
   imagePreview: string | null;
   currentLang: "en" | "ml" | "ta" | "bg";
   isEdit?: boolean;
-})
- {
-  const isTransliterate = currentLang === "ml" || currentLang === "ta";
-
+}) {
   return (
     <div className="space-y-4">
       <div>
         <Label htmlFor="question">Question</Label>
-        {isTransliterate ? (
-          <ReactTransliterate
-            lang={currentLang}
-            value={formData.q}
-            onChangeText={(text: string) =>
-              setFormData({ ...formData, q: text })
-            }
-            renderComponent={(props) => (
-              <textarea
-                {...props}
-                placeholder="Enter the question"
-                rows={3}
-                className="w-full mt-1 px-3 py-2 border-2 border-slate-300 rounded-md
-                 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 focus:outline-none
-                 shadow-sm transition resize-none"
-              />
-            )}
-          />
-        ) : (
-          <Textarea
-            id="question"
-            value={formData.q}
-            onChange={(e) => setFormData({ ...formData, q: e.target.value })}
-            placeholder="Enter the question"
-            rows={3}
-            className="mt-1"
-          />
-        )}
+
+        <Textarea
+          id="question"
+          value={formData.q}
+          onChange={(e) => setFormData({ ...formData, q: e.target.value })}
+          placeholder="Enter the question"
+          rows={3}
+          className="mt-1"
+        />
       </div>
 
       <div>
@@ -873,130 +846,113 @@ function QuestionForm({
           )}
           {imagePreview && (
             <div className="relative w-32 h-32 border-2 border-slate-200 rounded-lg overflow-hidden">
-              <img src={imagePreview} alt="Preview"  className="object-contain fill" />
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="object-contain fill"
+                loading="lazy"
+              />
             </div>
           )}
         </div>
       </div>
 
-     <div className="space-y-3">
-  <Label>Options</Label>
+      <div className="space-y-3">
+        <Label>Options</Label>
 
-  {[1, 2, 3, 4].map((num) => {
-    const isImage = formData[`option${num}IsImage`];
+        {[1, 2, 3, 4].map((num) => {
+          const isImage = formData[`option${num}IsImage`];
 
-    return (
-      <div key={num} className="border p-3 rounded-md bg-slate-50">
+          return (
+            <div key={num} className="border p-3 rounded-md bg-slate-50">
+              {/* Header with Toggle */}
+              <div className="flex justify-between items-center mb-2">
+                <Label>Option {num}</Label>
 
-        {/* Header with Toggle */}
-        <div className="flex justify-between items-center mb-2">
-          <Label>Option {num}</Label>
-
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-600">Image?</span>
-            <input
-              type="checkbox"
-              checked={isImage}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  [`option${num}IsImage`]: e.target.checked,
-                })
-              }
-            />
-          </div>
-        </div>
-
-        {/* If IMAGE OPTION */}
-        {isImage ? (
-          <div>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) uploadOptionImage(file, `option${num}`);
-              }}
-              className="cursor-pointer"
-            />
-
-            {formData[`option${num}`] && (
-              <div className="mt-2">
-                <img
-                  src={formData[`option${num}`]}
-                  alt="Option"
-                  width={120}
-                  height={120}
-                  className="border rounded-md bg-white object-contain"
-                />
-
-                <Input
-                  value={formData[`option${num}`]}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      [`option${num}`]: e.target.value,
-                    })
-                  }
-                  className="mt-2"
-                />
-
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    setFormData({
-                      ...formData,
-                      [`option${num}`]: "",
-                      [`option${num}IsImage`]: false,
-                    })
-                  }
-                  className="mt-2"
-                >
-                  Clear
-                </Button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <>
-            {/* TEXT OPTION (supports transliteration) */}
-            {currentLang === "ml" || currentLang === "ta" ? (
-              <ReactTransliterate
-                lang={currentLang}
-                value={formData[`option${num}`]}
-                onChangeText={(text) =>
-                  setFormData({
-                    ...formData,
-                    [`option${num}`]: text,
-                  })
-                }
-                renderComponent={(props) => (
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-600">Image?</span>
                   <input
-                    {...props}
-                    placeholder={`Option ${num}`}
-                    className="w-full px-3 py-2 border-2 border-slate-300 rounded-md"
+                    type="checkbox"
+                    checked={isImage}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        [`option${num}IsImage`]: e.target.checked,
+                      })
+                    }
                   />
-                )}
-              />
-            ) : (
-              <Input
-                value={formData[`option${num}`]}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    [`option${num}`]: e.target.value,
-                  })
-                }
-                placeholder={`Option ${num}`}
-              />
-            )}
-          </>
-        )}
-      </div>
-    );
-  })}
-</div>
+                </div>
+              </div>
 
+              {/* If IMAGE OPTION */}
+              {isImage ? (
+                <div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) uploadOptionImage(file, `option${num}`);
+                    }}
+                    className="cursor-pointer"
+                  />
+
+                  {formData[`option${num}`] && (
+                    <div className="mt-2">
+                      <img
+                        src={formData[`option${num}`]}
+                        alt="Option"
+                        width={120}
+                        height={120}
+                        className="border rounded-md bg-white object-contain"
+                        loading="lazy"
+                      />
+
+                      <Input
+                        value={formData[`option${num}`]}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            [`option${num}`]: e.target.value,
+                          })
+                        }
+                        className="mt-2"
+                      />
+
+                      <Button
+                        variant="outline"
+                        onClick={() =>
+                          setFormData({
+                            ...formData,
+                            [`option${num}`]: "",
+                            [`option${num}IsImage`]: false,
+                          })
+                        }
+                        className="mt-2"
+                      >
+                        Clear
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <Input
+                    value={formData[`option${num}`]}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        [`option${num}`]: e.target.value,
+                      })
+                    }
+                    placeholder={`Option ${num}`}
+                  />
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
       <div>
         <Label htmlFor="answer">Correct Answer</Label>
@@ -1019,7 +975,10 @@ function QuestionForm({
       </div>
 
       <div className="flex gap-2 pt-4">
-        <Button onClick={onSubmit} className="flex-1 bg-sky-600 hover:bg-sky-700">
+        <Button
+          onClick={onSubmit}
+          className="flex-1 bg-sky-600 hover:bg-sky-700"
+        >
           <Save className="w-4 h-4 mr-2" />
           {isEdit ? "Update" : "Add"} Question
         </Button>

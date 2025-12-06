@@ -42,6 +42,9 @@ const handleLogin = async () => {
   }
 
   localStorage.setItem("loggedInSchoolId", String(school.id));
+  if(school.id === 7927)
+  router.push("/mocktest");
+  else
   router.push("/flow");
 };
 
