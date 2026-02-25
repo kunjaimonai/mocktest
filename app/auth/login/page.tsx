@@ -1,62 +1,69 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
-
-type School = {
-  id: number;
-  name: string;
-  paymentstatus?: "pending" | "completed";
-};
 
 export default function LoginPage() {
   const router = useRouter();
-  const [schools, setSchools] = useState<School[]>([]);
   const [institutionCode, setInstitutionCode] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-const handleLogin = async () => {
-  setError("");
+  const handleLogin = async () => {
+    setError("");
 
-  if (!institutionCode.trim()) {
-    setError("Please enter your institution code");
-    return;
-  }
+    if (!institutionCode.trim()) {
+      setError("Please enter your institution code");
+      return;
+    }
 
-  const { data: school, error: fetchError } = await supabase
-    .from("schools")
-    .select("*")
-    .eq("id", institutionCode.trim())
-    .single();
+    try {
+      setLoading(true);
 
-  if (fetchError || !school) {
-    setError("Invalid institution code");
-    return;
-  }
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          institutionCode: institutionCode.trim(),
+        }),
+      });
 
-  if (school.paymentstatus !== "completed") {
-    setError("Payment not approved yet. Please contact admin.");
-    return;
-  }
+      const result = await res.json();
 
-  localStorage.setItem("loggedInSchoolId", String(school.id));
-  if(school.id === 7927)
-  router.push("/mocktest");
-  else
-  router.push("/flow");
-};
+      if (!res.ok) {
+        setError(result.error || "Something went wrong");
+        return;
+      }
 
+      // Save login state
+      localStorage.setItem("loggedInSchoolId", String(result.id));
+
+      // Redirect
+      if (result.id === 7927) {
+        router.push("/mocktest");
+      } else {
+        router.push("/flow");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 flex flex-col items-center justify-center p-6">
       <div className="flex flex-row items-center mb-8 gap-4">
-        <Image src="/learners_logo.png" width={80} height={100} alt=""></Image>
+        <Image src="/learners_logo.png" width={80} height={100} alt="" />
         <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-center">
-          <span id="text">LEARNERS MOCK TEST KERALA</span>
+          LEARNERS MOCK TEST KERALA
         </h1>
       </div>
+
       <motion.div
         className="w-full max-w-md bg-white rounded-2xl shadow-2xl p-8 border border-slate-200"
         initial={{ opacity: 0, y: 20 }}
@@ -68,11 +75,11 @@ const handleLogin = async () => {
         </h1>
 
         <div className="space-y-6">
-          {/* Institution Code Input */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Institution Code
             </label>
+
             <input
               type="text"
               value={institutionCode}
@@ -80,14 +87,13 @@ const handleLogin = async () => {
                 setInstitutionCode(e.target.value);
                 setError("");
               }}
-              placeholder="Enter 4-digit code (e.g. 1234)"
+              placeholder="Enter 4-digit code"
               onKeyDown={(e) => e.key === "Enter" && handleLogin()}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-sky-500 text-slate-800 text-center font-semibold text-lg tracking-widest"
               maxLength={4}
             />
           </div>
 
-          {/* Error message */}
           {error && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -98,17 +104,16 @@ const handleLogin = async () => {
             </motion.div>
           )}
 
-          {/* Login button */}
           <motion.button
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             onClick={handleLogin}
-            className="w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 text-white rounded-lg font-semibold shadow-lg"
+            disabled={loading}
+            className="w-full py-3 bg-gradient-to-r from-sky-500 to-indigo-600 text-white rounded-lg font-semibold shadow-lg disabled:opacity-50"
           >
-            Login
+            {loading ? "Checking..." : "Login"}
           </motion.button>
 
-          {/* Register link */}
           <motion.div
             className="text-center text-sm text-slate-600 mt-4"
             initial={{ opacity: 0 }}
@@ -117,7 +122,7 @@ const handleLogin = async () => {
             Don&apos;t have an account?{" "}
             <span
               onClick={() => router.push("/auth/register")}
-              className="text-sky-600 font-medium hover:underline"
+              className="text-sky-600 font-medium hover:underline cursor-pointer"
             >
               Register now
             </span>
