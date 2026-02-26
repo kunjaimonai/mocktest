@@ -2,7 +2,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Watermark from "../components/watermark";
-import { supabase } from "@/lib/supabase";
 import Image from "next/image";
 
 function handleLogout() {
@@ -44,12 +43,11 @@ async function preloadImagesAsync(questions: Question[]) {
     if (!q.sign) return Promise.resolve();
     return new Promise<void>((resolve) => {
       const img = new window.Image();
-      img.src = q.sign ?? "";
+      img.src = `/api/mocktest?url=${encodeURIComponent(q.sign ?? "")}`;
       img.onload = () => resolve();
       img.onerror = () => resolve();
     });
   });
-
   await Promise.all(promises);
 }
 
@@ -77,20 +75,28 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  function proxyImage(url?: string | null) {
+    if (!url) return undefined;
+    return `/api/mocktest?url=${encodeURIComponent(url)}`;
+  }
+
+  async function fetchFromAPI(body: object) {
+    const res = await fetch("/api/mocktest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error("API error");
+    return res.json();
+  }
   // Load school if not passed
   useEffect(() => {
     if (!schoolData && typeof window !== "undefined") {
       const storedId = localStorage.getItem("loggedInSchoolId");
       if (storedId) {
-        const fetchSchool = async () => {
-          const { data, error } = await supabase
-            .from("schools")
-            .select("*")
-            .eq("id", parseInt(storedId))
-            .single();
-          if (!error && data) setSchoolData(data);
-        };
-        fetchSchool();
+        fetchFromAPI({ type: "school", schoolId: parseInt(storedId) })
+          .then((data) => setSchoolData(data))
+          .catch(console.error);
       }
     }
   }, [schoolData]);
@@ -101,36 +107,26 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
     const loadQuestions = async () => {
       setLoadingQuestions(true);
+      try {
+        const data = (await fetchFromAPI({
+          type: "questions",
+          language,
+        })) as Question[];
 
-      const table =
-        language === "en"
-          ? "english_questions"
-          : language === "ml"
-          ? "malayalam_questions"
-          : language === "ta"
-          ? "tamil_questions"
-          : "badge_questions";
+        await preloadImagesAsync(data);
+        setQuestions(data);
 
-      const { data, error } = await supabase.from(table).select("*");
-
-      if (!error && data) {
-        const shuffled = shuffleArray(data);
-        const pickedQuestions =
-          language === "bg" ? shuffled.slice(0, 20) : shuffled.slice(0, 30);
-
-        await preloadImagesAsync(pickedQuestions);
-
-        setQuestions(pickedQuestions);
         setCurrentIdx(0);
         setScore(0);
         setSelected(null);
         setFinished(false);
         setTestPassed(false);
-
         setTimeLeft(30);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoadingQuestions(false);
       }
-
-      setLoadingQuestions(false);
     };
 
     loadQuestions();
@@ -400,7 +396,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           <div className="flex items-center gap-4">
             {schoolData.logo && (
               <img
-                src={schoolData.logo}
+                src={proxyImage(schoolData.logo)}
                 alt={`${schoolData.name} Logo`}
                 className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
@@ -463,7 +459,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 <span>{q.q}</span>
                 {q.sign ? (
                   <Image
-                    src={q.sign}
+                    src={proxyImage(q.sign) ?? ""}
                     alt="Sign"
                     width={48}
                     height={48}
@@ -521,7 +517,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                             {isImage ? (
                               <div className="relative w-40 h-28">
                                 <Image
-                                  src={opt}
+                                  src={proxyImage(opt) ?? ""}
                                   alt={`Option ${i + 1}`}
                                   fill
                                   className="object-contain rounded-lg border bg-white"

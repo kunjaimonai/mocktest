@@ -152,9 +152,20 @@ export default function AdminPage() {
   };
 
   // SEARCH FUNCTION
-  const filteredSchools = schools.filter((school) =>
-    school.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredSchools = schools.filter((school) => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return true;
+
+    // match by name
+    if (school.name.toLowerCase().includes(q)) return true;
+
+    const qNoHash = q.startsWith("#") ? q.slice(1) : q;
+    const qNoPrefix = qNoHash.startsWith("id:") ? qNoHash.slice(3) : qNoHash;
+    const num = parseInt(qNoPrefix, 10);
+    if (!isNaN(num) && school.id === num) return true;
+
+    return false;
+  });
 
   // FETCH SCHOOLS
   useEffect(() => {
