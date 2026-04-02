@@ -29,39 +29,34 @@ type School = {
   has_badge: boolean;
 };
 
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-async function preloadImagesAsync(questions: Question[]) {
-  const promises = questions.map((q) => {
-    if (!q.sign) return Promise.resolve();
-    return new Promise<void>((resolve) => {
-      const img = new window.Image();
-      img.src = `/api/mocktest?url=${encodeURIComponent(q.sign ?? "")}`;
-      img.onload = () => resolve();
-      img.onerror = () => resolve();
-    });
-  });
-  await Promise.all(promises);
-}
-
 interface MockTestPageProps {
   school?: School;
 }
 
+type StartQuestionsResponse = {
+  total: number;
+  questions: Question[];
+  nextOffset: number;
+  done: boolean;
+};
+
+type NextChunkResponse = {
+  questions: Question[];
+  nextOffset: number;
+  done: boolean;
+};
+
 const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [testStarted, setTestStarted] = useState(false);
+  const [testMode, setTestMode] = useState<"exam" | "practice">("exam");
 
   const [schoolData, setSchoolData] = useState<School | null>(school || null);
   const [language, setLanguage] = useState<"en" | "ml" | "ta" | "bg">("en");
 
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [totalQuestions, setTotalQuestions] = useState<number>(0);
+  const [nextOffset, setNextOffset] = useState<number>(0);
+  const [allChunksLoaded, setAllChunksLoaded] = useState<boolean>(false);
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [selected, setSelected] = useState<number | null>(null);
@@ -89,6 +84,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     if (!res.ok) throw new Error("API error");
     return res.json();
   }
+
   // Load school if not passed
   useEffect(() => {
     if (!schoolData && typeof window !== "undefined") {
@@ -101,20 +97,22 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   }, [schoolData]);
 
-  // Load  questions
+  // Load first chunk + total count
   useEffect(() => {
     if (!testStarted) return;
 
     const loadQuestions = async () => {
       setLoadingQuestions(true);
       try {
-        const data = (await fetchFromAPI({
-          type: "questions",
+        const startData = (await fetchFromAPI({
+          type: "start",
           language,
-        })) as Question[];
+        })) as StartQuestionsResponse;
 
-        await preloadImagesAsync(data);
-        setQuestions(data);
+        setTotalQuestions(startData?.total ?? 0);
+        setQuestions(startData?.questions ?? []);
+        setNextOffset(startData?.nextOffset ?? 0);
+        setAllChunksLoaded(!!startData?.done);
 
         setCurrentIdx(0);
         setScore(0);
@@ -143,7 +141,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   useEffect(() => {
     if (timerRef.current) clearInterval(timerRef.current);
 
-    if (questions.length > 0) {
+    if (questions.length > 0 && testMode === "exam") {
       setTimeLeft(30);
       startTimer();
     }
@@ -154,58 +152,114 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         timerRef.current = null;
       }
     };
-  }, [currentIdx, questions, startTimer]);
-
-  useEffect(() => {
-    if (timeLeft <= 0 && !finished) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      handleNext();
-    }
-  }, [timeLeft, finished]);
+  }, [currentIdx, questions, startTimer, testMode]);
 
   const handleSelect = (i: number) => {
     if (selected !== null) return;
     setSelected(i);
   };
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
 
-    const q = questions[currentIdx];
-    let newScore = score;
+    const currentQuestion = questions[currentIdx];
+    if (!currentQuestion) return;
 
-    if (selected === q.answerIndex) {
-      newScore = score + 1;
-      setScore(newScore);
+    if (testMode === "exam") {
+      let newScore = score;
 
-      // Update pass score check to 12 out of 20 for "bg" language
-      if (language === "bg" && newScore >= 12) {
-        setTestPassed(true);
-        setFinished(true);
-        return;
-      }
+      if (selected === currentQuestion.answerIndex) {
+        newScore = score + 1;
+        setScore(newScore);
 
-      if (newScore >= 18) {
-        // For other languages (30 questions)
-        setTestPassed(true);
-        setFinished(true);
-        return;
+        // Update pass score check to 12 out of 20 for "bg" language
+        if (language === "bg" && newScore >= 12) {
+          setTestPassed(true);
+          setFinished(true);
+          return;
+        }
+
+        if (newScore >= 18) {
+          // For other languages (30 questions)
+          setTestPassed(true);
+          setFinished(true);
+          return;
+        }
       }
     }
 
     setSelected(null);
 
     const nextIdx = currentIdx + 1;
-    if (nextIdx >= questions.length) {
+    if (nextIdx >= totalQuestions) {
+      if (testMode === "practice") {
+        setTestPassed(true);
+      }
+      setFinished(true);
+      return;
+    }
+
+    let loadedQuestions = questions;
+    if (!loadedQuestions[nextIdx] && !allChunksLoaded) {
+      try {
+        const chunk = (await fetchFromAPI({
+          type: "nextChunk",
+          language,
+          offset: nextOffset,
+        })) as NextChunkResponse;
+
+        const fetched = chunk?.questions ?? [];
+        loadedQuestions = [...loadedQuestions, ...fetched];
+
+        setQuestions(loadedQuestions);
+        setNextOffset(chunk?.nextOffset ?? nextOffset + fetched.length);
+        setAllChunksLoaded(!!chunk?.done || fetched.length === 0);
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    }
+
+    if (!loadedQuestions[nextIdx]) {
       setFinished(true);
       return;
     }
 
     setCurrentIdx(nextIdx);
-  }, [currentIdx, questions, selected, score, language]);
+  }, [
+    currentIdx,
+    questions,
+    selected,
+    score,
+    language,
+    testMode,
+    totalQuestions,
+    nextOffset,
+    allChunksLoaded,
+  ]);
+
+  const handlePrevious = useCallback(() => {
+    if (currentIdx <= 0) return;
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    setSelected(null);
+    setCurrentIdx((idx) => Math.max(0, idx - 1));
+  }, [currentIdx]);
+
+  useEffect(() => {
+    if (testMode === "exam" && timeLeft <= 0 && !finished) {
+      if (timerRef.current) clearInterval(timerRef.current);
+      void handleNext();
+    }
+  }, [timeLeft, finished, handleNext, testMode]);
+
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -232,6 +286,40 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             </h1>
             <p className="text-slate-600">
               Choose your preferred language to begin
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100 space-y-3">
+            <h2 className="text-xl font-bold text-indigo-700 text-center">
+              Select Mode
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                onClick={() => setTestMode("exam")}
+                className={`w-full px-5 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                  testMode === "exam"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "bg-slate-50 border-2 border-indigo-200 text-slate-700 hover:border-indigo-400"
+                }`}
+              >
+                Exam Mode
+              </button>
+
+              <button
+                onClick={() => setTestMode("practice")}
+                className={`w-full px-5 py-3 rounded-xl font-semibold transition-all duration-200 ${
+                  testMode === "practice"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "bg-slate-50 border-2 border-indigo-200 text-slate-700 hover:border-indigo-400"
+                }`}
+              >
+                Practice Mode
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-500 text-center">
+              Practice mode has no timer, no score, and uses Next button only.
             </p>
           </div>
 
@@ -307,7 +395,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 : "bg-slate-300 text-slate-500 cursor-not-allowed"
             }`}
           >
-            {language ? "Start Test →" : "Select Language First"}
+            {language
+              ? testMode === "practice"
+                ? "Start Practice →"
+                : "Start Test →"
+              : "Select Language First"}
           </button>
         </div>
       </div>
@@ -354,15 +446,25 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             testPassed ? "text-green-700" : "text-red-700"
           }`}
         >
-          {testPassed ? "Test Passed!" : "Test Failed!"}
+          {testMode === "practice"
+            ? "Practice Completed!"
+            : testPassed
+            ? "Test Passed!"
+            : "Test Failed!"}
         </h2>
 
-        <p className="mb-6 text-slate-600">
-          Your score:{" "}
-          <span className="font-mono text-2xl text-sky-600 font-bold">
-            {score} / {questions.length}
-          </span>
-        </p>
+        {testMode === "exam" ? (
+          <p className="mb-6 text-slate-600">
+            Your score:{" "}
+            <span className="font-mono text-2xl text-sky-600 font-bold">
+              {score} / {totalQuestions || questions.length}
+            </span>
+          </p>
+        ) : (
+          <p className="mb-6 text-slate-600">
+            You have reached the end of practice questions.
+          </p>
+        )}
 
         <div className="flex gap-3">
           <button
@@ -430,7 +532,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         </div>
 
         <div className="text-sm text-slate-600 mb-3">
-          Q {currentIdx + 1} / {questions.length}
+          Q {currentIdx + 1} / {totalQuestions || questions.length}
         </div>
 
         <AnimatePresence mode="wait">
@@ -441,18 +543,24 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             exit={{ opacity: 0, x: -40 }}
             transition={{ duration: 0.4 }}
           >
-            <div className="flex items-center justify-between mb-4 text-sm text-slate-600">
-              <div>
-                Time left:{" "}
-                <span className="font-mono font-semibold text-slate-800">
-                  {timeLeft}s
-                </span>
+            {testMode === "exam" ? (
+              <div className="flex items-center justify-between mb-4 text-sm text-slate-600">
+                <div>
+                  Time left:{" "}
+                  <span className="font-mono font-semibold text-slate-800">
+                    {timeLeft}s
+                  </span>
+                </div>
+                <div>
+                  Score:{" "}
+                  <span className="font-semibold text-sky-600">{score}</span>
+                </div>
               </div>
-              <div>
-                Score:{" "}
-                <span className="font-semibold text-sky-600">{score}</span>
+            ) : (
+              <div className="mb-4 text-sm text-slate-600 font-medium">
+                Practice mode: No timer, no score.
               </div>
-            </div>
+            )}
 
             <div className="p-4 border rounded-xl mb-4 bg-gradient-to-r from-white to-slate-50">
               <div className="text-sm md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
@@ -534,20 +642,32 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               </div>
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end gap-2">
+              {testMode === "practice" && (
+                <button
+                  onClick={handlePrevious}
+                  disabled={currentIdx === 0}
+                  className="px-4 py-2 border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+              )}
+
               <button
-                onClick={handleNext}
-                disabled={selected === null}
+                onClick={() => void handleNext()}
+                disabled={testMode === "exam" && selected === null}
                 className="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 disabled:opacity-50"
               >
-                Submit Answer
+                {testMode === "exam" ? "Submit Answer" : "Next"}
               </button>
             </div>
           </motion.div>
         </AnimatePresence>
 
         <footer className="mt-6 text-xs text-slate-500 text-center">
-          30s per question
+          {testMode === "exam"
+            ? "30s per question"
+            : "Move to the next question using the Next button"}
         </footer>
       </motion.div>
     </div>
