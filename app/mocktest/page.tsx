@@ -73,7 +73,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const EXAM_QUESTION_LIMIT = 30;
-  const EXAM_PASS_MARK = 12;
+  const EXAM_PASS_MARK = 18;
 
   function proxyImage(url?: string | null) {
     if (!url) return undefined;
