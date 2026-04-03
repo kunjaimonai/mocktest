@@ -4,6 +4,20 @@ import { NextResponse } from 'next/server';
 const QUESTION_COLUMNS = 'id,q,sign,options,answerIndex';
 const CHUNK_SIZE = 8;
 
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function orderRowsByIds<T extends { id: number }>(rows: T[], ids: number[]) {
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  return ids.map((id) => byId.get(id)).filter(Boolean) as T[];
+}
+
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -28,7 +42,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const { type, schoolId, language, index, offset } = await req.json();
+  const { type, schoolId, language, index, offset, orderIds } = await req.json();
 
   const getQuestionTable = (lang: string) =>
     lang === 'en'
@@ -53,34 +67,44 @@ export async function POST(req: Request) {
   if (type === 'start') {
     const table = getQuestionTable(language);
 
-    const [{ count, error: countError }, { data, error: dataError }] =
-      await Promise.all([
-        supabase.from(table).select('id', { count: 'exact', head: true }),
-        supabase
-          .from(table)
-          .select(QUESTION_COLUMNS)
-          .order('id', { ascending: true })
-          .range(0, CHUNK_SIZE - 1),
-      ]);
+    const { data: idRows, error: idError } = await supabase
+      .from(table)
+      .select('id');
 
-    if (countError || dataError) {
+    if (idError) {
       return NextResponse.json(
-        { error: countError?.message || dataError?.message || 'Failed to load questions' },
+        { error: idError.message || 'Failed to load questions' },
         { status: 500 }
       );
     }
 
-    const safeData = data ?? [];
+    const orderIds = shuffleArray((idRows ?? []).map((row) => row.id));
+    const firstIds = orderIds.slice(0, CHUNK_SIZE);
+
+    const { data, error: dataError } = firstIds.length
+      ? await supabase
+          .from(table)
+          .select(QUESTION_COLUMNS)
+          .in('id', firstIds)
+      : { data: [], error: null };
+
+    if (dataError) {
+      return NextResponse.json({ error: dataError.message }, { status: 500 });
+    }
+
+    const safeData = orderRowsByIds(data ?? [], firstIds);
     return NextResponse.json({
-      total: count ?? 0,
+      total: orderIds.length,
+      orderIds,
       questions: safeData,
       nextOffset: safeData.length,
-      done: safeData.length >= (count ?? 0),
+      done: safeData.length >= orderIds.length,
     });
   }
 
   if (type === 'nextChunk') {
     const table = getQuestionTable(language);
+    const safeOrderIds = Array.isArray(orderIds) ? orderIds : [];
     const startOffset = Number.isInteger(offset)
       ? offset
       : parseInt(String(offset ?? '0'), 10);
@@ -89,19 +113,22 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid offset' }, { status: 400 });
     }
 
-    const { data, error } = await supabase
-      .from(table)
-      .select(QUESTION_COLUMNS)
-      .order('id', { ascending: true })
-      .range(startOffset, startOffset + CHUNK_SIZE - 1);
+    const chunkIds = safeOrderIds.slice(startOffset, startOffset + CHUNK_SIZE);
+
+    const { data, error } = chunkIds.length
+      ? await supabase
+          .from(table)
+          .select(QUESTION_COLUMNS)
+          .in('id', chunkIds)
+      : { data: [], error: null };
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
-    const safeData = data ?? [];
+    const safeData = orderRowsByIds(data ?? [], chunkIds);
     return NextResponse.json({
       questions: safeData,
       nextOffset: startOffset + safeData.length,
-      done: safeData.length < CHUNK_SIZE,
+      done: safeData.length < CHUNK_SIZE || startOffset + safeData.length >= safeOrderIds.length,
     });
   }
 

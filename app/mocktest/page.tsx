@@ -36,6 +36,7 @@ interface MockTestPageProps {
 type StartQuestionsResponse = {
   total: number;
   questions: Question[];
+  orderIds: number[];
   nextOffset: number;
   done: boolean;
 };
@@ -55,6 +56,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
   const [questions, setQuestions] = useState<Question[]>([]);
   const [totalQuestions, setTotalQuestions] = useState<number>(0);
+  const [questionOrder, setQuestionOrder] = useState<number[]>([]);
   const [nextOffset, setNextOffset] = useState<number>(0);
   const [allChunksLoaded, setAllChunksLoaded] = useState<boolean>(false);
   const [currentIdx, setCurrentIdx] = useState<number>(0);
@@ -69,6 +71,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const EXAM_QUESTION_LIMIT = 30;
+  const EXAM_PASS_MARK = 12;
 
   function proxyImage(url?: string | null) {
     if (!url) return undefined;
@@ -109,10 +114,29 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           language,
         })) as StartQuestionsResponse;
 
-        setTotalQuestions(startData?.total ?? 0);
-        setQuestions(startData?.questions ?? []);
-        setNextOffset(startData?.nextOffset ?? 0);
-        setAllChunksLoaded(!!startData?.done);
+        const activeOrderIds =
+          testMode === "exam"
+            ? (startData?.orderIds ?? []).slice(0, EXAM_QUESTION_LIMIT)
+            : startData?.orderIds ?? [];
+
+        const activeQuestions =
+          testMode === "exam"
+            ? (startData?.questions ?? []).slice(0, EXAM_QUESTION_LIMIT)
+            : startData?.questions ?? [];
+
+        setTotalQuestions(
+          testMode === "exam"
+            ? Math.min(EXAM_QUESTION_LIMIT, startData?.total ?? 0)
+            : startData?.total ?? 0
+        );
+        setQuestions(activeQuestions);
+        setQuestionOrder(activeOrderIds);
+        setNextOffset(activeQuestions.length);
+        setAllChunksLoaded(
+          testMode === "exam"
+            ? activeOrderIds.length <= activeQuestions.length
+            : !!startData?.done
+        );
 
         setCurrentIdx(0);
         setScore(0);
@@ -128,7 +152,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     };
 
     loadQuestions();
-  }, [language, testStarted]);
+  }, [language, testStarted, testMode]);
 
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -175,15 +199,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         newScore = score + 1;
         setScore(newScore);
 
-        // Update pass score check to 12 out of 20 for "bg" language
-        if (language === "bg" && newScore >= 12) {
-          setTestPassed(true);
-          setFinished(true);
-          return;
-        }
-
-        if (newScore >= 18) {
-          // For other languages (30 questions)
+        if (newScore >= EXAM_PASS_MARK) {
           setTestPassed(true);
           setFinished(true);
           return;
@@ -209,6 +225,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           type: "nextChunk",
           language,
           offset: nextOffset,
+          orderIds: questionOrder,
         })) as NextChunkResponse;
 
         const fetched = chunk?.questions ?? [];
@@ -239,6 +256,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     totalQuestions,
     nextOffset,
     allChunksLoaded,
+    questionOrder,
   ]);
 
   const handlePrevious = useCallback(() => {
