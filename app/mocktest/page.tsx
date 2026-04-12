@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSearchParams } from "next/navigation";
 import Watermark from "../components/watermark";
 import Image from "next/image";
 
@@ -49,7 +48,6 @@ type NextChunkResponse = {
 };
 
 const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
-  const searchParams = useSearchParams();
   const [testStarted, setTestStarted] = useState(false);
   const [testMode, setTestMode] = useState<"exam" | "practice">("exam");
 
@@ -78,11 +76,12 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const EXAM_PASS_MARK = 18;
 
   useEffect(() => {
-    const mode = searchParams.get("mode");
+    if (typeof window === "undefined") return;
+    const mode = new URLSearchParams(window.location.search).get("mode");
     if (mode === "exam" || mode === "practice") {
       setTestMode(mode);
     }
-  }, [searchParams]);
+  }, []);
 
   function proxyImage(url?: string | null) {
     if (!url) return undefined;
