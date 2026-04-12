@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 import Watermark from "../components/watermark";
 import Image from "next/image";
 
@@ -48,6 +49,7 @@ type NextChunkResponse = {
 };
 
 const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
+  const searchParams = useSearchParams();
   const [testStarted, setTestStarted] = useState(false);
   const [testMode, setTestMode] = useState<"exam" | "practice">("exam");
 
@@ -74,6 +76,13 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
   const EXAM_QUESTION_LIMIT = 30;
   const EXAM_PASS_MARK = 18;
+
+  useEffect(() => {
+    const mode = searchParams.get("mode");
+    if (mode === "exam" || mode === "practice") {
+      setTestMode(mode);
+    }
+  }, [searchParams]);
 
   function proxyImage(url?: string | null) {
     if (!url) return undefined;
@@ -304,40 +313,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             </h1>
             <p className="text-slate-600">
               Choose your preferred language to begin
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 shadow-lg border border-indigo-100 space-y-3">
-            <h2 className="text-xl font-bold text-indigo-700 text-center">
-              Select Mode
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <button
-                onClick={() => setTestMode("exam")}
-                className={`w-full px-5 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                  testMode === "exam"
-                    ? "bg-indigo-600 text-white shadow"
-                    : "bg-slate-50 border-2 border-indigo-200 text-slate-700 hover:border-indigo-400"
-                }`}
-              >
-                Exam Mode
-              </button>
-
-              <button
-                onClick={() => setTestMode("practice")}
-                className={`w-full px-5 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                  testMode === "practice"
-                    ? "bg-indigo-600 text-white shadow"
-                    : "bg-slate-50 border-2 border-indigo-200 text-slate-700 hover:border-indigo-400"
-                }`}
-              >
-                Practice Mode
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-500 text-center">
-              Practice mode has no timer, no score, and uses Next button only.
             </p>
           </div>
 

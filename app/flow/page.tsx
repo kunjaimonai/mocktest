@@ -13,8 +13,9 @@ function generateSixDigit() {
 }
 
 export default function PreTestFlow() {
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(0);
   const router = useRouter(); // Initialize the router
+  const [testMode, setTestMode] = useState<"exam" | "practice" | null>(null);
 
   const [appNumber, setAppNumber] = useState("");
   const [captcha, setCaptcha] = useState(generateCaptcha());
@@ -65,7 +66,7 @@ export default function PreTestFlow() {
   // -------------------------------
   useEffect(() => {
     if (step === 3) {
-      router.push("/mocktest");  // Navigate to the MockTestPage
+      router.push("/mocktest?mode=exam");  // Navigate to the MockTestPage
     }
   }, [step, router]);  // This will only run when `step` changes to 3
 
@@ -77,11 +78,44 @@ export default function PreTestFlow() {
       <div className="bg-white w-full max-w-lg p-8 rounded-2xl shadow-xl border border-slate-200 text-center">
         {/* Title */}
         <h1 className="text-2xl font-bold text-slate-900 mb-6">
-          Road Safety Mock Test – Verification
+          {testMode === "exam"
+            ? "Road Safety Mock Test – Verification"
+            : "Road Safety Mock Test"}
         </h1>
 
+        {/* ------------------- MODE SELECT ------------------- */}
+        {step === 0 && (
+          <>
+            <h2 className="text-lg font-semibold mb-4 text-slate-800">
+              Select Mode
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <button
+                onClick={() => {
+                  setTestMode("exam");
+                  setStep(1);
+                }}
+                className="w-full px-5 py-3 rounded-xl font-semibold transition-all duration-200 bg-indigo-600 text-white shadow hover:bg-indigo-700"
+              >
+                Exam Mode
+              </button>
+
+              <button
+                onClick={() => {
+                  setTestMode("practice");
+                  router.push("/mocktest?mode=practice");
+                }}
+                className="w-full px-5 py-3 rounded-xl font-semibold transition-all duration-200 bg-slate-50 border-2 border-indigo-200 text-slate-700 hover:border-indigo-400"
+              >
+                Practice Mode
+              </button>
+            </div>
+          </>
+        )}
+
         {/* ------------------- STEP 1 ------------------- */}
-        {step === 1 && (
+        {testMode === "exam" && step === 1 && (
           <>
             <h2 className="text-lg font-semibold mb-4 text-slate-800">
               Step 1: Enter Application Number & Captcha
@@ -132,7 +166,7 @@ export default function PreTestFlow() {
         )}
 
         {/* ------------------- STEP 2 ------------------- */}
-        {step === 2 && (
+        {testMode === "exam" && step === 2 && (
           <>
             <h2 className="text-lg font-semibold mb-4 text-slate-800">
               Step 2: Enter DOB & PIN
