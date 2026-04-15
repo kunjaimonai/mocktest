@@ -72,8 +72,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const EXAM_QUESTION_LIMIT = 30;
-  const EXAM_PASS_MARK = 18;
+  const isBadgeExam = testMode === "exam" && language === "bg";
+  const EXAM_QUESTION_LIMIT = isBadgeExam ? 20 : 30;
+  const EXAM_PASS_MARK = isBadgeExam ? 12 : 18;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
