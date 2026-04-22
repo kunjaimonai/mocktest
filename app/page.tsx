@@ -1,13 +1,6 @@
-"use client";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
-export default function mocktest() {
-  const router = useRouter();
-  useEffect(() => {
-    router.replace("/auth/login");
-  }, [router]);
-
-  return null;
+export default function Page() {
+  redirect("/auth/login");
 }
  

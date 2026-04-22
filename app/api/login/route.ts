@@ -1,13 +1,14 @@
 import { supabase } from "@/lib/supabase";
+import { applyRateLimit, jsonNoStore } from "@/lib/api-guard";
 
 export async function POST(req: Request) {
+  const rateLimitResponse = applyRateLimit(req, "api-login", 40, 60_000);
+  if (rateLimitResponse) return rateLimitResponse;
+
   const { institutionCode } = await req.json();
 
   if (!institutionCode) {
-    return new Response(
-      JSON.stringify({ error: "Institution code required" }),
-      { status: 400 }
-    );
+    return jsonNoStore({ error: "Institution code required" }, 400);
   }
 
   const { data, error } = await supabase
@@ -17,21 +18,12 @@ export async function POST(req: Request) {
     .single();
 
   if (error || !data) {
-    return new Response(
-      JSON.stringify({ error: "Invalid institution code" }),
-      { status: 401 }
-    );
+    return jsonNoStore({ error: "Invalid institution code" }, 401);
   }
 
   if (data.paymentstatus !== "completed") {
-    return new Response(
-      JSON.stringify({ error: "Payment not approved yet" }),
-      { status: 403 }
-    );
+    return jsonNoStore({ error: "Payment not approved yet" }, 403);
   }
 
-  return new Response(
-    JSON.stringify({ success: true, id: data.id }),
-    { status: 200 }
-  );
+  return jsonNoStore({ success: true, id: data.id }, 200);
 }

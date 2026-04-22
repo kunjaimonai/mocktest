@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
-import { supabase } from "@/lib/supabase";
 
 type School = {
   id: number;
@@ -16,7 +15,6 @@ type School = {
 };
 
 const Register = () => {
-  const [schools, setSchools] = useState<School[]>([]);
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [screenshot, setScreenshot] = useState<string | null>(null);
@@ -24,29 +22,6 @@ const Register = () => {
   const [step, setStep] = useState<"form" | "paywall" | "success">("form");
   const [generatedId, setGeneratedId] = useState<number | null>(null);
   const router = useRouter();
-
-  const fetchSchoolData = async () => {
-    const { data, error } = await supabase.from("schools").select("*");
-    if (error) {
-      console.error("Error fetching school data:", error);
-    } else {
-      setSchools(data as School[]);
-    }
-  };
-
-  useEffect(() => {
-    fetchSchoolData();
-  }, []);
-
-  const generateUniqueId = (): number => {
-    let id: number;
-    const existingIds = new Set(schools.map((s) => s.id));
-    do {
-      id = Math.floor(1000 + Math.random() * 9000);
-      id = Number(String(id).padStart(4, "0"));
-    } while (existingIds.has(id));
-    return id;
-  };
 
   const handleSubmit = () => {
     if (!name.trim() || !mobile.trim()) {
@@ -93,25 +68,17 @@ const Register = () => {
       return;
     }
 
-    const newId = generateUniqueId();
-    setGeneratedId(newId);
-
-    const newSchool: School = {
-      id: newId,
-      name,
-      number: mobile,
-      paymentstatus: "pending",
-      screenshot,
-      logo: logo || "",
-    };
-
-    const updatedSchools = [...schools, newSchool];
-
     try {
       const res = await fetch("/api/updateSchools", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newSchool),
+        body: JSON.stringify({
+          name,
+          number: mobile,
+          paymentstatus: "pending",
+          screenshot,
+          logo: logo || "",
+        }),
       });
 
       const responseData = await res.json();
@@ -121,13 +88,18 @@ const Register = () => {
         throw new Error(responseData.error || "Unknown server error");
       }
 
-      if (!res.ok) throw new Error("Failed to update database");
+      const createdId = Number(responseData.id);
+      if (!createdId) {
+        throw new Error("Institution code was not generated");
+      }
+
+      setGeneratedId(createdId);
 
       toast.success("Registration submitted successfully!", { duration: 2000 });
       setStep("success");
 
       // Auto-copy the ID to clipboard
-      await navigator.clipboard.writeText(String(newId));
+      await navigator.clipboard.writeText(String(createdId));
       toast("Institution ID copied to clipboard!", { icon: "📋" });
     } catch (err) {
       console.error("Error adding new school:", err);

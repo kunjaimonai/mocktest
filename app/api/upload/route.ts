@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase"; // your supabase client
+import { applyRateLimit, jsonNoStore } from "@/lib/api-guard";
 
 export async function POST(req: NextRequest) {
+  const rateLimitResponse = applyRateLimit(req, "api-upload", 20, 60_000);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File;
@@ -9,11 +13,11 @@ export async function POST(req: NextRequest) {
     const id = formData.get("id") as string;
 
     if (!file || !type || !id) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+      return jsonNoStore({ error: "Missing required fields" }, 400);
     }
 
     if (!["logo", "screenshot"].includes(type)) {
-      return NextResponse.json({ error: "Invalid type" }, { status: 400 });
+      return jsonNoStore({ error: "Invalid type" }, 400);
     }
 
     // Convert file to buffer
@@ -35,7 +39,7 @@ export async function POST(req: NextRequest) {
 
     if (uploadError) {
       console.error(uploadError);
-      return NextResponse.json({ error: uploadError.message }, { status: 500 });
+      return jsonNoStore({ error: uploadError.message }, 500);
     }
 
     // Generate public URL
@@ -43,13 +47,13 @@ export async function POST(req: NextRequest) {
       .from(bucket)
       .getPublicUrl(filename);
 
-    return NextResponse.json({
+    return jsonNoStore({
       success: true,
       url: publicUrl.publicUrl,
       filename,
     });
   } catch (err) {
     console.error("Upload failed:", err);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    return jsonNoStore({ error: "Upload failed" }, 500);
   }
 }

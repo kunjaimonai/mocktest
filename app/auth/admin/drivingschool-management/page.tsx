@@ -178,7 +178,7 @@ export default function AdminPage() {
     const load = async () => {
       const { data, error } = await supabase
         .from("schools")
-        .select("*")
+        .select("id,name,number,paymentstatus,logo,screenshot,has_badge")
         .order("id", { ascending: true });
 
       if (error) console.error(error);

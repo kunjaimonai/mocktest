@@ -1,33 +1,37 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";  // <-- your supabase client
+import { applyRateLimit, jsonNoStore } from "@/lib/api-guard";
 
 export async function POST(request: Request) {
+  const rateLimitResponse = applyRateLimit(request, "api-upload-sign", 30, 60_000);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File;
 
     if (!file) {
-      return NextResponse.json(
+      return jsonNoStore(
         { success: false, error: "No file uploaded" },
-        { status: 400 }
+        400
       );
     }
 
     // ---- Validate file type ----
     const validTypes = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
     if (!validTypes.includes(file.type)) {
-      return NextResponse.json(
+      return jsonNoStore(
         { success: false, error: "Invalid file type. Only PNG, JPG, JPEG, WEBP allowed" },
-        { status: 400 }
+        400
       );
     }
 
     // ---- Validate file size (max 5MB) ----
     const maxSize = 5 * 1024 * 1024;
     if (file.size > maxSize) {
-      return NextResponse.json(
+      return jsonNoStore(
         { success: false, error: "File size too large. Maximum size is 5MB" },
-        { status: 400 }
+        400
       );
     }
 
@@ -49,9 +53,9 @@ export async function POST(request: Request) {
 
     if (uploadError) {
       console.error(uploadError);
-      return NextResponse.json(
+      return jsonNoStore(
         { success: false, error: uploadError.message },
-        { status: 500 }
+        500
       );
     }
 
@@ -60,7 +64,7 @@ export async function POST(request: Request) {
       .from("signs")
       .getPublicUrl(filename);
 
-    return NextResponse.json({
+    return jsonNoStore({
       success: true,
       message: "File uploaded successfully",
       url: urlData.publicUrl,      // ✔ full public URL
@@ -68,29 +72,32 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json(
+    return jsonNoStore(
       { success: false, error: "Failed to upload file" },
-      { status: 500 }
+      500
     );
   }
 }
 export async function DELETE(request: Request) {
+  const rateLimitResponse = applyRateLimit(request, "api-upload-sign-delete", 20, 60_000);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { searchParams } = new URL(request.url);
     const filename = searchParams.get("filename");
 
     if (!filename) {
-      return NextResponse.json(
+      return jsonNoStore(
         { success: false, error: "No filename provided" },
-        { status: 400 }
+        400
       );
     }
 
     // Security check
     if (filename.includes("..") || filename.includes("/") || filename.includes("\\")) {
-      return NextResponse.json(
+      return jsonNoStore(
         { success: false, error: "Invalid filename" },
-        { status: 400 }
+        400
       );
     }
 
@@ -100,21 +107,21 @@ export async function DELETE(request: Request) {
       .remove([filename]);
 
     if (deleteError) {
-      return NextResponse.json(
+      return jsonNoStore(
         { success: false, error: deleteError.message },
-        { status: 500 }
+        500
       );
     }
 
-    return NextResponse.json({
+    return jsonNoStore({
       success: true,
       message: "File deleted successfully"
     });
   } catch (error) {
     console.error("Error deleting file:", error);
-    return NextResponse.json(
+    return jsonNoStore(
       { success: false, error: "Failed to delete file" },
-      { status: 500 }
+      500
     );
   }
 }

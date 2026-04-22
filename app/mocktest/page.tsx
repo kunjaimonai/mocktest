@@ -75,6 +75,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const isBadgeExam = testMode === "exam" && language === "bg";
   const EXAM_QUESTION_LIMIT = isBadgeExam ? 20 : 30;
   const EXAM_PASS_MARK = isBadgeExam ? 12 : 18;
+  const PRACTICE_QUESTION_LIMIT = 60;
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -84,8 +85,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   }, []);
 
-  function proxyImage(url?: string | null) {
+  function resolveImageSrc(url?: string | null) {
     if (!url) return undefined;
+    try {
+      const parsed = new URL(url);
+      if (parsed.hostname === "cprcrmwwpcixfhfyjmuk.supabase.co") {
+        return url;
+      }
+    } catch {
+      return `/api/mocktest?url=${encodeURIComponent(url)}`;
+    }
     return `/api/mocktest?url=${encodeURIComponent(url)}`;
   }
 
@@ -121,6 +130,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         const startData = (await fetchFromAPI({
           type: "start",
           language,
+          mode: testMode,
+          questionLimit:
+            testMode === "exam" ? EXAM_QUESTION_LIMIT : PRACTICE_QUESTION_LIMIT,
         })) as StartQuestionsResponse;
 
         const activeOrderIds =
@@ -491,7 +503,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           <div className="flex items-center gap-4">
             {schoolData.logo && (
               <img
-                src={proxyImage(schoolData.logo)}
+                src={resolveImageSrc(schoolData.logo)}
                 alt={`${schoolData.name} Logo`}
                 className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
@@ -560,7 +572,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 <span>{q.q}</span>
                 {q.sign ? (
                   <Image
-                    src={proxyImage(q.sign) ?? ""}
+                    src={resolveImageSrc(q.sign) ?? ""}
                     alt="Sign"
                     width={48}
                     height={48}
@@ -618,7 +630,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                             {isImage ? (
                               <div className="relative w-40 h-28">
                                 <Image
-                                  src={proxyImage(opt) ?? ""}
+                                  src={resolveImageSrc(opt) ?? ""}
                                   alt={`Option ${i + 1}`}
                                   fill
                                   className="object-contain rounded-lg border bg-white"

@@ -5,8 +5,6 @@ const nextConfig: NextConfig = {
   // (prevents future Next.js warnings about cross-origin dev requests)
   allowedDevOrigins: ["http://192.168.0.4", "http://192.168.0.4:3000"],
   images: {
-      unoptimized: true,
-
     remotePatterns: [
       {
         protocol: "https",

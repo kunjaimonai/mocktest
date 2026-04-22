@@ -1,7 +1,11 @@
 // app/api/admin/route.ts
 import { NextRequest, NextResponse } from "next/server";
+import { applyRateLimit, jsonNoStore } from "@/lib/api-guard";
 
 export async function POST(request: NextRequest) {
+  const rateLimitResponse = applyRateLimit(request, "api-admin-login", 20, 60_000);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const { username, password } = await request.json();
 
@@ -11,26 +15,26 @@ export async function POST(request: NextRequest) {
 
     // Verify credentials
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
-      return NextResponse.json({ 
+      return jsonNoStore({ 
         success: true, 
         message: "Login successful" 
       });
     } else {
-      return NextResponse.json(
+      return jsonNoStore(
         { 
           success: false, 
           message: "Invalid username or password" 
         },
-        { status: 401 }
+        401
       );
     }
   } catch (error) {
-    return NextResponse.json(
+    return jsonNoStore(
       { 
         success: false, 
         message: "Server error" 
       },
-      { status: 500 }
+      500
     );
   }
 }

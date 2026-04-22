@@ -103,7 +103,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         const fetchSchool = async () => {
           const { data, error } = await supabase
             .from("schools")
-            .select("*")
+            .select("id,name,number,paymentStatus:paymentstatus,logo,screenshot")
             .eq("id", parseInt(storedId))
             .single();
           if (!error && data) {
@@ -131,7 +131,10 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           ? "tamil_questions"
           : "english_questions";
 
-      const { data, error } = await supabase.from(table).select("*");
+      const { data, error } = await supabase
+        .from(table)
+        .select("id,q,sign,options,answerIndex")
+        .order("id", { ascending: true });
 
       if (!error && data) {
         const shuffled = shuffleArray(data);

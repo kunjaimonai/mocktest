@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/lib/supabase";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -22,28 +21,13 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-type SchoolType = {
-  id: number;
-  name: string;
-  number: string;
-  paymentstatus: string;
-  logo: string | null;
-  screenshot: string | null;
-};
-
-type QuestionType = {
-  id: number;
-  q: string;
-  options: string[];
-  sign: string;
-  answerIndex: number;
-};
-
 export default function AdminDashboard() {
   const router = useRouter();
-  const [schools, setSchools] = useState<SchoolType[]>([]);
-  const [questionsEN, setQuestionsEN] = useState<QuestionType[]>([]);
-  const [questionsML, setQuestionsML] = useState<QuestionType[]>([]);
+  const [totalSchools, setTotalSchools] = useState(0);
+  const [pendingSchools, setPendingSchools] = useState(0);
+  const [approvedSchools, setApprovedSchools] = useState(0);
+  const [questionsENCount, setQuestionsENCount] = useState(0);
+  const [questionsMLCount, setQuestionsMLCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,32 +39,19 @@ export default function AdminDashboard() {
 
     const loadData = async () => {
       try {
-        const { data: schoolsData, error: schoolsErr } = await supabase
-          .from("schools")
-          .select("*")
-          .order("id", { ascending: true });
+        const res = await fetch("/api/admin/stats", {
+          method: "GET",
+          cache: "no-store",
+        });
 
-        if (!schoolsErr && schoolsData) {
-          setSchools(schoolsData);
-        }
+        const payload = await res.json();
+        if (!res.ok) throw new Error(payload?.error || "Failed to load stats");
 
-        const { data: qnsEN, error: enErr } = await supabase
-          .from("english_questions")
-          .select("*")
-          .order("id", { ascending: true });
-
-        if (!enErr && qnsEN) {
-          setQuestionsEN(qnsEN);
-        }
-
-        const { data: qnsML, error: mlErr } = await supabase
-          .from("malayalam_questions")
-          .select("*")
-          .order("id", { ascending: true });
-
-        if (!mlErr && qnsML) {
-          setQuestionsML(qnsML);
-        }
+        setTotalSchools(payload.totalSchools ?? 0);
+        setPendingSchools(payload.pendingSchools ?? 0);
+        setApprovedSchools(payload.approvedSchools ?? 0);
+        setQuestionsENCount(payload.questionsENCount ?? 0);
+        setQuestionsMLCount(payload.questionsMLCount ?? 0);
       } catch (error) {
         console.error("Error loading dashboard:", error);
       } finally {
@@ -109,9 +80,7 @@ export default function AdminDashboard() {
     );
   }
 
-  const pendingSchools = schools.filter((s) => s.paymentstatus === "pending").length;
-  const approvedSchools = schools.filter((s) => s.paymentstatus === "completed").length;
-  const totalQuestions = questionsEN.length + questionsML.length;
+  const totalQuestions = questionsENCount + questionsMLCount;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -150,7 +119,7 @@ export default function AdminDashboard() {
                     Total Schools
                   </p>
                   <p className="text-3xl font-bold text-slate-900 mt-2">
-                    {schools.length}
+                    {totalSchools}
                   </p>
                 </div>
                 <div className="p-3 bg-sky-100 rounded-lg">
@@ -299,7 +268,7 @@ export default function AdminDashboard() {
                       English Questions
                     </span>
                     <span className="text-lg font-bold text-sky-600">
-                      {questionsEN.length}
+                      {questionsENCount}
                     </span>
                   </div>
 
@@ -308,7 +277,7 @@ export default function AdminDashboard() {
                       Malayalam Questions
                     </span>
                     <span className="text-lg font-bold text-purple-600">
-                      {questionsML.length}
+                      {questionsMLCount}
                     </span>
                   </div>
                 </div>
@@ -343,7 +312,7 @@ export default function AdminDashboard() {
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="text-slate-600">Total Registered Schools</span>
-                  <span className="font-bold text-slate-900">{schools.length}</span>
+                  <span className="font-bold text-slate-900">{totalSchools}</span>
                 </div>
 
                 <div className="flex justify-between">
@@ -363,8 +332,8 @@ export default function AdminDashboard() {
                 <div className="flex justify-between">
                   <span className="text-slate-600">Success Rate</span>
                   <span className="font-bold text-green-600">
-                    {schools.length > 0
-                      ? Math.round((approvedSchools / schools.length) * 100)
+                    {totalSchools > 0
+                      ? Math.round((approvedSchools / totalSchools) * 100)
                       : 0}
                     %
                   </span>

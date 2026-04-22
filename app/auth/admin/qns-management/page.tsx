@@ -53,6 +53,8 @@ type Question = {
 };
 
 const ITEMS_PER_PAGE = 12;
+const QUESTION_COLUMNS = "id,q,options,sign,answerIndex,optionTypes";
+const INITIAL_FETCH_LIMIT = 500;
 
 export default function AdminQuestionsPage() {
   const router = useRouter();
@@ -145,23 +147,27 @@ export default function AdminQuestionsPage() {
     const fetchQuestions = async () => {
       const { data: enData } = await supabase
         .from("english_questions")
-        .select("*")
-        .order("id", { ascending: true });
+        .select(QUESTION_COLUMNS)
+        .order("id", { ascending: true })
+        .range(0, INITIAL_FETCH_LIMIT - 1);
 
       const { data: mlData } = await supabase
         .from("malayalam_questions")
-        .select("*")
-        .order("id", { ascending: true });
+        .select(QUESTION_COLUMNS)
+        .order("id", { ascending: true })
+        .range(0, INITIAL_FETCH_LIMIT - 1);
 
       const { data: taData } = await supabase
         .from("tamil_questions")
-        .select("*")
-        .order("id", { ascending: true });
+        .select(QUESTION_COLUMNS)
+        .order("id", { ascending: true })
+        .range(0, INITIAL_FETCH_LIMIT - 1);
 
       const { data: bgData } = await supabase
         .from("badge_questions")
-        .select("*")
-        .order("id", { ascending: true });
+        .select(QUESTION_COLUMNS)
+        .order("id", { ascending: true })
+        .range(0, INITIAL_FETCH_LIMIT - 1);
 
       if (enData) setQuestionsEN(enData);
       if (mlData) setQuestionsML(mlData);
@@ -209,8 +215,8 @@ export default function AdminQuestionsPage() {
     setCurrentPage(1);
   }, [currentLang, searchQuery]);
 
-  const updateQuestionsFile = async (
-    updatedQuestions: Question[],
+  const upsertQuestion = async (
+    question: Question,
     lang: "en" | "ml" | "ta" | "bg"
   ) => {
     const tableName =
@@ -224,30 +230,15 @@ export default function AdminQuestionsPage() {
 
     const { error } = await supabase
       .from(tableName)
-      .upsert(updatedQuestions, { onConflict: "id" });
+      .upsert([question], { onConflict: "id" });
 
     if (error) {
       console.error(error);
-      alert("Error saving questions: " + error.message);
+      alert("Error saving question: " + error.message);
       return;
     }
 
-    if (lang === "en") setQuestionsEN(updatedQuestions);
-    else if (lang === "ml") setQuestionsML(updatedQuestions);
-    else if (lang === "ta") setQuestionsTA(updatedQuestions);
-    else setQuestionsBG(updatedQuestions);
-
-    alert(
-      `${
-        lang === "en"
-          ? "English"
-          : lang === "ml"
-          ? "Malayalam"
-          : lang === "ta"
-          ? "Tamil"
-          : "Badge"
-      } questions updated!`
-    );
+    alert("Question saved!");
   };
 
   const handleAddQuestion = () => {
@@ -270,8 +261,14 @@ export default function AdminQuestionsPage() {
       answerIndex: formData.answerIndex,
     };
 
-    const updated = [...currentQuestions, newQuestion];
-    updateQuestionsFile(updated, currentLang);
+    void upsertQuestion(newQuestion, currentLang);
+    if (currentLang === "en") setQuestionsEN((prev) => [...prev, newQuestion]);
+    else if (currentLang === "ml")
+      setQuestionsML((prev) => [...prev, newQuestion]);
+    else if (currentLang === "ta")
+      setQuestionsTA((prev) => [...prev, newQuestion]);
+    else setQuestionsBG((prev) => [...prev, newQuestion]);
+
     resetForm();
     setIsAddDialogOpen(false);
   };
@@ -279,30 +276,45 @@ export default function AdminQuestionsPage() {
   const handleEditQuestion = () => {
     if (!editingQuestion) return;
 
-    const updated = currentQuestions.map((q) =>
-      q.id === editingQuestion.id
-        ? {
-            ...q,
-            q: formData.q,
-            options: [
-              formData.option1,
-              formData.option2,
-              formData.option3,
-              formData.option4,
-            ],
-            optionTypes: [
-              !!formData.option1IsImage,
-              !!formData.option2IsImage,
-              !!formData.option3IsImage,
-              !!formData.option4IsImage,
-            ],
-            sign: formData.sign,
-            answerIndex: formData.answerIndex,
-          }
-        : q
-    );
+    const updatedQuestion: Question = {
+      ...editingQuestion,
+      q: formData.q,
+      options: [
+        formData.option1,
+        formData.option2,
+        formData.option3,
+        formData.option4,
+      ],
+      optionTypes: [
+        !!formData.option1IsImage,
+        !!formData.option2IsImage,
+        !!formData.option3IsImage,
+        !!formData.option4IsImage,
+      ],
+      sign: formData.sign,
+      answerIndex: formData.answerIndex,
+    };
 
-    updateQuestionsFile(updated, currentLang);
+    void upsertQuestion(updatedQuestion, currentLang);
+
+    if (currentLang === "en") {
+      setQuestionsEN((prev) =>
+        prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
+      );
+    } else if (currentLang === "ml") {
+      setQuestionsML((prev) =>
+        prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
+      );
+    } else if (currentLang === "ta") {
+      setQuestionsTA((prev) =>
+        prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
+      );
+    } else {
+      setQuestionsBG((prev) =>
+        prev.map((q) => (q.id === updatedQuestion.id ? updatedQuestion : q))
+      );
+    }
+
     resetForm();
     setEditingQuestion(null);
   };

@@ -1,8 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
+import { applyRateLimit, jsonNoStore } from '@/lib/api-guard';
 
 const QUESTION_COLUMNS = 'id,q,sign,options,answerIndex';
 const CHUNK_SIZE = 8;
+const MAX_EXAM_QUESTION_LIMIT = 30;
+const MAX_PRACTICE_QUESTION_LIMIT = 80;
+const ALLOWED_PROXY_HOSTS = new Set(['cprcrmwwpcixfhfyjmuk.supabase.co']);
 
 function shuffleArray<T>(array: T[]): T[] {
   const arr = [...array];
@@ -20,14 +24,28 @@ function orderRowsByIds<T extends { id: number }>(rows: T[], ids: number[]) {
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
 export async function GET(req: Request) {
+  const rateLimitResponse = applyRateLimit(req, 'api-mocktest-image', 240, 60_000);
+  if (rateLimitResponse) return rateLimitResponse;
+
   const { searchParams } = new URL(req.url);
   const url = searchParams.get('url');
 
   if (!url) return NextResponse.json({ error: 'No URL' }, { status: 400 });
+
+  let parsedUrl: URL;
+  try {
+    parsedUrl = new URL(url);
+  } catch {
+    return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
+  }
+
+  if (!ALLOWED_PROXY_HOSTS.has(parsedUrl.hostname)) {
+    return NextResponse.json({ error: 'Forbidden host' }, { status: 403 });
+  }
 
   const response = await fetch(url, { cache: 'force-cache' });
   const buffer = await response.arrayBuffer();
@@ -42,7 +60,19 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const { type, schoolId, language, index, offset, orderIds } = await req.json();
+  const rateLimitResponse = applyRateLimit(req, 'api-mocktest-post', 120, 60_000);
+  if (rateLimitResponse) return rateLimitResponse;
+
+  const {
+    type,
+    schoolId,
+    language,
+    index,
+    offset,
+    orderIds,
+    mode,
+    questionLimit,
+  } = await req.json();
 
   const getQuestionTable = (lang: string) =>
     lang === 'en'
@@ -60,45 +90,68 @@ export async function POST(req: Request) {
       .eq('id', schoolId)
       .single();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json(data);
+    if (error) return jsonNoStore({ error: error.message }, 500);
+    return jsonNoStore(data);
   }
 
   if (type === 'start') {
-    const table = getQuestionTable(language);
+    const isExam = mode === 'exam';
+    const defaultLimit = isExam
+      ? language === 'bg'
+        ? 20
+        : 30
+      : 60;
+    const rawLimit = Number.isInteger(questionLimit)
+      ? questionLimit
+      : parseInt(String(questionLimit ?? defaultLimit), 10);
+    const safeLimit = Number.isNaN(rawLimit)
+      ? defaultLimit
+      : Math.max(
+          1,
+          Math.min(
+            rawLimit,
+            isExam ? MAX_EXAM_QUESTION_LIMIT : MAX_PRACTICE_QUESTION_LIMIT
+          )
+        );
 
-    const { data: idRows, error: idError } = await supabase
-      .from(table)
-      .select('id');
+    const { data: rpcData, error: rpcError } = await supabase.rpc('get_random_questions', {
+      p_language: language,
+      p_limit: safeLimit,
+    });
 
-    if (idError) {
-      return NextResponse.json(
-        { error: idError.message || 'Failed to load questions' },
-        { status: 500 }
-      );
+    let randomizedQuestions = (rpcData as Array<{ id: number; q: string; sign?: string; options: string[]; answerIndex: number }> | null) ?? null;
+
+    if (rpcError || !randomizedQuestions) {
+      const table = getQuestionTable(language);
+      const { data, error: dataError } = await supabase
+        .from(table)
+        .select(QUESTION_COLUMNS)
+        .order('id', { ascending: false })
+        .limit(safeLimit);
+
+      if (dataError) {
+        return jsonNoStore(
+          {
+            error:
+              rpcError?.message || dataError.message || 'Failed to load questions',
+          },
+          500
+        );
+      }
+
+      randomizedQuestions = shuffleArray(data ?? []);
     }
 
-    const orderIds = shuffleArray((idRows ?? []).map((row) => row.id));
-    const firstIds = orderIds.slice(0, CHUNK_SIZE);
+    const randomizedOrderIds = randomizedQuestions.map((row) => row.id);
+    const firstIds = randomizedOrderIds.slice(0, CHUNK_SIZE);
+    const firstChunk = orderRowsByIds(randomizedQuestions, firstIds);
 
-    const { data, error: dataError } = firstIds.length
-      ? await supabase
-          .from(table)
-          .select(QUESTION_COLUMNS)
-          .in('id', firstIds)
-      : { data: [], error: null };
-
-    if (dataError) {
-      return NextResponse.json({ error: dataError.message }, { status: 500 });
-    }
-
-    const safeData = orderRowsByIds(data ?? [], firstIds);
-    return NextResponse.json({
-      total: orderIds.length,
-      orderIds,
-      questions: safeData,
-      nextOffset: safeData.length,
-      done: safeData.length >= orderIds.length,
+    return jsonNoStore({
+      total: randomizedOrderIds.length,
+      orderIds: randomizedOrderIds,
+      questions: firstChunk,
+      nextOffset: firstChunk.length,
+      done: firstChunk.length >= randomizedOrderIds.length,
     });
   }
 
@@ -110,7 +163,7 @@ export async function POST(req: Request) {
       : parseInt(String(offset ?? '0'), 10);
 
     if (Number.isNaN(startOffset) || startOffset < 0) {
-      return NextResponse.json({ error: 'Invalid offset' }, { status: 400 });
+      return jsonNoStore({ error: 'Invalid offset' }, 400);
     }
 
     const chunkIds = safeOrderIds.slice(startOffset, startOffset + CHUNK_SIZE);
@@ -122,10 +175,10 @@ export async function POST(req: Request) {
           .in('id', chunkIds)
       : { data: [], error: null };
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return jsonNoStore({ error: error.message }, 500);
 
     const safeData = orderRowsByIds(data ?? [], chunkIds);
-    return NextResponse.json({
+    return jsonNoStore({
       questions: safeData,
       nextOffset: startOffset + safeData.length,
       done: safeData.length < CHUNK_SIZE || startOffset + safeData.length >= safeOrderIds.length,
@@ -141,8 +194,8 @@ export async function POST(req: Request) {
       .select(QUESTION_COLUMNS)
       .order('id', { ascending: true });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json(data ?? []);
+    if (error) return jsonNoStore({ error: error.message }, 500);
+    return jsonNoStore(data ?? []);
   }
 
   if (type === 'questionsCount') {
@@ -152,8 +205,8 @@ export async function POST(req: Request) {
       .from(table)
       .select('id', { count: 'exact', head: true });
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json({ count: count ?? 0 });
+    if (error) return jsonNoStore({ error: error.message }, 500);
+    return jsonNoStore({ count: count ?? 0 });
   }
 
   if (type === 'question') {
@@ -161,7 +214,7 @@ export async function POST(req: Request) {
     const idx = Number.isInteger(index) ? index : parseInt(String(index ?? '0'), 10);
 
     if (Number.isNaN(idx) || idx < 0) {
-      return NextResponse.json({ error: 'Invalid index' }, { status: 400 });
+      return jsonNoStore({ error: 'Invalid index' }, 400);
     }
 
     const { data, error } = await supabase
@@ -171,9 +224,9 @@ export async function POST(req: Request) {
       .range(idx, idx)
       .maybeSingle();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json(data ?? null);
+    if (error) return jsonNoStore({ error: error.message }, 500);
+    return jsonNoStore(data ?? null);
   }
 
-  return NextResponse.json({ error: 'Invalid type' }, { status: 400 });
+  return jsonNoStore({ error: 'Invalid type' }, 400);
 }
