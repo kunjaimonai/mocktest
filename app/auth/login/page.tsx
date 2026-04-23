@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+export const revalidate = 3600;
+
 export default function LoginPage() {
   const router = useRouter();
   const [institutionCode, setInstitutionCode] = useState("");

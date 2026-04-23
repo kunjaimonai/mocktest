@@ -1,8 +1,5 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  // Allow specific dev origins to request Next.js dev/_next assets
-  // (prevents future Next.js warnings about cross-origin dev requests)
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   allowedDevOrigins: ["http://192.168.0.4", "http://192.168.0.4:3000"],
   images: {
     minimumCacheTTL: 86400,
@@ -16,4 +13,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

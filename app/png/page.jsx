@@ -1,5 +1,6 @@
 "use client"
 import { useState, useCallback, useRef } from "react";
+import NextImage from "next/image";
 
 // Load JSZip from CDN
 let _jszip = null;
@@ -296,7 +297,7 @@ export default function App() {
                 const n = parseFloat(item.savings);
                 return (
                   <div key={item.id} className={`fitem${item.status === "done" ? " done" : item.status === "error" ? " err" : ""}`}>
-                    <img className="thumb" src={item.preview} alt="" onError={(e) => { e.target.style.opacity = ".2"; }} />
+                    <NextImage className="thumb" src={item.preview} alt="" width={42} height={42} unoptimized onError={(e) => { e.currentTarget.style.opacity = ".2"; }} />
                     <div className="finfo">
                       <div className="fname">{item.file.name}</div>
                       <div className="fmeta">

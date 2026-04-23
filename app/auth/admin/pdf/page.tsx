@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 import { Edit2, X, ChevronLeft, ChevronRight, ImageIcon, RefreshCw } from "lucide-react";
 
 const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxeKQLFP1woFPP_Z1yOYxTPWidvRdFSkrZUr_fzNtQlKZDZLUXIsOPZz_RRGDjtKKDLNQ/exec";
@@ -384,10 +385,8 @@ function ImageCell({ url, imageCache, loadImage, large = false }: {
   }
 
   return (
-    <img 
-      src={imageSrc}
-      alt="Upload"
-      className={`${sizeClass} object-cover rounded border border-gray-200`}
-    />
+    <div className={`${sizeClass} relative rounded border border-gray-200 overflow-hidden`}>
+      <Image src={imageSrc} alt="Upload" fill unoptimized className="object-cover" />
+    </div>
   );
 }

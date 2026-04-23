@@ -41,7 +41,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { supabase } from "@/lib/supabase";
+import { supabaseBrowser as supabase } from "@/lib/supabase-browser";
 
 type Question = {
   id: number;
@@ -632,12 +632,11 @@ export default function AdminQuestionsPage() {
               <CardContent className="pt-4">
                 {question.sign && (
                   <div className="mb-4">
-                    <img
+                    <Image
                       src={question.sign}
                       alt="Traffic Sign"
                       width={200}
                       height={200}
-                      loading="lazy"
                       className="rounded-lg border-2 border-slate-200 w-full object-contain bg-white"
                     />
                   </div>
@@ -663,11 +662,11 @@ export default function AdminQuestionsPage() {
                           <div className="flex-1">
                             {isImage ? (
                               <div className="w-40 h-28 relative">
-                                <img
+                                <Image
                                   src={String(option)}
                                   alt={`Option ${idx + 1}`}
-                                  loading="lazy"
-                                  className="object-contain rounded-md border bg-white fill"
+                                  fill
+                                  className="object-contain rounded-md border bg-white"
                                 />
                               </div>
                             ) : (
@@ -858,11 +857,11 @@ function QuestionForm({
           )}
           {imagePreview && (
             <div className="relative w-32 h-32 border-2 border-slate-200 rounded-lg overflow-hidden">
-              <img
+              <Image
                 src={imagePreview}
                 alt="Preview"
-                className="object-contain fill"
-                loading="lazy"
+                fill
+                className="object-contain"
               />
             </div>
           )}
@@ -911,13 +910,12 @@ function QuestionForm({
 
                   {formData[`option${num}`] && (
                     <div className="mt-2">
-                      <img
+                      <Image
                         src={formData[`option${num}`]}
                         alt="Option"
                         width={120}
                         height={120}
                         className="border rounded-md bg-white object-contain"
-                        loading="lazy"
                       />
 
                       <Input

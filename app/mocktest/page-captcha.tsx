@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Watermark from "../components/watermark";
-import { supabase } from "@/lib/supabase";
+import { supabaseBrowser as supabase } from "@/lib/supabase-browser";
 import Image from "next/image";
 
 function handleLogout() {
@@ -437,9 +437,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         <div className="mb-6 pb-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-4">
             {schoolData.logo && (
-              <img
+              <Image
                 src={schoolData.logo}
                 alt={`${schoolData.name} Logo`}
+                width={56}
+                height={56}
                 className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
             )}

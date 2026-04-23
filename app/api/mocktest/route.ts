@@ -1,232 +1,197 @@
-import { createClient } from '@supabase/supabase-js';
-import { NextResponse } from 'next/server';
-import { applyRateLimit, jsonNoStore } from '@/lib/api-guard';
+import { NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase";
+import { applyRateLimit } from "@/lib/api-guard";
 
-const QUESTION_COLUMNS = 'id,q,sign,options,answerIndex';
-const CHUNK_SIZE = 8;
-const MAX_EXAM_QUESTION_LIMIT = 30;
-const MAX_PRACTICE_QUESTION_LIMIT = 80;
-const ALLOWED_PROXY_HOSTS = new Set(['cprcrmwwpcixfhfyjmuk.supabase.co']);
+export const runtime = "edge";
 
-function shuffleArray<T>(array: T[]): T[] {
-  const arr = [...array];
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
+const SCHOOL_COOKIE = "school_session";
+
+type CookiePayload = {
+  school_id: number;
+  school_name: string;
+  has_badge: boolean;
+  language: "en" | "ml" | "ta" | "bg";
+};
+
+type SessionStartRow = {
+  id?: number;
+  session_id?: number;
+  set_id: number;
+  school_id?: number;
+  language?: string;
+  mode?: string;
+};
+
+type PublicQuestion = {
+  id: number;
+  q: string;
+  options: string[];
+  sign: string | null;
+  optionTypes: boolean[] | null;
+};
+
+const QUESTION_COLUMNS = "id,q,options,sign,optionTypes";
+
+function jsonError(message: string, status = 400) {
+  return NextResponse.json(
+    { error: message },
+    {
+      status,
+      headers: {
+        "Cache-Control": "private, no-store, max-age=0",
+      },
+    }
+  );
 }
 
-function orderRowsByIds<T extends { id: number }>(rows: T[], ids: number[]) {
-  const byId = new Map(rows.map((row) => [row.id, row]));
-  return ids.map((id) => byId.get(id)).filter(Boolean) as T[];
-}
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
-
-export async function GET(req: Request) {
-  const rateLimitResponse = applyRateLimit(req, 'api-mocktest-image', 240, 60_000);
-  if (rateLimitResponse) return rateLimitResponse;
-
-  const { searchParams } = new URL(req.url);
-  const url = searchParams.get('url');
-
-  if (!url) return NextResponse.json({ error: 'No URL' }, { status: 400 });
-
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL(url);
-  } catch {
-    return NextResponse.json({ error: 'Invalid URL' }, { status: 400 });
-  }
-
-  if (!ALLOWED_PROXY_HOSTS.has(parsedUrl.hostname)) {
-    return NextResponse.json({ error: 'Forbidden host' }, { status: 403 });
-  }
-
-  const response = await fetch(url, { cache: 'force-cache' });
-  const buffer = await response.arrayBuffer();
-  const contentType = response.headers.get('content-type') || 'image/jpeg';
-
-  return new Response(buffer, {
+function jsonNoStore(payload: unknown, status = 200) {
+  return NextResponse.json(payload, {
+    status,
     headers: {
-      'Content-Type': contentType,
-      'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400',
+      "Cache-Control": "private, no-store, max-age=0",
     },
   });
 }
 
+function getQuestionTable(language: string) {
+  if (language === "ml") return "malayalam_questions";
+  if (language === "ta") return "tamil_questions";
+  if (language === "bg") return "badge_questions";
+  return "english_questions";
+}
+
+function parseCookieValue(cookieHeader: string | null): CookiePayload | null {
+  if (!cookieHeader) return null;
+
+  const allCookies = cookieHeader.split(";").map((part) => part.trim());
+  const raw = allCookies.find((part) => part.startsWith(`${SCHOOL_COOKIE}=`));
+  if (!raw) return null;
+
+  const value = raw.slice(`${SCHOOL_COOKIE}=`.length);
+  try {
+    const parsed = JSON.parse(decodeURIComponent(value)) as CookiePayload;
+    if (!parsed?.school_id || !parsed?.language) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function normalizeSessionRow(rpcData: unknown): SessionStartRow | null {
+  if (Array.isArray(rpcData)) {
+    return (rpcData[0] as SessionStartRow | undefined) ?? null;
+  }
+
+  if (rpcData && typeof rpcData === "object") {
+    return rpcData as SessionStartRow;
+  }
+
+  return null;
+}
+
+function stripAnswers(rows: Array<Record<string, unknown>>): PublicQuestion[] {
+  return rows.map((row) => ({
+    id: Number(row.id),
+    q: String(row.q ?? ""),
+    options: Array.isArray(row.options) ? (row.options as string[]) : [],
+    sign: (row.sign as string | null) ?? null,
+    optionTypes: Array.isArray(row.optionTypes)
+      ? (row.optionTypes as boolean[])
+      : null,
+  }));
+}
+
 export async function POST(req: Request) {
-  const rateLimitResponse = applyRateLimit(req, 'api-mocktest-post', 120, 60_000);
+  const rateLimitResponse = applyRateLimit(req, "api-mocktest", 120, 60_000);
   if (rateLimitResponse) return rateLimitResponse;
 
-  const {
-    type,
-    schoolId,
+  const auth = parseCookieValue(req.headers.get("cookie"));
+  if (!auth) {
+    return jsonError("Unauthorized", 401);
+  }
+
+  let body: Record<string, unknown> = {};
+  try {
+    body = (await req.json()) as Record<string, unknown>;
+  } catch {
+    body = {};
+  }
+
+  const requestType = String(body.type ?? "start");
+  if (requestType === "school") {
+    return jsonNoStore({
+      id: auth.school_id,
+      name: auth.school_name,
+      has_badge: auth.has_badge,
+      language: auth.language,
+    });
+  }
+
+  const mode = body.mode === "practice" ? "practice" : "exam";
+  const language =
+    body.language === "en" ||
+    body.language === "ml" ||
+    body.language === "ta" ||
+    body.language === "bg"
+      ? String(body.language)
+      : auth.language;
+
+  const { data: rpcData, error: rpcError } = await supabase.rpc("start_session", {
+    p_school_id: auth.school_id,
+    p_language: language,
+    p_mode: mode,
+  });
+
+  if (rpcError) {
+    return jsonError("Failed to start session", 500);
+  }
+
+  const sessionRow = normalizeSessionRow(rpcData);
+  const setId = sessionRow?.set_id;
+  const sessionId = sessionRow?.session_id ?? sessionRow?.id;
+
+  if (!setId || !sessionId) {
+    return jsonError("Invalid session payload", 500);
+  }
+
+  const { data: questionSet, error: setError } = await supabase
+    .from("question_sets")
+    .select("question_ids")
+    .eq("id", setId)
+    .single();
+
+  if (setError || !questionSet?.question_ids?.length) {
+    return jsonError("Question set not found", 500);
+  }
+
+  const questionIds = questionSet.question_ids;
+  const questionTable = getQuestionTable(language);
+
+  const { data: questionsData, error: questionError } = await supabase
+    .from(questionTable)
+    .select(QUESTION_COLUMNS)
+    .in("id", questionIds);
+
+  if (questionError || !questionsData) {
+    return jsonError("Failed to load questions", 500);
+  }
+
+  const byId = new Map(questionsData.map((row: Record<string, unknown>) => [Number(row.id), row]));
+  const orderedRows = questionIds
+    .map((id) => byId.get(id))
+    .filter((row): row is Record<string, unknown> => Boolean(row));
+
+  const safeQuestions = stripAnswers(orderedRows);
+
+  return jsonNoStore({
+    session_id: Number(sessionId),
+    set_id: Number(setId),
     language,
-    index,
-    offset,
-    orderIds,
     mode,
-    questionLimit,
-  } = await req.json();
-
-  const getQuestionTable = (lang: string) =>
-    lang === 'en'
-      ? 'english_questions'
-      : lang === 'ml'
-      ? 'malayalam_questions'
-      : lang === 'ta'
-      ? 'tamil_questions'
-      : 'badge_questions';
-
-  if (type === 'school') {
-    const { data, error } = await supabase
-      .from('schools')
-      .select('id,name,number,logo,screenshot,has_badge,paymentstatus')
-      .eq('id', schoolId)
-      .single();
-
-    if (error) return jsonNoStore({ error: error.message }, 500);
-    return jsonNoStore(data);
-  }
-
-  if (type === 'start') {
-    const isExam = mode === 'exam';
-    const defaultLimit = isExam
-      ? language === 'bg'
-        ? 20
-        : 30
-      : 60;
-    const rawLimit = Number.isInteger(questionLimit)
-      ? questionLimit
-      : parseInt(String(questionLimit ?? defaultLimit), 10);
-    const safeLimit = Number.isNaN(rawLimit)
-      ? defaultLimit
-      : Math.max(
-          1,
-          Math.min(
-            rawLimit,
-            isExam ? MAX_EXAM_QUESTION_LIMIT : MAX_PRACTICE_QUESTION_LIMIT
-          )
-        );
-
-    const { data: rpcData, error: rpcError } = await supabase.rpc('get_random_questions', {
-      p_language: language,
-      p_limit: safeLimit,
-    });
-
-    let randomizedQuestions = (rpcData as Array<{ id: number; q: string; sign?: string; options: string[]; answerIndex: number }> | null) ?? null;
-
-    if (rpcError || !randomizedQuestions) {
-      const table = getQuestionTable(language);
-      const { data, error: dataError } = await supabase
-        .from(table)
-        .select(QUESTION_COLUMNS)
-        .order('id', { ascending: false })
-        .limit(safeLimit);
-
-      if (dataError) {
-        return jsonNoStore(
-          {
-            error:
-              rpcError?.message || dataError.message || 'Failed to load questions',
-          },
-          500
-        );
-      }
-
-      randomizedQuestions = shuffleArray(data ?? []);
-    }
-
-    const randomizedOrderIds = randomizedQuestions.map((row) => row.id);
-    const firstIds = randomizedOrderIds.slice(0, CHUNK_SIZE);
-    const firstChunk = orderRowsByIds(randomizedQuestions, firstIds);
-
-    return jsonNoStore({
-      total: randomizedOrderIds.length,
-      orderIds: randomizedOrderIds,
-      questions: firstChunk,
-      nextOffset: firstChunk.length,
-      done: firstChunk.length >= randomizedOrderIds.length,
-    });
-  }
-
-  if (type === 'nextChunk') {
-    const table = getQuestionTable(language);
-    const safeOrderIds = Array.isArray(orderIds) ? orderIds : [];
-    const startOffset = Number.isInteger(offset)
-      ? offset
-      : parseInt(String(offset ?? '0'), 10);
-
-    if (Number.isNaN(startOffset) || startOffset < 0) {
-      return jsonNoStore({ error: 'Invalid offset' }, 400);
-    }
-
-    const chunkIds = safeOrderIds.slice(startOffset, startOffset + CHUNK_SIZE);
-
-    const { data, error } = chunkIds.length
-      ? await supabase
-          .from(table)
-          .select(QUESTION_COLUMNS)
-          .in('id', chunkIds)
-      : { data: [], error: null };
-
-    if (error) return jsonNoStore({ error: error.message }, 500);
-
-    const safeData = orderRowsByIds(data ?? [], chunkIds);
-    return jsonNoStore({
-      questions: safeData,
-      nextOffset: startOffset + safeData.length,
-      done: safeData.length < CHUNK_SIZE || startOffset + safeData.length >= safeOrderIds.length,
-    });
-  }
-
-  // Backward-compatible legacy modes
-  if (type === 'questions') {
-    const table = getQuestionTable(language);
-
-    const { data, error } = await supabase
-      .from(table)
-      .select(QUESTION_COLUMNS)
-      .order('id', { ascending: true });
-
-    if (error) return jsonNoStore({ error: error.message }, 500);
-    return jsonNoStore(data ?? []);
-  }
-
-  if (type === 'questionsCount') {
-    const table = getQuestionTable(language);
-
-    const { count, error } = await supabase
-      .from(table)
-      .select('id', { count: 'exact', head: true });
-
-    if (error) return jsonNoStore({ error: error.message }, 500);
-    return jsonNoStore({ count: count ?? 0 });
-  }
-
-  if (type === 'question') {
-    const table = getQuestionTable(language);
-    const idx = Number.isInteger(index) ? index : parseInt(String(index ?? '0'), 10);
-
-    if (Number.isNaN(idx) || idx < 0) {
-      return jsonNoStore({ error: 'Invalid index' }, 400);
-    }
-
-    const { data, error } = await supabase
-      .from(table)
-      .select(QUESTION_COLUMNS)
-      .order('id', { ascending: true })
-      .range(idx, idx)
-      .maybeSingle();
-
-    if (error) return jsonNoStore({ error: error.message }, 500);
-    return jsonNoStore(data ?? null);
-  }
-
-  return jsonNoStore({ error: 'Invalid type' }, 400);
+    total: safeQuestions.length,
+    orderIds: questionIds,
+    nextOffset: safeQuestions.length,
+    done: true,
+    questions: safeQuestions,
+  });
 }
