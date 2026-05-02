@@ -4,8 +4,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-export const revalidate = 3600;
-
 export default function LoginPage() {
   const router = useRouter();
   const [institutionCode, setInstitutionCode] = useState("");
@@ -28,6 +26,7 @@ export default function LoginPage() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           institutionCode: institutionCode.trim(),
         }),
@@ -60,7 +59,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 flex flex-col items-center justify-center p-6">
       <div className="flex flex-row items-center mb-8 gap-4">
-        <Image src="/learners_logo.png" width={80} height={100} alt="" />
+        <Image
+          src="/learners_logo.png"
+          width={80}
+          height={100}
+          alt=""
+          style={{ height: "auto" }}
+        />
         <h1 className="font-bold text-3xl sm:text-4xl md:text-5xl text-center">
           LEARNERS MOCK TEST KERALA
         </h1>

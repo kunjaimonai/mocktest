@@ -137,7 +137,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         .order("id", { ascending: true });
 
       if (!error && data) {
-        const shuffled = shuffleArray(data);
+        const typedRows = data as Question[];
+        const shuffled = shuffleArray(typedRows);
         const picked30 = shuffled.slice(0, 30);
 
         // WAIT UNTIL ALL IMAGES ARE LOADED

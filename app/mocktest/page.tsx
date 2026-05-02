@@ -69,6 +69,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [testPassed, setTestPassed] = useState<boolean>(false);
 
   const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -102,13 +103,13 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     const res = await fetch("/api/mocktest", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(body),
     });
     if (!res.ok) throw new Error("API error");
     return res.json();
   }
 
-  // Load school if not passed
   useEffect(() => {
     if (!schoolData && typeof window !== "undefined") {
       const storedId = localStorage.getItem("loggedInSchoolId");
@@ -120,7 +121,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
   }, [schoolData]);
 
-  // Load first chunk + total count
   useEffect(() => {
     if (!testStarted) return;
 
@@ -175,6 +175,18 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     loadQuestions();
   }, [language, testStarted, testMode]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const updateViewport = () => {
+      setIsDesktop(window.innerWidth >= 768);
+    };
+
+    updateViewport();
+    window.addEventListener("resize", updateViewport);
+    return () => window.removeEventListener("resize", updateViewport);
+  }, []);
+
   const startTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
 
@@ -200,7 +212,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   }, [currentIdx, questions, startTimer, testMode]);
 
   const handleSelect = (i: number) => {
-    if (selected !== null) return;
     setSelected(i);
   };
 
@@ -213,18 +224,15 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     const currentQuestion = questions[currentIdx];
     if (!currentQuestion) return;
 
-    if (testMode === "exam") {
-      let newScore = score;
+    const isCorrect = selected === currentQuestion.answerIndex;
+    if (isCorrect) {
+      const newScore = score + 1;
+      setScore(newScore);
 
-      if (selected === currentQuestion.answerIndex) {
-        newScore = score + 1;
-        setScore(newScore);
-
-        if (newScore >= EXAM_PASS_MARK) {
-          setTestPassed(true);
-          setFinished(true);
-          return;
-        }
+      if (testMode === "exam" && newScore >= EXAM_PASS_MARK) {
+        setTestPassed(true);
+        setFinished(true);
+        return;
       }
     }
 
@@ -305,7 +313,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     };
   }, []);
 
-  // UI STATES
   if (loadingQuestions) {
     return (
       <div className="min-h-screen flex items-center justify-center text-lg text-slate-700">
@@ -318,7 +325,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 via-indigo-50 to-purple-50 p-6">
         <div className="max-w-md w-full space-y-8">
-          {/* Header */}
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold text-slate-800 mb-2">
               Select Your Language
@@ -328,7 +334,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             </p>
           </div>
 
-          {/* Learners Section */}
           <div className="bg-white rounded-2xl p-6 shadow-lg border border-sky-100 space-y-4">
             <h2 className="text-2xl font-bold text-sky-700 text-center mb-4">
               LEARNERS MOCKTEST
@@ -370,7 +375,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             </div>
           </div>
 
-          {/* Badge Section */}
           {schoolData?.has_badge && (
             <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 shadow-lg border border-amber-200 space-y-4">
               <h2 className="text-2xl font-bold text-amber-700 text-center mb-4">
@@ -390,7 +394,6 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             </div>
           )}
 
-          {/* Start Button */}
           <button
             onClick={() => setTestStarted(true)}
             disabled={!language}
@@ -421,6 +424,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     );
 
   const q = questions[currentIdx] || null;
+  const schoolLogoSrc = resolveImageSrc(schoolData.logo);
   if (!q) {
     return (
       <div className="flex items-center justify-center min-h-screen text-lg text-slate-700">
@@ -458,7 +462,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             : "Test Failed!"}
         </h2>
 
-        {testMode === "exam" ? (
+        {testMode === "exam" || testMode === "practice" ? (
           <p className="mb-6 text-slate-600">
             Your score:{" "}
             <span className="font-mono text-2xl text-sky-600 font-bold">
@@ -501,12 +505,13 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       >
         <div className="mb-6 pb-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-4">
-            {schoolData.logo && (
+            {schoolLogoSrc && (
               <Image
-                src={resolveImageSrc(schoolData.logo)}
+                src={schoolLogoSrc}
                 alt={`${schoolData.name} Logo`}
                 width={56}
                 height={56}
+                unoptimized
                 className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
             )}
@@ -578,79 +583,93 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                     alt="Sign"
                     width={48}
                     height={48}
+                    unoptimized
                     className="w-32 h-32 object-contain"
                   />
                 ) : null}
               </div>
 
               <div className="grid gap-3 text-slate-800">
-                {q.options
-                  .filter((opt) => opt && opt.trim() !== "")
-                  .map((opt, i) => {
-                    const isSelected = selected === i;
-                    const showResult = selected !== null;
-                    const correct = q.answerIndex === i;
+                {(() => {
+                  const visible = q.options
+                    .map((opt, idx) => ({ opt, idx }))
+                    .filter(({ opt }) => opt && opt.trim() !== "");
 
+                  return visible.map(({ opt, idx }, displayIdx) => {
+                    const isSelected = selected === idx;
                     const isImage =
                       opt.startsWith("http://") || opt.startsWith("https://");
 
                     let cls =
-                      "cursor-pointer p-3 border rounded-lg transition-all duration-200 ";
+                      "cursor-pointer p-3 border rounded-lg transition-all duration-200 flex items-center justify-between ";
 
-                    if (!showResult)
-                      cls +=
-                        "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
-
-                    if (showResult && correct)
-                      cls += "bg-green-500 text-white border-green-400";
-
-                    if (showResult && isSelected && !correct)
-                      cls += "bg-red-500 text-white border-red-400";
+                    if (isSelected) {
+                      cls += "border-sky-500 bg-sky-50 ring-2 ring-sky-200 ";
+                    } else {
+                      cls += "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
+                    }
 
                     return (
                       <motion.div
-                        whileHover={{ scale: showResult ? 1 : 1.02 }}
-                        whileTap={{ scale: showResult ? 1 : 0.98 }}
-                        key={i}
+                        whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.99 }}
+                        key={idx}
                         className={cls}
-                        onClick={() => handleSelect(i)}
+                        onClick={!isDesktop ? () => handleSelect(idx) : undefined}
                       >
-                        <div className="flex items-center gap-3">
-                          {/* Letter bubble */}
+                        <div className="flex items-center gap-3 flex-1">
+                          {/* Circle Index (Mobile/Always) */}
                           <div
-                            className={`w-6 h-6 rounded-full border-2 flex items-center justify-center font-semibold text-sm md:text-lg ${
-                              showResult && correct
-                                ? "border-white"
-                                : "border-slate-400"
+                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center font-semibold text-sm md:text-lg transition-colors ${
+                              isSelected
+                                ? "border-sky-600 bg-sky-600 text-white"
+                                : "border-slate-400 text-slate-500"
                             }`}
                           >
-                            {String.fromCharCode(65 + i)}
+                            {String.fromCharCode(65 + displayIdx)}
                           </div>
 
-                          {/* Content: image or text */}
+                          {/* Content */}
                           <div className="flex-1">
                             {isImage ? (
                               <div className="relative w-40 h-28">
                                 <Image
                                   src={resolveImageSrc(opt) ?? ""}
-                                  alt={`Option ${i + 1}`}
+                                  alt={`Option ${displayIdx + 1}`}
                                   fill
+                                  unoptimized
                                   className="object-contain rounded-lg border bg-white"
                                 />
                               </div>
                             ) : (
-                              <span className="text-sm md:text-lg">{opt}</span>
+                              <span className="text-sm md:text-lg font-medium">{opt}</span>
                             )}
                           </div>
                         </div>
+
+                        {/* Radio Button Style (Visible/End only on desktop-ish widths) */}
+                        <button
+                          type="button"
+                          aria-label={`Select option ${displayIdx + 1}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSelect(idx);
+                          }}
+                          className="hidden md:flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-300"
+                        >
+                          {isSelected && (
+                            <div className="w-3 h-3 bg-sky-600 rounded-full" />
+                          )}
+                        </button>
                       </motion.div>
                     );
-                  })}
+                  });
+                })()}
               </div>
             </div>
 
-            <div className="flex justify-end gap-2">
-              {testMode === "practice" && (
+            <div className="flex justify-between items-center gap-2">
+              {testMode === "practice" ? (
                 <button
                   onClick={handlePrevious}
                   disabled={currentIdx === 0}
@@ -658,14 +677,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 >
                   Previous
                 </button>
+              ) : (
+                <div />
               )}
 
               <button
                 onClick={() => void handleNext()}
-                disabled={testMode === "exam" && selected === null}
-                className="px-4 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 disabled:opacity-50"
+                disabled={selected === null}
+                className="px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-sky-700 disabled:opacity-50"
               >
-                {testMode === "exam" ? "Submit Answer" : "Next"}
+                Submit
               </button>
             </div>
           </motion.div>
@@ -673,8 +694,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
         <footer className="mt-6 text-xs text-slate-500 text-center">
           {testMode === "exam"
-            ? "30s per question"
-            : "Move to the next question using the Next button"}
+            ? "30s per question • Select an option and click Submit"
+            : "Practice Mode • Select an option and click Submit to continue"}
         </footer>
       </motion.div>
     </div>

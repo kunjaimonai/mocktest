@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     }
 
     if (!school.id) {
-      const { data: createdId, error: createError } = await supabase.rpc(
+      const { data: createdId, error: createError } = await (supabase as any).rpc(
         "create_school_registration",
         {
           p_name: school.name,
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
       return jsonNoStore({ message: "OK", id: created }, 200);
     }
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await (supabase as any)
       .from("schools")
       .upsert(
         [

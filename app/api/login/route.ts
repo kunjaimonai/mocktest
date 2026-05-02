@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { applyRateLimit, jsonNoStore } from "@/lib/api-guard";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const VALID_TTL_MS = 30 * 60 * 1000;
 const INVALID_TTL_MS = 5 * 60 * 1000;
@@ -18,6 +18,13 @@ type SchoolCookiePayload = {
 type CacheEntry = {
   expiresAt: number;
   payload: SchoolCookiePayload;
+};
+
+type SchoolLoginRow = {
+  id: number;
+  name: string | null;
+  has_badge: boolean | null;
+  paymentstatus: string | null;
 };
 
 const globalCache = globalThis as typeof globalThis & {
@@ -54,10 +61,10 @@ function buildSuccessResponse(payload: SchoolCookiePayload) {
     200
   );
 
-  response.cookies.set(SCHOOL_COOKIE, encodeURIComponent(JSON.stringify(payload)), {
+  response.cookies.set(SCHOOL_COOKIE, JSON.stringify(payload), {
     httpOnly: true,
-    secure: true,
-    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
     path: "/",
     maxAge: COOKIE_MAX_AGE_SECONDS,
   });
@@ -105,19 +112,21 @@ export async function POST(req: Request) {
     .eq("id", normalizedCode)
     .single();
 
-  if (error || !data) {
+  const school = (data as SchoolLoginRow | null) ?? null;
+
+  if (error || !school) {
     invalidCodeCache.set(normalizedCode, Date.now() + INVALID_TTL_MS);
     return jsonNoStore({ error: "Invalid institution code" }, 401);
   }
 
-  if (data.paymentstatus !== "completed") {
+  if (school.paymentstatus !== "completed") {
     return jsonNoStore({ error: "Payment not approved yet" }, 403);
   }
 
   const payload: SchoolCookiePayload = {
-    school_id: Number(data.id),
-    school_name: String(data.name ?? "School"),
-    has_badge: Boolean(data.has_badge),
+    school_id: Number(school.id),
+    school_name: String(school.name ?? "School"),
+    has_badge: Boolean(school.has_badge),
     language: preferredLanguage,
   };
 

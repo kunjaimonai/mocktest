@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { applyRateLimit } from "@/lib/api-guard";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 
 const SCHOOL_COOKIE = "school_session";
 
@@ -22,15 +22,30 @@ type SessionStartRow = {
   mode?: string;
 };
 
+type QuestionSetRow = {
+  question_ids: number[];
+};
+
 type PublicQuestion = {
   id: number;
   q: string;
   options: string[];
   sign: string | null;
   optionTypes: boolean[] | null;
+  answerIndex?: number;
 };
 
-const QUESTION_COLUMNS = "id,q,options,sign,optionTypes";
+const QUESTION_COLUMNS_BASE = "id,q,options,sign,optionTypes";
+const QUESTION_COLUMNS_WITH_ANS = 'id,q,options,sign,optionTypes,"answerIndex"';
+
+function shuffleArray<T>(items: T[]) {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
 
 function jsonError(message: string, status = 400) {
   return NextResponse.json(
@@ -67,9 +82,17 @@ function parseCookieValue(cookieHeader: string | null): CookiePayload | null {
   const raw = allCookies.find((part) => part.startsWith(`${SCHOOL_COOKIE}=`));
   if (!raw) return null;
 
-  const value = raw.slice(`${SCHOOL_COOKIE}=`.length);
+  let value = raw.slice(`${SCHOOL_COOKIE}=`.length);
+  
+  // Decode the cookie value - the browser URL-encodes it when sending
   try {
-    const parsed = JSON.parse(decodeURIComponent(value)) as CookiePayload;
+    value = decodeURIComponent(value);
+  } catch {
+    // If decoding fails, use as-is
+  }
+  
+  try {
+    const parsed = JSON.parse(value) as CookiePayload;
     if (!parsed?.school_id || !parsed?.language) return null;
     return parsed;
   } catch {
@@ -89,16 +112,32 @@ function normalizeSessionRow(rpcData: unknown): SessionStartRow | null {
   return null;
 }
 
-function stripAnswers(rows: Array<Record<string, unknown>>): PublicQuestion[] {
-  return rows.map((row) => ({
-    id: Number(row.id),
-    q: String(row.q ?? ""),
-    options: Array.isArray(row.options) ? (row.options as string[]) : [],
-    sign: (row.sign as string | null) ?? null,
-    optionTypes: Array.isArray(row.optionTypes)
-      ? (row.optionTypes as boolean[])
-      : null,
-  }));
+function stripAnswers(
+  rows: Array<Record<string, unknown>>,
+  includeAnswers = false
+): PublicQuestion[] {
+  return rows.map((row) => {
+    const base: PublicQuestion = {
+      id: Number(row.id),
+      q: String(row.q ?? ""),
+      options: Array.isArray(row.options) ? (row.options as string[]) : [],
+      sign: (row.sign as string | null) ?? null,
+      optionTypes: Array.isArray(row.optionTypes)
+        ? (row.optionTypes as boolean[])
+        : null,
+    };
+
+    if (includeAnswers) {
+      const ai = Object.prototype.hasOwnProperty.call(row, "answerIndex")
+        ? Number((row as any).answerIndex)
+        : undefined;
+      if (typeof ai === "number" && !Number.isNaN(ai)) {
+        base.answerIndex = ai;
+      }
+    }
+
+    return base;
+  });
 }
 
 export async function POST(req: Request) {
@@ -136,56 +175,33 @@ export async function POST(req: Request) {
       ? String(body.language)
       : auth.language;
 
-  const { data: rpcData, error: rpcError } = await supabase.rpc("start_session", {
-    p_school_id: auth.school_id,
-    p_language: language,
-    p_mode: mode,
-  });
-
-  if (rpcError) {
-    return jsonError("Failed to start session", 500);
-  }
-
-  const sessionRow = normalizeSessionRow(rpcData);
-  const setId = sessionRow?.set_id;
-  const sessionId = sessionRow?.session_id ?? sessionRow?.id;
-
-  if (!setId || !sessionId) {
-    return jsonError("Invalid session payload", 500);
-  }
-
-  const { data: questionSet, error: setError } = await supabase
-    .from("question_sets")
-    .select("question_ids")
-    .eq("id", setId)
-    .single();
-
-  if (setError || !questionSet?.question_ids?.length) {
-    return jsonError("Question set not found", 500);
-  }
-
-  const questionIds = questionSet.question_ids;
+  // Build a fresh random set each time so repeated sessions do not reuse the same order.
+  const sessionId = Math.floor(Math.random() * 1000000);
   const questionTable = getQuestionTable(language);
-
-  const { data: questionsData, error: questionError } = await supabase
+  const selectCols = QUESTION_COLUMNS_WITH_ANS;
+  const { data: allQuestions, error: questionsError } = await supabase
     .from(questionTable)
-    .select(QUESTION_COLUMNS)
-    .in("id", questionIds);
+    .select(selectCols);
 
-  if (questionError || !questionsData) {
+  if (questionsError || !allQuestions) {
     return jsonError("Failed to load questions", 500);
   }
 
-  const byId = new Map(questionsData.map((row: Record<string, unknown>) => [Number(row.id), row]));
-  const orderedRows = questionIds
-    .map((id) => byId.get(id))
-    .filter((row): row is Record<string, unknown> => Boolean(row));
-
-  const safeQuestions = stripAnswers(orderedRows);
+  const shuffledQuestions = shuffleArray(
+    stripAnswers(allQuestions as Record<string, unknown>[], true)
+  );
+  const requestedLimit =
+    typeof body.questionLimit === "number" ? Number(body.questionLimit) : 0;
+  const limit = Math.max(
+    1,
+    Math.min(requestedLimit > 0 ? requestedLimit : shuffledQuestions.length, shuffledQuestions.length)
+  );
+  const safeQuestions = shuffledQuestions.slice(0, limit);
+  const questionIds = safeQuestions.map((q) => q.id);
 
   return jsonNoStore({
-    session_id: Number(sessionId),
-    set_id: Number(setId),
+    session_id: sessionId,
+    set_id: null,
     language,
     mode,
     total: safeQuestions.length,
