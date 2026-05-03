@@ -47,6 +47,15 @@ type NextChunkResponse = {
   done: boolean;
 };
 
+function shuffleArray<T>(items: T[]) {
+  const arr = [...items];
+  for (let i = arr.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [testStarted, setTestStarted] = useState(false);
   const [testMode, setTestMode] = useState<"exam" | "practice">("exam");
@@ -62,6 +71,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [selected, setSelected] = useState<number | null>(null);
+  const [practiceChecked, setPracticeChecked] = useState<boolean>(false);
+  const [practiceIsCorrect, setPracticeIsCorrect] = useState<boolean | null>(null);
 
   const [timeLeft, setTimeLeft] = useState<number>(30);
 
@@ -143,7 +154,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         const activeQuestions =
           testMode === "exam"
             ? (startData?.questions ?? []).slice(0, EXAM_QUESTION_LIMIT)
-            : startData?.questions ?? [];
+            : shuffleArray(startData?.questions ?? []);
 
         setTotalQuestions(
           testMode === "exam"
@@ -162,6 +173,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         setCurrentIdx(0);
         setScore(0);
         setSelected(null);
+        setPracticeChecked(false);
+        setPracticeIsCorrect(null);
         setFinished(false);
         setTestPassed(false);
         setTimeLeft(30);
@@ -224,6 +237,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     const currentQuestion = questions[currentIdx];
     if (!currentQuestion) return;
 
+    if (testMode === "practice" && !practiceChecked) {
+      const isCorrect = selected === currentQuestion.answerIndex;
+      if (isCorrect) {
+        setScore((prev) => prev + 1);
+      }
+      setPracticeIsCorrect(isCorrect);
+      setPracticeChecked(true);
+      return;
+    }
+
     const isCorrect = selected === currentQuestion.answerIndex;
     if (isCorrect) {
       const newScore = score + 1;
@@ -237,6 +260,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
 
     setSelected(null);
+    setPracticeChecked(false);
+    setPracticeIsCorrect(null);
 
     const nextIdx = currentIdx + 1;
     if (nextIdx >= totalQuestions) {
@@ -280,6 +305,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     questions,
     selected,
     score,
+    practiceChecked,
     language,
     testMode,
     totalQuestions,
@@ -603,7 +629,15 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                     let cls =
                       "cursor-pointer p-3 border rounded-lg transition-all duration-200 flex items-center justify-between ";
 
-                    if (isSelected) {
+                    if (testMode === "practice" && practiceChecked) {
+                      if (idx === q.answerIndex) {
+                        cls += "border-green-500 bg-green-50 ring-2 ring-green-200 ";
+                      } else if (isSelected) {
+                        cls += "border-red-500 bg-red-50 ring-2 ring-red-200 ";
+                      } else {
+                        cls += "border-slate-200";
+                      }
+                    } else if (isSelected) {
                       cls += "border-sky-500 bg-sky-50 ring-2 ring-sky-200 ";
                     } else {
                       cls += "hover:border-sky-300 hover:bg-sky-50 border-slate-200";
@@ -666,6 +700,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                   });
                 })()}
               </div>
+
+              {testMode === "practice" && practiceChecked && (
+                <div
+                  className={`mt-3 text-sm font-semibold ${
+                    practiceIsCorrect ? "text-green-700" : "text-red-700"
+                  }`}
+                >
+                  {practiceIsCorrect ? "✅ Correct answer" : "❌ Wrong answer"}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-between items-center gap-2">
@@ -686,7 +730,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 disabled={selected === null}
                 className="px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-sky-700 disabled:opacity-50"
               >
-                Submit
+                {testMode === "practice" && practiceChecked ? "Next" : "Submit"}
               </button>
             </div>
           </motion.div>

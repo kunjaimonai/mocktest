@@ -79,18 +79,26 @@ export async function POST(req: Request) {
 
   const { institutionCode, language } = await req.json();
   const normalizedCode = String(institutionCode ?? "").trim();
+  const digitsOnlyCode = normalizedCode.replace(/\D/g, "");
   const preferredLanguage = toLanguage(language);
 
-  if (!normalizedCode) {
+  if (!digitsOnlyCode) {
     return jsonNoStore({ error: "Institution code required" }, 400);
   }
 
-  const cachedInvalidExpiry = invalidCodeCache.get(normalizedCode);
+  const parsedCode = Number.parseInt(digitsOnlyCode, 10);
+  if (Number.isNaN(parsedCode) || parsedCode <= 0) {
+    return jsonNoStore({ error: "Invalid institution code" }, 401);
+  }
+
+  const cacheKey = String(parsedCode);
+
+  const cachedInvalidExpiry = invalidCodeCache.get(cacheKey);
   if (cachedInvalidExpiry && !isExpired(cachedInvalidExpiry)) {
     return jsonNoStore({ error: "Invalid institution code" }, 401);
   }
 
-  const cachedValidEntry = validCodeCache.get(normalizedCode);
+  const cachedValidEntry = validCodeCache.get(cacheKey);
   if (cachedValidEntry && !isExpired(cachedValidEntry.expiresAt)) {
     return buildSuccessResponse({
       ...cachedValidEntry.payload,
@@ -99,23 +107,23 @@ export async function POST(req: Request) {
   }
 
   if (cachedInvalidExpiry && isExpired(cachedInvalidExpiry)) {
-    invalidCodeCache.delete(normalizedCode);
+    invalidCodeCache.delete(cacheKey);
   }
 
   if (cachedValidEntry && isExpired(cachedValidEntry.expiresAt)) {
-    validCodeCache.delete(normalizedCode);
+    validCodeCache.delete(cacheKey);
   }
 
   const { data, error } = await supabase
     .from("schools")
     .select("id,name,has_badge,paymentstatus")
-    .eq("id", normalizedCode)
+    .eq("id", parsedCode)
     .single();
 
   const school = (data as SchoolLoginRow | null) ?? null;
 
   if (error || !school) {
-    invalidCodeCache.set(normalizedCode, Date.now() + INVALID_TTL_MS);
+    invalidCodeCache.set(cacheKey, Date.now() + INVALID_TTL_MS);
     return jsonNoStore({ error: "Invalid institution code" }, 401);
   }
 
@@ -130,7 +138,7 @@ export async function POST(req: Request) {
     language: preferredLanguage,
   };
 
-  validCodeCache.set(normalizedCode, {
+  validCodeCache.set(cacheKey, {
     payload,
     expiresAt: Date.now() + VALID_TTL_MS,
   });

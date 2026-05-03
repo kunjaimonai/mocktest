@@ -158,10 +158,22 @@ export async function POST(req: Request) {
 
   const requestType = String(body.type ?? "start");
   if (requestType === "school") {
+    const { data: schoolData } = await supabase
+      .from("schools")
+      .select("id,name,number,paymentstatus,logo,screenshot,has_badge")
+      .eq("id", auth.school_id)
+      .single();
+
+    const school = (schoolData as Record<string, unknown> | null) ?? null;
+
     return jsonNoStore({
-      id: auth.school_id,
-      name: auth.school_name,
-      has_badge: auth.has_badge,
+      id: Number(school?.id ?? auth.school_id),
+      name: String(school?.name ?? auth.school_name),
+      number: String(school?.number ?? ""),
+      paymentStatus: String(school?.paymentstatus ?? "pending"),
+      logo: String(school?.logo ?? ""),
+      screenshot: String(school?.screenshot ?? ""),
+      has_badge: Boolean(school?.has_badge ?? auth.has_badge),
       language: auth.language,
     });
   }
