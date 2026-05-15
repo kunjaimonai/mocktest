@@ -73,6 +73,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [selected, setSelected] = useState<number | null>(null);
   const [practiceChecked, setPracticeChecked] = useState<boolean>(false);
   const [practiceIsCorrect, setPracticeIsCorrect] = useState<boolean | null>(null);
+  const [examChecked, setExamChecked] = useState<boolean>(false);
+  const [examIsCorrect, setExamIsCorrect] = useState<boolean | null>(null);
 
   const [timeLeft, setTimeLeft] = useState<number>(30);
 
@@ -175,6 +177,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         setSelected(null);
         setPracticeChecked(false);
         setPracticeIsCorrect(null);
+        setExamChecked(false);
+        setExamIsCorrect(null);
         setFinished(false);
         setTestPassed(false);
         setTimeLeft(30);
@@ -247,6 +251,24 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       return;
     }
 
+    if (testMode === "exam" && !examChecked) {
+      const isCorrect = selected === currentQuestion.answerIndex;
+      if (isCorrect) {
+        const newScore = score + 1;
+        setScore(newScore);
+        if (newScore >= EXAM_PASS_MARK) {
+          setExamIsCorrect(true);
+          setExamChecked(true);
+          setTestPassed(true);
+          setFinished(true);
+          return;
+        }
+      }
+      setExamIsCorrect(isCorrect);
+      setExamChecked(true);
+      return;
+    }
+
     const isCorrect = selected === currentQuestion.answerIndex;
     if (isCorrect) {
       const newScore = score + 1;
@@ -262,6 +284,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     setSelected(null);
     setPracticeChecked(false);
     setPracticeIsCorrect(null);
+    setExamChecked(false);
+    setExamIsCorrect(null);
 
     const nextIdx = currentIdx + 1;
     if (nextIdx >= totalQuestions) {
@@ -305,8 +329,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     questions,
     selected,
     score,
-    practiceChecked,
-    language,
+    practiceChecked,    examChecked,    language,
     testMode,
     totalQuestions,
     nextOffset,
@@ -629,7 +652,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                     let cls =
                       "cursor-pointer p-3 border rounded-lg transition-all duration-200 flex items-center justify-between ";
 
-                    if (testMode === "practice" && practiceChecked) {
+                    if ((testMode === "practice" && practiceChecked) || (testMode === "exam" && examChecked)) {
                       if (idx === q.answerIndex) {
                         cls += "border-green-500 bg-green-50 ring-2 ring-green-200 ";
                       } else if (isSelected) {
@@ -710,6 +733,16 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                   {practiceIsCorrect ? "✅ Correct answer" : "❌ Wrong answer"}
                 </div>
               )}
+
+              {testMode === "exam" && examChecked && (
+                <div
+                  className={`mt-3 text-sm font-semibold ${
+                    examIsCorrect ? "text-green-700" : "text-red-700"
+                  }`}
+                >
+                  {examIsCorrect ? "✅ Correct answer" : "❌ Wrong answer"}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-between items-center gap-2">
@@ -730,7 +763,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 disabled={selected === null}
                 className="px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-sky-700 disabled:opacity-50"
               >
-                {testMode === "practice" && practiceChecked ? "Next" : "Submit"}
+                {(testMode === "practice" && practiceChecked) || (testMode === "exam" && examChecked) ? "Next" : "Submit"}
               </button>
             </div>
           </motion.div>
