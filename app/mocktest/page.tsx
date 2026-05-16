@@ -71,6 +71,10 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [selected, setSelected] = useState<number | null>(null);
+  const [attendedCount, setAttendedCount] = useState<number>(0);
+  const [timeoutCount, setTimeoutCount] = useState<number>(0);
+  const [trueCount, setTrueCount] = useState<number>(0);
+  const [falseCount, setFalseCount] = useState<number>(0);
   const [practiceChecked, setPracticeChecked] = useState<boolean>(false);
   const [practiceIsCorrect, setPracticeIsCorrect] = useState<boolean | null>(null);
   const [examChecked, setExamChecked] = useState<boolean>(false);
@@ -243,8 +247,12 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
     if (testMode === "practice" && !practiceChecked) {
       const isCorrect = selected === currentQuestion.answerIndex;
+      setAttendedCount((v) => v + 1);
       if (isCorrect) {
         setScore((prev) => prev + 1);
+        setTrueCount((v) => v + 1);
+      } else {
+        setFalseCount((v) => v + 1);
       }
       setPracticeIsCorrect(isCorrect);
       setPracticeChecked(true);
@@ -253,9 +261,18 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
     if (testMode === "exam" && !examChecked) {
       const isCorrect = selected === currentQuestion.answerIndex;
+      // count attendance if the user selected an answer
+      if (selected !== null) {
+        setAttendedCount((v) => v + 1);
+      } else {
+        // timed out on this question
+        setTimeoutCount((v) => v + 1);
+      }
+
       if (isCorrect) {
         const newScore = score + 1;
         setScore(newScore);
+        setTrueCount((v) => v + 1);
         if (newScore >= EXAM_PASS_MARK) {
           setExamIsCorrect(true);
           setExamChecked(true);
@@ -263,22 +280,21 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
           setFinished(true);
           return;
         }
+      } else {
+        if (selected !== null) setFalseCount((v) => v + 1);
       }
+
       setExamIsCorrect(isCorrect);
       setExamChecked(true);
       return;
     }
 
     const isCorrect = selected === currentQuestion.answerIndex;
-    if (isCorrect) {
+    // For exam mode we already handled scoring when showing feedback, so only
+    // increment here for non-exam flows (or defensive fallback).
+    if (isCorrect && testMode !== "exam") {
       const newScore = score + 1;
       setScore(newScore);
-
-      if (testMode === "exam" && newScore >= EXAM_PASS_MARK) {
-        setTestPassed(true);
-        setFinished(true);
-        return;
-      }
     }
 
     setSelected(null);
@@ -523,6 +539,21 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             You have reached the end of practice questions.
           </p>
         )}
+
+        <div className="mb-4 text-sm text-slate-700 space-y-1 text-center">
+          <div>
+            <strong>Total attend:</strong> {attendedCount}
+          </div>
+          <div>
+            <strong>Time out:</strong> {timeoutCount}
+          </div>
+          <div>
+            <strong>True :</strong> {trueCount}
+          </div>
+          <div>
+            <strong>Falls :</strong> {falseCount}
+          </div>
+        </div>
 
         <div className="flex gap-3">
           <button
