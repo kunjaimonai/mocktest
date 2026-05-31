@@ -282,12 +282,21 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     examCheckedRef.current = false;
     examAdvancePendingRef.current = false;
 
+    const finalScore = resolvedScore ?? score;
+    
+    // In exam mode, end immediately if pass mark is reached
+    if (testMode === "exam" && finalScore >= EXAM_PASS_MARK) {
+      setTestPassed(true);
+      setFinished(true);
+      return;
+    }
+
     const nextIdx = currentIdx + 1;
     if (nextIdx >= totalQuestions) {
       if (testMode === "practice") {
         setTestPassed(true);
       } else if (testMode === "exam") {
-        setTestPassed((resolvedScore ?? score) >= EXAM_PASS_MARK);
+        setTestPassed(finalScore >= EXAM_PASS_MARK);
       }
       setFinished(true);
       return;
@@ -614,7 +623,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
             <strong>True :</strong> {trueCount}
           </div>
           <div>
-            <strong>Falls :</strong> {falseCount}
+            <strong>Fails :</strong> {falseCount}
           </div>
         </div>
 
