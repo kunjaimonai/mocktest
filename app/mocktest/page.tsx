@@ -79,6 +79,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [practiceIsCorrect, setPracticeIsCorrect] = useState<boolean | null>(null);
   const [examChecked, setExamChecked] = useState<boolean>(false);
   const [examIsCorrect, setExamIsCorrect] = useState<boolean | null>(null);
+  const [examTimedOut, setExamTimedOut] = useState<boolean>(false);
 
   const [timeLeft, setTimeLeft] = useState<number>(30);
 
@@ -89,6 +90,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
 
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const advanceRef = useRef<NodeJS.Timeout | null>(null);
+  const examCheckedRef = useRef<boolean>(false);
+  const examAdvancePendingRef = useRef<boolean>(false);
 
   const isBadgeExam = testMode === "exam" && language === "bg";
   const EXAM_QUESTION_LIMIT = isBadgeExam ? 20 : 30;
@@ -114,6 +118,25 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
       return `/api/mocktest?url=${encodeURIComponent(url)}`;
     }
     return `/api/mocktest?url=${encodeURIComponent(url)}`;
+  }
+
+  function renderAnswerContent(value?: string) {
+    if (!value) return null;
+    const isImage = value.startsWith("http://") || value.startsWith("https://");
+
+    return isImage ? (
+      <div className="relative mt-2 w-40 h-28">
+        <Image
+          src={resolveImageSrc(value) ?? ""}
+          alt="Correct answer"
+          fill
+          unoptimized
+          className="object-contain rounded-lg border bg-white"
+        />
+      </div>
+    ) : (
+      <span className="font-semibold">{value}</span>
+    );
   }
 
   async function fetchFromAPI(body: object) {
@@ -183,6 +206,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         setPracticeIsCorrect(null);
         setExamChecked(false);
         setExamIsCorrect(null);
+        setExamTimedOut(false);
+        examCheckedRef.current = false;
+        examAdvancePendingRef.current = false;
         setFinished(false);
         setTestPassed(false);
         setTimeLeft(30);
@@ -236,77 +262,32 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     setSelected(i);
   };
 
-  const handleNext = useCallback(async () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
+  const clearAdvanceTimer = useCallback(() => {
+    if (advanceRef.current) {
+      clearTimeout(advanceRef.current);
+      advanceRef.current = null;
     }
+    examAdvancePendingRef.current = false;
+  }, []);
 
-    const currentQuestion = questions[currentIdx];
-    if (!currentQuestion) return;
-
-    if (testMode === "practice" && !practiceChecked) {
-      const isCorrect = selected === currentQuestion.answerIndex;
-      setAttendedCount((v) => v + 1);
-      if (isCorrect) {
-        setScore((prev) => prev + 1);
-        setTrueCount((v) => v + 1);
-      } else {
-        setFalseCount((v) => v + 1);
-      }
-      setPracticeIsCorrect(isCorrect);
-      setPracticeChecked(true);
-      return;
-    }
-
-    if (testMode === "exam" && !examChecked) {
-      const isCorrect = selected === currentQuestion.answerIndex;
-      // count attendance if the user selected an answer
-      if (selected !== null) {
-        setAttendedCount((v) => v + 1);
-      } else {
-        // timed out on this question
-        setTimeoutCount((v) => v + 1);
-      }
-
-      if (isCorrect) {
-        const newScore = score + 1;
-        setScore(newScore);
-        setTrueCount((v) => v + 1);
-        if (newScore >= EXAM_PASS_MARK) {
-          setExamIsCorrect(true);
-          setExamChecked(true);
-          setTestPassed(true);
-          setFinished(true);
-          return;
-        }
-      } else {
-        if (selected !== null) setFalseCount((v) => v + 1);
-      }
-
-      setExamIsCorrect(isCorrect);
-      setExamChecked(true);
-      return;
-    }
-
-    const isCorrect = selected === currentQuestion.answerIndex;
-    // For exam mode we already handled scoring when showing feedback, so only
-    // increment here for non-exam flows (or defensive fallback).
-    if (isCorrect && testMode !== "exam") {
-      const newScore = score + 1;
-      setScore(newScore);
-    }
+  const goToNextQuestion = useCallback(async (resolvedScore?: number) => {
+    clearAdvanceTimer();
 
     setSelected(null);
     setPracticeChecked(false);
     setPracticeIsCorrect(null);
     setExamChecked(false);
     setExamIsCorrect(null);
+    setExamTimedOut(false);
+    examCheckedRef.current = false;
+    examAdvancePendingRef.current = false;
 
     const nextIdx = currentIdx + 1;
     if (nextIdx >= totalQuestions) {
       if (testMode === "practice") {
         setTestPassed(true);
+      } else if (testMode === "exam") {
+        setTestPassed((resolvedScore ?? score) >= EXAM_PASS_MARK);
       }
       setFinished(true);
       return;
@@ -340,17 +321,98 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
     }
 
     setCurrentIdx(nextIdx);
+    if (testMode === "exam") {
+      setTimeLeft(30);
+    }
   }, [
+    allChunksLoaded,
+    clearAdvanceTimer,
     currentIdx,
+    language,
+    nextOffset,
+    questions,
+    questionOrder,
+    score,
+    totalQuestions,
+    testMode,
+  ]);
+
+  const handleNext = useCallback(async () => {
+    clearAdvanceTimer();
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    const currentQuestion = questions[currentIdx];
+    if (!currentQuestion) return;
+
+    if (testMode === "practice" && !practiceChecked) {
+      const isCorrect = selected === currentQuestion.answerIndex;
+      setAttendedCount((v) => v + 1);
+      if (isCorrect) {
+        setScore((prev) => prev + 1);
+        setTrueCount((v) => v + 1);
+      } else {
+        setFalseCount((v) => v + 1);
+      }
+      setPracticeIsCorrect(isCorrect);
+      setPracticeChecked(true);
+      return;
+    }
+
+    if (testMode === "exam" && !examChecked) {
+      if (examAdvancePendingRef.current) return;
+
+      const isCorrect = selected === currentQuestion.answerIndex;
+      // count attendance if the user selected an answer
+      if (selected !== null) {
+        setAttendedCount((v) => v + 1);
+      } else {
+        // timed out on this question
+        setTimeoutCount((v) => v + 1);
+        setExamTimedOut(true);
+      }
+
+      if (isCorrect) {
+        const newScore = score + 1;
+        setScore(newScore);
+        setTrueCount((v) => v + 1);
+      } else {
+        if (selected !== null) setFalseCount((v) => v + 1);
+      }
+
+      setExamIsCorrect(isCorrect);
+      setExamChecked(true);
+      examCheckedRef.current = true;
+      examAdvancePendingRef.current = true;
+      advanceRef.current = setTimeout(() => {
+        void goToNextQuestion(isCorrect ? score + 1 : score);
+      }, 2000);
+      return;
+    }
+
+    const isCorrect = selected === currentQuestion.answerIndex;
+    // For exam mode we already handled scoring when showing feedback, so only
+    // increment here for non-exam flows (or defensive fallback).
+    if (isCorrect && testMode !== "exam") {
+      const newScore = score + 1;
+      setScore(newScore);
+    }
+
+    await goToNextQuestion();
+  }, [
+    clearAdvanceTimer,
+    currentIdx,
+    goToNextQuestion,
     questions,
     selected,
     score,
-    practiceChecked,    examChecked,    language,
+    practiceChecked,
+    examChecked,
+    language,
     testMode,
-    totalQuestions,
-    nextOffset,
-    allChunksLoaded,
-    questionOrder,
   ]);
 
   const handlePrevious = useCallback(() => {
@@ -366,7 +428,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   }, [currentIdx]);
 
   useEffect(() => {
-    if (testMode === "exam" && timeLeft <= 0 && !finished) {
+    if (testMode === "exam" && timeLeft <= 0 && !finished && !examCheckedRef.current && !examAdvancePendingRef.current) {
       if (timerRef.current) clearInterval(timerRef.current);
       void handleNext();
     }
@@ -375,6 +437,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   useEffect(() => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
+      if (advanceRef.current) clearTimeout(advanceRef.current);
     };
   }, []);
 
@@ -703,7 +766,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                         whileTap={{ scale: 0.99 }}
                         key={idx}
                         className={cls}
-                        onClick={!isDesktop ? () => handleSelect(idx) : undefined}
+                        onClick={
+                          !isDesktop && !(testMode === "practice" && practiceChecked) && !(testMode === "exam" && examChecked)
+                            ? () => handleSelect(idx)
+                            : undefined
+                        }
                       >
                         <div className="flex items-center gap-3 flex-1">
                           {/* Circle Index (Mobile/Always) */}
@@ -741,7 +808,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                           aria-label={`Select option ${displayIdx + 1}`}
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleSelect(idx);
+                            if (!(testMode === "practice" && practiceChecked) && !(testMode === "exam" && examChecked)) {
+                              handleSelect(idx);
+                            }
                           }}
                           className="hidden md:flex items-center justify-center w-6 h-6 rounded-full border-2 border-slate-300"
                         >
@@ -755,29 +824,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 })()}
               </div>
 
-              {testMode === "practice" && practiceChecked && (
-                <div
-                  className={`mt-3 text-sm font-semibold ${
-                    practiceIsCorrect ? "text-green-700" : "text-red-700"
-                  }`}
-                >
-                  {practiceIsCorrect ? "✅ Correct answer" : "❌ Wrong answer"}
-                </div>
-              )}
-
-              {testMode === "exam" && examChecked && (
-                <div
-                  className={`mt-3 text-sm font-semibold ${
-                    examIsCorrect ? "text-green-700" : "text-red-700"
-                  }`}
-                >
-                  {examIsCorrect ? "✅ Correct answer" : "❌ Wrong answer"}
-                </div>
-              )}
+            
             </div>
 
-            <div className="flex justify-between items-center gap-2">
-              {testMode === "practice" ? (
+            {testMode === "practice" ? (
+              <div className="flex justify-between items-center gap-2">
                 <button
                   onClick={handlePrevious}
                   disabled={currentIdx === 0}
@@ -785,24 +836,32 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 >
                   Previous
                 </button>
-              ) : (
-                <div />
-              )}
 
-              <button
-                onClick={() => void handleNext()}
-                disabled={selected === null}
-                className="px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-sky-700 disabled:opacity-50"
-              >
-                {(testMode === "practice" && practiceChecked) || (testMode === "exam" && examChecked) ? "Next" : "Submit"}
-              </button>
-            </div>
+                <button
+                  onClick={() => void handleNext()}
+                  disabled={selected === null}
+                  className="px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-sky-700 disabled:opacity-50"
+                >
+                  {practiceChecked ? "Next" : "Submit"}
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-end items-center gap-2">
+                <button
+                  onClick={() => void handleNext()}
+                  disabled={selected === null || examChecked}
+                  className="px-4 py-2 bg-sky-600 text-white rounded-lg text-sm font-bold shadow-md hover:bg-sky-700 disabled:opacity-50"
+                >
+                  Submit
+                </button>
+              </div>
+            )}
           </motion.div>
         </AnimatePresence>
 
         <footer className="mt-6 text-xs text-slate-500 text-center">
           {testMode === "exam"
-            ? "30s per question • Select an option and click Submit"
+            ? "30s per question • Submit to reveal the answer for 2 seconds, then it advances automatically"
             : "Practice Mode • Select an option and click Submit to continue"}
         </footer>
       </motion.div>
