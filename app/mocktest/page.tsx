@@ -663,7 +663,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                 alt={`${schoolData.name} Logo`}
                 width={56}
                 height={56}
-                unoptimized
+                quality={75}
+                sizes="56px"
                 className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
             )}
@@ -733,10 +734,12 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                   <Image
                     src={resolveImageSrc(q.sign) ?? ""}
                     alt="Sign"
-                    width={48}
-                    height={48}
-                    unoptimized
-                    className="w-32 h-32 object-contain"
+                    width={128}
+                    height={128}
+                    quality={75}
+                    priority={false}
+                    sizes="(max-width: 768px) 80px, 128px"
+                    className="w-20 md:w-32 h-20 md:h-32 object-contain"
                   />
                 ) : null}
               </div>
@@ -801,7 +804,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                                   src={resolveImageSrc(opt) ?? ""}
                                   alt={`Option ${displayIdx + 1}`}
                                   fill
-                                  unoptimized
+                                  quality={75}
+                                  sizes="(max-width: 768px) 120px, 160px"
                                   className="object-contain rounded-lg border bg-white"
                                 />
                               </div>

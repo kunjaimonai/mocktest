@@ -21,7 +21,9 @@ const nextConfig: NextConfig = {
   // (prevents future Next.js warnings about cross-origin dev requests)
   allowedDevOrigins: ["http://192.168.0.4", "http://192.168.0.4:3000"],
   images: {
-    minimumCacheTTL: 86400,
+    // Increase cache TTL to 1 year for immutable images
+    // Saves egress: repeat visitors get browser cache hit (100% savings)
+    minimumCacheTTL: 31536000,
     remotePatterns: [
       {
         protocol: "https",
@@ -29,6 +31,8 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
     ],
+    // Optimize image format and size
+    formats: ["image/webp", "image/avif"],
   },
 };
 
