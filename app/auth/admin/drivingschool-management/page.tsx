@@ -183,7 +183,7 @@ export default function AdminPage() {
       // 3. Centralized rate limiting
       try {
         const res = await fetch("/api/schools?limit=500", {
-          next: { revalidate: 3600 }  // Cache 1 hour
+          cache: "no-store"
         });
         
         if (res.ok) {

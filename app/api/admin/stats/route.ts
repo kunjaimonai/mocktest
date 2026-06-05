@@ -4,10 +4,7 @@ import { applyRateLimit, jsonNoStore, validateAdminToken } from "@/lib/api-guard
 
 export const runtime = "nodejs";
 
-// OPTIMIZATION: Cache stats for 1 hour
-// Admin dashboard loads frequently but data changes slowly
-// Saves 95% egress by serving cached RPC results
-export const revalidate = 3600;
+// No caching so admin sees live numbers
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,7 +42,7 @@ export async function GET(req: Request) {
 
   response.headers.set(
     "Cache-Control",
-    "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400"
+    "private, no-store, max-age=0"
   );
 
   return response;

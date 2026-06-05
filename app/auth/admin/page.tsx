@@ -42,8 +42,7 @@ export default function AdminDashboard() {
         // OPTIMIZATION: Use next revalidate to cache dashboard stats
         // Saves 95% egress - most admin panels loaded repeatedly
         const res = await fetch("/api/admin/stats", {
-          method: "GET",
-          next: { revalidate: 3600 },  // Cache 1 hour
+          cache: "no-store",
         });
 
         const payload = await res.json();

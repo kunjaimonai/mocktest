@@ -61,11 +61,10 @@ export async function GET(req: Request) {
   // Saves 85% egress for list requests
   const { data: schools, error: schoolsError } = await query
     .order("id", { ascending: true })
-    .limit(limit)
-    .offset(offset);
+    .range(offset, offset + limit - 1);
 
   if (schoolsError || !schools) {
-    return jsonError("Failed to load schools", 500);
+    return jsonError(schoolsError ? schoolsError.message : "Failed to load schools", 500);
   }
 
   return jsonResponse({
