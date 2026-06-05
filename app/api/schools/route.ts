@@ -4,8 +4,7 @@ import { applyRateLimit } from "@/lib/api-guard";
 
 export const runtime = "nodejs";
 
-// Cache schools for 1 hour - rarely changes
-export const revalidate = 3600;
+// No caching for schools since admin needs real-time updates
 
 const SCHOOL_COLUMNS = "id,name,number,paymentstatus,logo,screenshot,has_badge";
 
@@ -13,8 +12,7 @@ function jsonResponse(payload: unknown, status = 200) {
   return NextResponse.json(payload, {
     status,
     headers: {
-      // Cache for 1 hour - reduces egress for repeat requests
-      "Cache-Control": "public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400",
+      "Cache-Control": "private, no-store, max-age=0",
     },
   });
 }

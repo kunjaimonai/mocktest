@@ -198,12 +198,10 @@ export async function POST(req: Request) {
     Math.min(requestedLimit > 0 ? requestedLimit : 30, 100)
   );
 
-  // OPTIMIZATION: Use LIMIT to fetch only needed questions
-  // Saves 60-80% egress by not loading entire question table
+  // Fetch all questions to ensure true randomness across the entire question bank
   const { data: allQuestions, error: questionsError } = await supabase
     .from(questionTable)
-    .select(selectCols)
-    .limit(limit * 2);  // Fetch 2x to allow shuffling
+    .select(selectCols);
 
   if (questionsError || !allQuestions) {
     return jsonError("Failed to load questions", 500);
