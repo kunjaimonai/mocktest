@@ -17,6 +17,7 @@ type Question = {
   q: string;
   sign?: string;
   options: string[];
+  optionTypes?: boolean[] | null;
   answerIndex: number;
 };
 
@@ -547,7 +548,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                     >
                       <div className="flex items-center">
                         <div
-                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm md:text-lg ${
+                          className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-3 font-semibold text-sm md:text-lg shrink-0 ${
                             showResult && correct
                               ? "border-white"
                               : "border-slate-400"
@@ -555,7 +556,24 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                         >
                           {String.fromCharCode(65 + i)}
                         </div>
-                        <div>{opt}</div>
+                        <div className="flex-1">
+                          {(() => {
+                            // @ts-ignore - optionTypes might not exist in Question type but exists in data
+                            const isImage = (q.optionTypes && q.optionTypes[i]) || opt.startsWith("http://") || opt.startsWith("https://");
+                            return isImage ? (
+                              <div className="w-40 h-28 relative">
+                                <Image
+                                  src={opt}
+                                  alt={`Option ${i + 1}`}
+                                  fill
+                                  className="object-contain rounded-md border bg-white"
+                                />
+                              </div>
+                            ) : (
+                              <div>{opt}</div>
+                            );
+                          })()}
+                        </div>
                       </div>
                     </motion.div>
                   );

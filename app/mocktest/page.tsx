@@ -16,6 +16,7 @@ type Question = {
   q: string;
   sign?: string;
   options: string[];
+  optionTypes?: boolean[] | null;
   answerIndex: number;
 };
 
@@ -753,7 +754,9 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                   return visible.map(({ opt, idx }, displayIdx) => {
                     const isSelected = selected === idx;
                     const isImage =
-                      opt.startsWith("http://") || opt.startsWith("https://");
+                      (q.optionTypes && q.optionTypes[idx]) ||
+                      opt.startsWith("http://") ||
+                      opt.startsWith("https://");
 
                     let cls =
                       "cursor-pointer p-3 border rounded-lg transition-all duration-200 flex items-center justify-between ";
