@@ -1,8 +1,35 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { applyRateLimit } from "@/lib/api-guard";
+import { unstable_cache } from "next/cache";
 
 export const runtime = "nodejs";
+
+const getCachedSchool = unstable_cache(
+  async (schoolId: number) => {
+    const { data, error } = await supabase
+      .from("schools")
+      .select("id,name,number,paymentstatus,logo,screenshot,has_badge")
+      .eq("id", schoolId)
+      .single();
+    if (error) throw error;
+    return data;
+  },
+  ["school-cache"],
+  { revalidate: 60 }
+);
+
+const getCachedQuestions = unstable_cache(
+  async (questionTable: string, selectCols: string) => {
+    const { data, error } = await supabase
+      .from(questionTable)
+      .select(selectCols);
+    if (error) throw error;
+    return data;
+  },
+  ["questions-cache"],
+  { revalidate: 60 }
+);
 
 const SCHOOL_COOKIE = "school_session";
 
@@ -158,11 +185,12 @@ export async function POST(req: Request) {
 
   const requestType = String(body.type ?? "start");
   if (requestType === "school") {
-    const { data: schoolData } = await supabase
-      .from("schools")
-      .select("id,name,number,paymentstatus,logo,screenshot,has_badge")
-      .eq("id", auth.school_id)
-      .single();
+    let schoolData = null;
+    try {
+      schoolData = await getCachedSchool(auth.school_id);
+    } catch (err) {
+      console.error("Failed to fetch school data:", err);
+    }
 
     const school = (schoolData as Record<string, unknown> | null) ?? null;
 
@@ -199,9 +227,13 @@ export async function POST(req: Request) {
   );
 
   // Fetch all questions to ensure true randomness across the entire question bank
-  const { data: allQuestions, error: questionsError } = await supabase
-    .from(questionTable)
-    .select(selectCols);
+  let allQuestions = null;
+  let questionsError = null;
+  try {
+    allQuestions = await getCachedQuestions(questionTable, selectCols);
+  } catch (err) {
+    questionsError = err;
+  }
 
   if (questionsError || !allQuestions) {
     return jsonError("Failed to load questions", 500);
