@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Watermark from "../components/watermark";
-import Image from "next/image";
+
 
 function handleLogout() {
   localStorage.removeItem("loggedInSchoolId");
@@ -127,12 +127,10 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
 
     return isImage ? (
       <div className="relative mt-2 w-40 h-28">
-        <Image
+        <img
           src={resolveImageSrc(value) ?? ""}
           alt="Correct answer"
-          fill
-          unoptimized
-          className="object-contain rounded-lg border bg-white"
+          className="object-contain rounded-lg border bg-white w-full h-full"
         />
       </div>
     ) : (
@@ -659,13 +657,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         <div className="mb-6 pb-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-4">
             {schoolLogoSrc && (
-              <Image
+              <img
                 src={schoolLogoSrc}
                 alt={`${schoolData.name} Logo`}
                 width={56}
                 height={56}
-                quality={75}
-                sizes="56px"
                 className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
             )}
@@ -732,14 +728,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               <div className="text-sm md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
                 <span>{q.q}</span>
                 {q.sign ? (
-                  <Image
+                  <img
                     src={resolveImageSrc(q.sign) ?? ""}
                     alt="Sign"
                     width={128}
                     height={128}
-                    quality={75}
-                    priority={false}
-                    sizes="(max-width: 768px) 80px, 128px"
                     className="w-20 md:w-32 h-20 md:h-32 object-contain"
                   />
                 ) : null}
@@ -803,13 +796,10 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                           <div className="flex-1">
                             {isImage ? (
                               <div className="relative w-40 h-28">
-                                <Image
+                                <img
                                   src={resolveImageSrc(opt) ?? ""}
                                   alt={`Option ${displayIdx + 1}`}
-                                  fill
-                                  quality={75}
-                                  sizes="(max-width: 768px) 120px, 160px"
-                                  className="object-contain rounded-lg border bg-white"
+                                  className="object-contain rounded-lg border bg-white w-full h-full"
                                 />
                               </div>
                             ) : (

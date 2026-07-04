@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -632,7 +632,7 @@ export default function AdminQuestionsPage() {
               <CardContent className="pt-4">
                 {question.sign && (
                   <div className="mb-4">
-                    <Image
+                    <img
                       src={question.sign}
                       alt="Traffic Sign"
                       width={200}
@@ -662,11 +662,10 @@ export default function AdminQuestionsPage() {
                           <div className="flex-1">
                             {isImage ? (
                               <div className="w-40 h-28 relative">
-                                <Image
+                                <img
                                   src={String(option)}
                                   alt={`Option ${idx + 1}`}
-                                  fill
-                                  className="object-contain rounded-md border bg-white"
+                                  className="object-contain rounded-md border bg-white w-full h-full"
                                 />
                               </div>
                             ) : (
@@ -857,11 +856,10 @@ function QuestionForm({
           )}
           {imagePreview && (
             <div className="relative w-32 h-32 border-2 border-slate-200 rounded-lg overflow-hidden">
-              <Image
+              <img
                 src={imagePreview}
                 alt="Preview"
-                fill
-                className="object-contain"
+                className="object-contain w-full h-full"
               />
             </div>
           )}
@@ -910,7 +908,7 @@ function QuestionForm({
 
                   {formData[`option${num}`] && (
                     <div className="mt-2">
-                      <Image
+                      <img
                         src={formData[`option${num}`]}
                         alt="Option"
                         width={120}

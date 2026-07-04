@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-indigo-100 flex flex-col items-center justify-center p-6">
       <div className="flex flex-row items-center mb-8 gap-4">
-        <Image
+        <img
           src="/learners_logo.png"
           width={80}
           height={100}

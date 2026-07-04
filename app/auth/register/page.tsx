@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
+
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "react-hot-toast";
 
@@ -149,7 +149,7 @@ const Register = () => {
                 />
                 {logo && (
                   <div className="mt-3 flex justify-center">
-                    <Image
+                    <img
                       src={logo}
                       alt="School Logo Preview"
                       width={120}
@@ -201,7 +201,7 @@ const Register = () => {
               Scan the QR code below and upload your payment screenshot.
             </p>
             <div className="flex justify-center mb-4">
-              <Image
+              <img
                 src="/image.png"
                 alt="Payment QR"
                 width={200}
@@ -217,7 +217,7 @@ const Register = () => {
             />
             {screenshot && (
               <div className="mb-4">
-                <Image
+                <img
                   src={screenshot}
                   alt="Uploaded Screenshot"
                   width={200}

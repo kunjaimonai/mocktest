@@ -3,7 +3,7 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Watermark from "../components/watermark";
 import { supabaseBrowser as supabase } from "@/lib/supabase-browser";
-import Image from "next/image";
+
 
 function handleLogout() {
   localStorage.removeItem("loggedInSchoolId");
@@ -447,13 +447,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         <div className="mb-6 pb-4 border-b border-slate-200 flex justify-between items-center flex-wrap gap-4">
           <div className="flex items-center gap-4">
             {schoolData.logo && (
-              <Image
+              <img
                 src={schoolData.logo}
                 alt={`${schoolData.name} Logo`}
                 width={56}
                 height={56}
-                quality={75}
-                sizes="56px"
                 className="w-14 h-14 rounded-lg border border-slate-200 object-contain shadow-sm"
               />
             )}
@@ -507,13 +505,11 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
               <div className="text-sm md:text-xl font-medium mb-3 text-slate-900 flex items-center gap-4">
                 <span>{q.q}</span>
                 {q.sign ? (
-                  <Image
+                  <img
                     src={q.sign}
                     alt="Sign"
                     width={128}
                     height={128}
-                    quality={75}
-                    sizes="(max-width: 768px) 80px, 128px"
                     className="w-20 md:w-32 h-20 md:h-32 object-contain"
                   />
                 ) : null}
@@ -562,11 +558,10 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                             const isImage = (q.optionTypes && q.optionTypes[i]) || opt.startsWith("http://") || opt.startsWith("https://");
                             return isImage ? (
                               <div className="w-40 h-28 relative">
-                                <Image
+                                <img
                                   src={opt}
                                   alt={`Option ${i + 1}`}
-                                  fill
-                                  className="object-contain rounded-md border bg-white"
+                                  className="object-contain rounded-md border bg-white w-full h-full"
                                 />
                               </div>
                             ) : (

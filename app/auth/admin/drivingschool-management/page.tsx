@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -357,7 +357,7 @@ export default function AdminPage() {
 
                   <CardContent className="pt-4">
                     {school.screenshot ? (
-                      <Image
+                      <img
                         src={school.screenshot}
                         alt="Payment Screenshot"
                         width={300}
@@ -511,7 +511,7 @@ export default function AdminPage() {
                 <label className="font-medium text-sm">Logo</label>
                 {editData.logo && (
                   <div className="mt-2">
-                    <Image
+                    <img
                       src={editData.logo}
                       alt="logo preview"
                       width={100}
@@ -545,7 +545,7 @@ export default function AdminPage() {
 
                 {editData.screenshot && (
                   <div className="mt-2">
-                    <Image
+                    <img
                       src={editData.screenshot}
                       alt="screenshot preview"
                       width={150}
