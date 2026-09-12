@@ -19,16 +19,44 @@ const getCachedSchool = unstable_cache(
   { revalidate: 60 }
 );
 
+function stripAnswers(
+  rows: Array<Record<string, unknown>>,
+  includeAnswers = false
+): PublicQuestion[] {
+  return rows.map((row) => {
+    const base: PublicQuestion = {
+      id: Number(row.id),
+      q: String(row.q ?? ""),
+      options: Array.isArray(row.options) ? (row.options as string[]) : [],
+      sign: (row.sign as string | null) ?? null,
+      optionTypes: Array.isArray(row.optionTypes)
+        ? (row.optionTypes as boolean[])
+        : null,
+    };
+
+    if (includeAnswers) {
+      const ai = Object.prototype.hasOwnProperty.call(row, "answerIndex")
+        ? Number((row as any).answerIndex)
+        : undefined;
+      if (typeof ai === "number" && !Number.isNaN(ai)) {
+        base.answerIndex = ai;
+      }
+    }
+
+    return base;
+  });
+}
+
 const getCachedQuestions = unstable_cache(
   async (questionTable: string, selectCols: string) => {
     const { data, error } = await supabase
       .from(questionTable)
       .select(selectCols);
     if (error) throw error;
-    return data;
+    return stripAnswers(data as Record<string, unknown>[], true);
   },
-  ["questions-cache"],
-  { revalidate: 60 }
+  ["questions-cache-v2"],
+  { revalidate: 3600 }
 );
 
 const SCHOOL_COOKIE = "school_session";
@@ -111,11 +139,9 @@ function parseCookieValue(cookieHeader: string | null): CookiePayload | null {
 
   let value = raw.slice(`${SCHOOL_COOKIE}=`.length);
   
-  // Decode the cookie value - the browser URL-encodes it when sending
   try {
     value = decodeURIComponent(value);
   } catch {
-    // If decoding fails, use as-is
   }
   
   try {
@@ -137,34 +163,6 @@ function normalizeSessionRow(rpcData: unknown): SessionStartRow | null {
   }
 
   return null;
-}
-
-function stripAnswers(
-  rows: Array<Record<string, unknown>>,
-  includeAnswers = false
-): PublicQuestion[] {
-  return rows.map((row) => {
-    const base: PublicQuestion = {
-      id: Number(row.id),
-      q: String(row.q ?? ""),
-      options: Array.isArray(row.options) ? (row.options as string[]) : [],
-      sign: (row.sign as string | null) ?? null,
-      optionTypes: Array.isArray(row.optionTypes)
-        ? (row.optionTypes as boolean[])
-        : null,
-    };
-
-    if (includeAnswers) {
-      const ai = Object.prototype.hasOwnProperty.call(row, "answerIndex")
-        ? Number((row as any).answerIndex)
-        : undefined;
-      if (typeof ai === "number" && !Number.isNaN(ai)) {
-        base.answerIndex = ai;
-      }
-    }
-
-    return base;
-  });
 }
 
 export async function POST(req: Request) {
@@ -215,7 +213,6 @@ export async function POST(req: Request) {
       ? String(body.language)
       : auth.language;
 
-  // Build a fresh random set each time so repeated sessions do not reuse the same order.
   const sessionId = Math.floor(Math.random() * 1000000);
   const questionTable = getQuestionTable(language);
   const selectCols = QUESTION_COLUMNS_WITH_ANS;
@@ -226,7 +223,6 @@ export async function POST(req: Request) {
     Math.min(requestedLimit > 0 ? requestedLimit : 30, 100)
   );
 
-  // Fetch all questions to ensure true randomness across the entire question bank
   let allQuestions = null;
   let questionsError = null;
   try {
@@ -239,9 +235,8 @@ export async function POST(req: Request) {
     return jsonError("Failed to load questions", 500);
   }
 
-  const shuffledQuestions = shuffleArray(
-    stripAnswers(allQuestions as Record<string, unknown>[], true)
-  );
+  // allQuestions is already stripped and cached, just shuffle it
+  const shuffledQuestions = shuffleArray(allQuestions as PublicQuestion[]);
   const safeQuestions = shuffledQuestions.slice(0, limit);
   const questionIds = safeQuestions.map((q) => q.id);
 

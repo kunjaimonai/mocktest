@@ -109,16 +109,7 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
   }, []);
 
   function resolveImageSrc(url?: string | null) {
-    if (!url) return undefined;
-    try {
-      const parsed = new URL(url);
-      if (parsed.hostname === "cprcrmwwpcixfhfyjmuk.supabase.co") {
-        return url;
-      }
-    } catch {
-      return `/api/mocktest?url=${encodeURIComponent(url)}`;
-    }
-    return `/api/mocktest?url=${encodeURIComponent(url)}`;
+    return url || undefined;
   }
 
   function renderAnswerContent(value?: string) {
