@@ -20,6 +20,17 @@ const nextConfig: NextConfig = {
   // Allow specific dev origins to request Next.js dev/_next assets
   // (prevents future Next.js warnings about cross-origin dev requests)
   allowedDevOrigins: ["http://192.168.0.4", "http://192.168.0.4:3000"],
+  // Long-lived cache for static public assets (fewer CDN requests/transfer)
+  async headers() {
+    return [
+      {
+        source: "/:file(image.png|learners_logo.png)",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
+  },
   images: {
     // Increase cache TTL to 1 year for immutable images
     // Saves egress: repeat visitors get browser cache hit (100% savings)

@@ -121,6 +121,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
         <img
           src={resolveImageSrc(value) ?? ""}
           alt="Correct answer"
+          loading="lazy"
+          decoding="async"
           className="object-contain rounded-lg border bg-white w-full h-full"
         />
       </div>
@@ -722,6 +724,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                   <img
                     src={resolveImageSrc(q.sign) ?? ""}
                     alt="Sign"
+                    loading="lazy"
+                    decoding="async"
                     width={128}
                     height={128}
                     className="w-20 md:w-32 h-20 md:h-32 object-contain"
@@ -790,6 +794,8 @@ const MockTestPage: React.FC<MockTestPageProps> = ({ school }) => {
                                 <img
                                   src={resolveImageSrc(opt) ?? ""}
                                   alt={`Option ${displayIdx + 1}`}
+                                  loading="lazy"
+                                  decoding="async"
                                   className="object-contain rounded-lg border bg-white w-full h-full"
                                 />
                               </div>

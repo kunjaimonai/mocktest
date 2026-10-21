@@ -48,7 +48,8 @@ export async function POST(request: Request) {
       .from("signs")
       .upload(filename, buffer, {
         upsert: false,
-        contentType: file.type
+        contentType: file.type,
+        cacheControl: "31536000"
       });
 
     if (uploadError) {

@@ -71,6 +71,7 @@ export default function AdminPage() {
       .from(folder)
       .upload(newPath, file, {
         upsert: true,
+        cacheControl: "31536000",
       });
 
     if (error) {
